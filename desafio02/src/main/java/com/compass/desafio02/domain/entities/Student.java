@@ -1,13 +1,11 @@
 package com.compass.desafio02.domain.entities;
 
 import com.compass.desafio02.domain.entities.enums.Role;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_students")
@@ -18,6 +16,9 @@ public class Student extends User implements Serializable {
 
     @OneToOne
     private Course course;
+
+    @ManyToMany(mappedBy = "students")
+    private List<Subject> subjects = new ArrayList<>();
 
     public Student() {
     }
@@ -33,6 +34,16 @@ public class Student extends User implements Serializable {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
+    }
+
+
 
 
 }
