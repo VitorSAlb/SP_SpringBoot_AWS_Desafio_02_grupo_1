@@ -16,9 +16,8 @@ public class Student extends User implements Serializable {
     @Column(name = "address", nullable = false)
     private String address;
 
-//    @OneToOne
-//    @Column(name = "course_id")
-//    private Course course;
+    @OneToOne
+    private Course course;
 
     public Student() {
     }

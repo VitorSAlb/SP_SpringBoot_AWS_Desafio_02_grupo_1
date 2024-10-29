@@ -4,6 +4,7 @@ import com.compass.desafio02.domain.entities.enums.Role;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,7 +23,7 @@ public class Course {
 
     @OneToMany
     @Column(name = "Subjects")
-    private List<Subjects> subjectsList;
+    private List<Subjects> subjectsList = new ArrayList<>();
 
 
     public Course() {

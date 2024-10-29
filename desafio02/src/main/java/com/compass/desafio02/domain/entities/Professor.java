@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,23 +17,13 @@ public class Professor extends User implements Serializable {
 
     @OneToMany
     @Column(name = "Subjects")
-    private List<Subjects> subjectsList;
+    private List<Subjects> subjectsList = new ArrayList<>();
 
     public Professor() {
     }
 
-    public Professor(String firstName, String lastName, String email, LocalDate birthdate, List<Subjects> subjectsList) {
+    public Professor(String firstName, String lastName, String email, LocalDate birthdate) {
         super(firstName, lastName, email, birthdate, Role.ROLE_PROFESSOR);
-        this.course = course;
-        this.subjectsList = subjectsList;
-    }
-
-    public Course getCourse() {
-        return course;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
     }
 
     public List<Subjects> getSubjectsList() {

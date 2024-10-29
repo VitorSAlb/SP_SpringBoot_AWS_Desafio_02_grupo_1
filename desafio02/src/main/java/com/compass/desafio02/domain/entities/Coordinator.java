@@ -19,9 +19,8 @@ public class Coordinator extends User implements Serializable {
     public Coordinator() {
     }
 
-    public Coordinator(String firstName, String lastName, String email, LocalDate birthdate, Role role, Course course) {
-        super(firstName, lastName, email, birthdate, role);
-        this.course = course;
+    public Coordinator(String firstName, String lastName, String email, LocalDate birthdate, Role role) {
+        super(firstName, lastName, email, birthdate, Role.ROLE_COORDINATOR);
     }
 
     public Course getCourse() {
