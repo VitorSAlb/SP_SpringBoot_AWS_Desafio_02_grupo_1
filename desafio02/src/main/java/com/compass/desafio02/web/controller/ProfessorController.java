@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/professors")
+@RequestMapping("/api/v1/professors")
 public class ProfessorController {
     private final ProfessorService professorService;
 
@@ -18,31 +18,31 @@ public class ProfessorController {
         this.professorService = professorService;
     }
 
-    @PostMapping("professors")
+    @PostMapping
     public ResponseEntity<Professor> createProfessor(@RequestBody Professor professor) {
         Professor savedProfessor = professorService.save(professor);
         return ResponseEntity.status(201).body(savedProfessor);
     }
 
-    @GetMapping("professors")
+    @GetMapping()
     public ResponseEntity<Page<Professor>> getAllProfessors(Pageable pageable) {
         Page<Professor> professors = professorService.findAll(pageable);
         return ResponseEntity.ok(professors);
     }
 
-    @GetMapping("professors/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Professor> getProfessorById(@PathVariable Integer id) {
         Professor professor = professorService.findById(id);
         return ResponseEntity.ok(professor);
     }
 
-    @PutMapping("professors/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Professor> updateProfessor(@PathVariable Integer id, @RequestBody Professor professor) {
         Professor updatedProfessor = professorService.update(id, professor);
         return ResponseEntity.ok(updatedProfessor);
     }
 
-    @DeleteMapping("professors/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteProfessor(@PathVariable Integer id) {
         professorService.delete(id);
         return ResponseEntity.noContent().build();
