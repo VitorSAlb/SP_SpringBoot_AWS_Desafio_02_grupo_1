@@ -23,7 +23,7 @@ public class Subject{
     private Professor mainProfessor;
 
     @ManyToOne
-    @JoinColumn(name = "substitute_professor_id", nullable = false)
+    @JoinColumn(name = "substitute_professor_id")
     private Professor substituteProfessor;
 
     @ManyToOne
@@ -107,14 +107,17 @@ public class Subject{
 
     // Método para adicionar um aluno - Duvida se mantem ou não para o futuro
     public void addStudent(Student student) {
-        this.students.add(student);
-        student.getSubjects().add(this);
+        if (!students.contains(student)) {
+            this.students.add(student);
+            student.getSubjects().add(this);
+        }
     }
 
     // Método para remover um aluno - Duvida se mantem ou não para o futuro
     public void removeStudent(Student student) {
-        this.students.remove(student);
-        student.getSubjects().remove(this);
+        if (students.remove(student)) {
+            student.getSubjects().remove(this);
+        }
     }
 
 }
