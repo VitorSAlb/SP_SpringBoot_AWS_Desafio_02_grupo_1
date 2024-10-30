@@ -26,16 +26,19 @@ public abstract class User implements Serializable {
     private LocalDate birthdate;
     @Column(name = "role")
     private Role role;
+    @Column(name = "password")
+    private String password;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, LocalDate birthdate, Role role) {
+    public User(String firstName, String lastName, String email, LocalDate birthdate, Role role, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.birthdate = birthdate;
         this.role = role;
+        this.password = password;
     }
 
     public Integer getId() {
@@ -76,6 +79,22 @@ public abstract class User implements Serializable {
 
     public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
