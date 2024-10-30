@@ -1,8 +1,10 @@
-package com.compass.desafio02.web.dto;
+package com.compass.desafio02.web.dto.student;
 
 import com.compass.desafio02.domain.entities.enums.Role;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
@@ -15,9 +17,12 @@ public class StudentCreateDto {
     @NotBlank
     @Email(message = "{Email.studentCreateDto.student}", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")
     private String email;
+
     @NotBlank
     private String password;
-    @NotBlank
+
+    @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthdate;
 
     private String address;

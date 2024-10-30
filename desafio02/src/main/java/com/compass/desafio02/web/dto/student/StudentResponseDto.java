@@ -1,4 +1,4 @@
-package com.compass.desafio02.web.dto;
+package com.compass.desafio02.web.dto.student;
 
 import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.entities.Subject;
