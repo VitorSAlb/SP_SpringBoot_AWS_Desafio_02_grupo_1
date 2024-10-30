@@ -1,4 +1,7 @@
 package com.compass.desafio02.domain.repositories;
 
-public class StudentRepository {
+import com.compass.desafio02.domain.entities.Student;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface StudentRepository extends JpaRepository<Student, Integer> {
 }
