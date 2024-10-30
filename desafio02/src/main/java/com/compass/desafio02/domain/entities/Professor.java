@@ -25,9 +25,8 @@ public class Professor extends User implements Serializable {
     public Professor() {
     }
 
-    public Professor(String firstName, String lastName, String email, LocalDate birthdate, Course course) {
-        super(firstName, lastName, email, birthdate, Role.ROLE_PROFESSOR);
-        this.course = course;
+    public Professor(Integer id, String firstName, String lastName, String email, LocalDate birthdate, String password) {
+        super(id, firstName, lastName, email, birthdate, Role.ROLE_PROFESSOR, password);
     }
 
     public Course getCourse() {

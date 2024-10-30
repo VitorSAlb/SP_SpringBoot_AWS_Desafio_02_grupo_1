@@ -1,5 +1,6 @@
 package com.compass.desafio02.domain.services;
 
+import com.compass.desafio02.domain.repositories.projection.StudentProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,8 +25,8 @@ public class StudentService {
         );
     }
 
-    public Page<Student> findAll(Pageable pageable) {
-        return studentRepository.findAll(pageable);
+    public Page<StudentProjection> findAll(Pageable pageable) {
+        return studentRepository.findAllP(pageable);
     }
 
     public Student update(Integer id, Student newStudent) {

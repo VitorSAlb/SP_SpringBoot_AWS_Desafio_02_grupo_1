@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 public class Student extends User implements Serializable {
 
-    @Column(name = "address", nullable = false)
+    @Column(name = "address")
     private String address;
 
     @OneToOne
@@ -22,8 +22,9 @@ public class Student extends User implements Serializable {
     public Student() {
     }
 
-    public Student(String firstName, String lastName, String email, LocalDate birthdate, String address) {
-        super(firstName, lastName, email, birthdate, Role.ROLE_STUDENT);
+    public Student(Integer id, String firstName, String lastName, String email, LocalDate birthdate, String password, String address) {
+        super(id, firstName, lastName, email, birthdate, Role.ROLE_STUDENT, password);
+        this.address = address;
     }
 
     public String getAddress() {
