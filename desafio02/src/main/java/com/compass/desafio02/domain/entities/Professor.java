@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_professors")
+
 public class Professor extends User implements Serializable {
 
     @OneToMany

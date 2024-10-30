@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_students")
+
 public class Student extends User implements Serializable {
 
     @Column(name = "address", nullable = false)
