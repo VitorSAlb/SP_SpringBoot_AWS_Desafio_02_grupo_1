@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_students")
 public class Student extends User implements Serializable {
 
     @Column(name = "address", nullable = false)
@@ -17,7 +16,7 @@ public class Student extends User implements Serializable {
     @OneToOne
     private Course course;
 
-    @ManyToMany(mappedBy = "students")
+    @ManyToMany(mappedBy = "students", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Subject> subjects = new ArrayList<>();
 
     public Student() {
@@ -43,7 +42,25 @@ public class Student extends User implements Serializable {
         this.subjects = subjects;
     }
 
+    public Course getCourse() {
+        return course;
+    }
 
+    public void setCourse(Course course) {
+        this.course = course;
+    }
 
+    public void addSubject(Subject subject) {
+        if (!subjects.contains(subject)) {
+            this.subjects.add(subject);
+            subject.getStudents().add(this);
+        }
+    }
 
+    // Método para remover uma matéria
+    public void removeSubject(Subject subject) {
+        if (subjects.remove(subject)) {
+            subject.getStudents().remove(this);
+        }
+    }
 }
