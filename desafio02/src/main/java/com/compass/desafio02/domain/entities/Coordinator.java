@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "tb_coordinator")
+
 public class Coordinator extends User implements Serializable {
 
     @OneToOne
