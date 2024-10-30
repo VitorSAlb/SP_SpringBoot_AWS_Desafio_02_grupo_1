@@ -15,11 +15,11 @@ public class Professor extends User implements Serializable {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @OneToMany(mappedBy = "holder_professor")
+    @OneToMany(mappedBy = "mainProfessor")
     @Column(name = "Subjects")
     private List<Subject> subjectHolder = new ArrayList<>();
 
-    @OneToMany(mappedBy = "substitute_professor")
+    @OneToMany(mappedBy = "substituteProfessor")
     private List<Subject> subjectSub = new ArrayList<>();
 
     public Professor() {
