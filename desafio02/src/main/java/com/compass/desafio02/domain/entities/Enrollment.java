@@ -4,14 +4,12 @@ import jakarta.persistence.*;
 //import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "tb_enrollment", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"student_id", "course_id"})
-})
+@Table(name = "tb_enrollment", uniqueConstraints = {@UniqueConstraint(columnNames = {"student_id", "course_id"})})
 public class Enrollment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     //@NotNull
     @ManyToOne
@@ -26,15 +24,15 @@ public class Enrollment {
     public Enrollment() {}
 
     public Enrollment(Student student, Course course) {
-        this.student = student;
+        this.student = student; 
         this.course = course;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
