@@ -32,8 +32,7 @@ public abstract class User implements Serializable {
     public User() {
     }
 
-    public User(Integer id, String firstName, String lastName, String email, LocalDate birthdate, Role role, String password) {
-        this.id = id;
+    public User(String firstName, String lastName, String email, LocalDate birthdate, Role role, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
