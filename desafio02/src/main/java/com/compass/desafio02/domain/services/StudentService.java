@@ -28,10 +28,19 @@ public class StudentService {
         return studentRepository.findAll(pageable);
     }
 
-    public Student update(Student student) {
-        return studentRepository.
+    public Student update(Integer id, Student newStudent) {
+        Student existingStudent = findById(id);
+
+        existingStudent.setEmail(newStudent.getEmail()); // TESMOS QUE VERIFICAR SE O NOVO EMAIL JÁ EXISTE PARA PODER EDITAR
+        existingStudent.setFirstName(newStudent.getFirstName());
+        existingStudent.setLastName(newStudent.getLastName());
+        existingStudent.setAddress(newStudent.getAddress());
+        existingStudent.setBirthdate(newStudent.getBirthdate());
+
+        return studentRepository.save(existingStudent);
     }
 
-
-
+    public void delete(Integer id) {
+        studentRepository.deleteById(id);
+    }
 }
