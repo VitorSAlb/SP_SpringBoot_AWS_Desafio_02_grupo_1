@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_professors")
+
 public class Professor extends User implements Serializable {
 
     @OneToMany
     @Column(name = "Subjects")
-    private List<Subjects> subjectsList = new ArrayList<>();
+    private List<Subject> subjectList = new ArrayList<>();
 
     public Professor() {
     }
@@ -26,12 +26,14 @@ public class Professor extends User implements Serializable {
         super(firstName, lastName, email, birthdate, Role.ROLE_PROFESSOR);
     }
 
-    public List<Subjects> getSubjectsList() {
-        return subjectsList;
+    public List<Subject> getSubjectList() {
+        return subjectList;
     }
 
-    public void setSubjectsList(List<Subjects> subjectsList) {
-        this.subjectsList = subjectsList;
+    public void setSubjectList(List<Subject> subjectList) {
+        this.subjectList = subjectList;
     }
+
+    //Alterado o nome de 'subjects...' para o singular 'subject' por medidas de boas praticas
 
 }

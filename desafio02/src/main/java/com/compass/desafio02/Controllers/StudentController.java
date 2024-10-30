@@ -15,16 +15,4 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/planets")
-public class StudentController {
-   
-    @Autowired
-    private StudentService studentService;
-
-    @PostMapping
-    public ResponseEntity<Student>createStudent(@RequestBody Student student) {
-        Student studentCreated = studentService.createStudent(student);
-        
-        return ResponseEntity.status(HttpStatus.CREATED).body(studentCreated);
-    }
-    
-}
+public class StudentController {}

@@ -4,13 +4,11 @@ import com.compass.desafio02.domain.entities.enums.Role;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
-@Table(name = "tb_coordinator")
+
 public class Coordinator extends User implements Serializable {
 
     @OneToOne
