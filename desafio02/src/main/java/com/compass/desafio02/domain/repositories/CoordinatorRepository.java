@@ -1,4 +1,7 @@
 package com.compass.desafio02.domain.repositories;
 
-public class CoordinatorRepository {
+import com.compass.desafio02.domain.entities.Coordinator;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CoordinatorRepository extends JpaRepository<Coordinator, Integer> {
 }
