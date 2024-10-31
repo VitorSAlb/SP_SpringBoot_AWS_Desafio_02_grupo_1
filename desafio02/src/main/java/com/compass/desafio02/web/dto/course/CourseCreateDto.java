@@ -10,15 +10,15 @@ public class CourseCreateDto {
     @NotBlank(message = "The course description is required.")
     private String description;
 
-    private Integer coordinatorId;
+    private String coordinatorEmail;
 
     public CourseCreateDto() {
     }
 
-    public CourseCreateDto(String name, String description, Integer coordinatorId) {
+    public CourseCreateDto(String name, String description, String coordinatorEmail) {
         this.name = name;
         this.description = description;
-        this.coordinatorId = coordinatorId;
+        this.coordinatorEmail = coordinatorEmail;
     }
 
     public String getName() {
@@ -37,11 +37,11 @@ public class CourseCreateDto {
         this.description = description;
     }
 
-    public Integer getCoordinatorId() {
-        return coordinatorId;
+    public String getCoordinatorEmail() {
+        return coordinatorEmail;
     }
 
-    public void setCoordinatorId(Integer coordinatorId) {
-        this.coordinatorId = coordinatorId;
+    public void setCoordinatorId(String coordinatorEmail) {
+        this.coordinatorEmail = coordinatorEmail;
     }
 }

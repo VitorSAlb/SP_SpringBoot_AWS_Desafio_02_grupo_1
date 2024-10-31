@@ -1,8 +1,8 @@
 package com.compass.desafio02.web.dto.mapper;
 
 import com.compass.desafio02.domain.entities.Coordinator;
-import com.compass.desafio02.web.dto.Coordinator.CoordinatorCreateDto;
-import com.compass.desafio02.web.dto.Coordinator.CoordinatorResponseDto;
+import com.compass.desafio02.web.dto.coordinator.CoordinatorCreateDto;
+import com.compass.desafio02.web.dto.coordinator.CoordinatorResponseDto;
 import org.modelmapper.ModelMapper;
 
 public class CoordinatorMapper {
