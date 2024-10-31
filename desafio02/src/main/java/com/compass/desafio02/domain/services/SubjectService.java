@@ -1,6 +1,8 @@
 package com.compass.desafio02.domain.services;
 
+import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.entities.Subject;
+import com.compass.desafio02.domain.repositories.StudentRepository;
 import com.compass.desafio02.domain.repositories.SubjectRepository;
 import com.compass.desafio02.infrastructure.exceptions.ResourceNotFoundException;
 import com.compass.desafio02.infrastructure.exceptions.BusinessRuleException;
@@ -14,6 +16,9 @@ public class SubjectService {
 
     @Autowired
     private SubjectRepository subjectRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
     public Subject save(Subject subject) {
 
@@ -73,5 +78,13 @@ public class SubjectService {
             throw new ResourceNotFoundException("Disciplina não encontrada com o id: " + id);
         }
         subjectRepository.deleteById(id);
+    }
+
+    public Student findByEmail(String email) {
+        Student student = studentRepository.findByEmail(email);
+        if (student == null) {
+            throw new ResourceNotFoundException("Student with email " + email + " not found");
+        }
+        return student;
     }
 }

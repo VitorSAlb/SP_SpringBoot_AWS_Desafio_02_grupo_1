@@ -45,20 +45,15 @@ public class SubjectController {
         Professor substituteProfessor = professorService.findById(dto.getSubstituteProfessor());
         Course course = courseService.findById(dto.getCourseId());
 
-        Page<StudentProjection> studentPage = studentService.findAll(pageable);
-        List<Student> students = studentPage.getContent().stream()
-                .map(projection -> {
-                    Student student = new Student();
-                    student.setId(projection.getId());
-                    student.setFirstName(projection.getFirstName());
-                    student.setEmail(projection.getEmail());
-                    return student;
-                }).collect(Collectors.toList());
+        List<Student> students = dto.getStudentEmails().stream()
+                .map(email -> studentService.findByEmail(email))
+                .collect(Collectors.toList());
 
         Subject subject = SubjectMapper.toEntity(dto, mainProfessor, substituteProfessor, course, students);
-
         Subject savedSubject = subjectService.save(subject);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(SubjectMapper.toDto(savedSubject));
+
     }
 
     @PutMapping("{id}")
