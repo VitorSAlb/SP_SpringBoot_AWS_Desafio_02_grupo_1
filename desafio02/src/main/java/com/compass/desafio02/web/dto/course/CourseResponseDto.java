@@ -1,7 +1,8 @@
 package com.compass.desafio02.web.dto.course;
 
 import com.compass.desafio02.web.dto.coordinator.CoordinatorResponseDto;
-import com.compass.desafio02.web.subject.SubjectResponseDto;
+import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
+
 
 import java.util.List;
 
