@@ -31,33 +31,26 @@ public class SubjectService {
 
     public Subject save(Subject subject, Integer mainProfessorId, Integer substituteProfessorId, Integer courseId, List<Integer> studentIds) {
 
-        // Check if the subject name is unique
         if (subjectRepository.existsByName(subject.getName())) {
             throw new BusinessRuleException("Subject name must be unique.");
         }
 
-        // Fetch professors
         Professor mainProfessor = professorService.findById(mainProfessorId);
         Professor substituteProfessor = professorService.findById(substituteProfessorId);
 
-        // Verify that the professors are different
         if (mainProfessorId.equals(substituteProfessorId)) {
             throw new BusinessRuleException("Main professor and substitute professor cannot be the same person.");
         }
 
-        // Fetch course
         Course course = courseService.findById(courseId);
 
-        // Set relationships
         subject.setMainProfessor(mainProfessor);
         subject.setSubstituteProfessor(substituteProfessor);
         subject.setCourse(course);
 
-        // Fetch students if provided
         if (studentIds != null && !studentIds.isEmpty()) {
             List<Student> students = studentService.findAll(studentIds);
 
-            // Check limit of 10 students
             if (students.size() > 10) {
                 throw new BusinessRuleException("A subject cannot have more than 10 students.");
             }
@@ -80,11 +73,9 @@ public class SubjectService {
     public Subject update(Integer id, Subject updatedSubject, Integer mainProfessorId, Integer substituteProfessorId, List<Integer> studentIds) {
         Subject existingSubject = findById(id);
 
-        // Update fields
         existingSubject.setName(updatedSubject.getName());
         existingSubject.setDescription(updatedSubject.getDescription());
 
-        // Update professors if provided
         if (mainProfessorId != null) {
             Professor mainProfessor = professorService.findById(mainProfessorId);
             existingSubject.setMainProfessor(mainProfessor);
@@ -94,7 +85,6 @@ public class SubjectService {
             existingSubject.setSubstituteProfessor(substituteProfessor);
         }
 
-        // Update students if provided
         if (studentIds != null) {
             List<Student> students = studentService.findAll(studentIds);
 
