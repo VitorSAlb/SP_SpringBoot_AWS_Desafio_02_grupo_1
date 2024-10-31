@@ -2,9 +2,11 @@ package com.compass.desafio02.util.config;
 
 import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Course;
+import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.repositories.CoordinatorRepository;
 import com.compass.desafio02.domain.repositories.CourseRepository;
+import com.compass.desafio02.domain.repositories.ProfessorRepository;
 import com.compass.desafio02.domain.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -25,12 +27,16 @@ public class Instatiation implements CommandLineRunner {
     @Autowired
     private CoordinatorRepository coordinatorRepository;
 
+    @Autowired
+    private ProfessorRepository professorRepository;
+
     @Override
     public void run(String... args) throws Exception {
 
         studentRepository.deleteAll();
         courseRepository.deleteAll();
         coordinatorRepository.deleteAll();
+        professorRepository.deleteAll();
 
 
         Student s1 = new Student("s01", "s01", "s1@email.com", LocalDate.now(), "123456", "test1 address");
@@ -61,6 +67,11 @@ public class Instatiation implements CommandLineRunner {
         courseRepository.save(c1);
         courseRepository.save(c2);
         courseRepository.save(c3);
+
+        Professor p1 = new Professor("prof1", "prof1LastName", "prof1@email.com", LocalDate.now(), "123456");
+        Professor p2 = new Professor("prof2", "prof2LastName", "prof2@email.com", LocalDate.now(), "123456");
+
+        professorRepository.saveAll(Arrays.asList(p1, p2));
 
     }
 }
