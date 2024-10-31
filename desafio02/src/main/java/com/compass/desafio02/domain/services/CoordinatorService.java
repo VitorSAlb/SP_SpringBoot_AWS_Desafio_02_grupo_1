@@ -1,6 +1,7 @@
 package com.compass.desafio02.domain.services;
 
 import com.compass.desafio02.domain.entities.Coordinator;
+import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.repositories.CoordinatorRepository;
@@ -19,8 +20,12 @@ public class CoordinatorService {
     @Autowired
     private CoordinatorRepository coordinatorRepository;
 
-    public Coordinator save(Coordinator professor) {
-        return coordinatorRepository.save(professor);
+    public Coordinator save(Coordinator coordinator) {
+        if (!isPasswordValid(coordinator.getPassword())) {
+            throw new IllegalArgumentException("The password must have at least one uppercase letter, one lowercase letter, one number, one special character and at least 8 characters.");
+        }
+
+        return coordinatorRepository.save(coordinator);
     }
 
     public Coordinator findById(Integer id) {
@@ -69,5 +74,9 @@ public class CoordinatorService {
         }
         coordinator.setPassword(newPassword);
         coordinatorRepository.save(coordinator);
+    }
+
+    private boolean isPasswordValid(String password) {
+        return password != null && password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$");
     }
 }

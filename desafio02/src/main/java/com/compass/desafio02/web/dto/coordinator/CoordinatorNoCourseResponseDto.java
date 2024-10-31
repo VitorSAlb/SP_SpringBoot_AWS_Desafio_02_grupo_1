@@ -2,23 +2,21 @@ package com.compass.desafio02.web.dto.coordinator;
 
 import com.compass.desafio02.domain.entities.Course;
 
-public class CoordinatorResponseDto {
+public class CoordinatorNoCourseResponseDto {
 
     private Integer id;
     private String firstName;
     private String lastName;
     private String email;
-    private Course course;
 
-    public CoordinatorResponseDto() {
+    public CoordinatorNoCourseResponseDto() {
     }
 
-    public CoordinatorResponseDto(Integer id, String firstName, String lastName, String email, Course course) {
+    public CoordinatorNoCourseResponseDto(Integer id, String firstName, String lastName, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.course = course;
     }
 
     public Integer getId() {
@@ -51,13 +49,5 @@ public class CoordinatorResponseDto {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Course getCourse() {
-        return course;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
     }
 }

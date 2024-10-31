@@ -46,7 +46,7 @@ public class StudentController {
     }
 
     @PostMapping()
-    public ResponseEntity<StudentResponseDto> create(@RequestBody StudentCreateDto dto) {
+    public ResponseEntity<StudentResponseDto> create(@RequestBody @Valid StudentCreateDto dto) {
         Student student = StudentMapper.toEntity(dto);
         student.setRole(Role.ROLE_STUDENT);
         studentService.save(student);

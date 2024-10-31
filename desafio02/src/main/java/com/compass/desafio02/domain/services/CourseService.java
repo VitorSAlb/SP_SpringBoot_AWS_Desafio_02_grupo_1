@@ -2,8 +2,10 @@ package com.compass.desafio02.domain.services;
 
 import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Course;
+import com.compass.desafio02.domain.repositories.CoordinatorRepository;
 import com.compass.desafio02.domain.repositories.CourseRepository;
 import com.compass.desafio02.infrastructure.exceptions.ResourceNotFoundException;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,8 +16,23 @@ public class CourseService {
 
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private CoordinatorRepository coordinatorRepository;
 
     public Course save(Course course) {
+
+        if (course.getName().isEmpty()) {
+            throw new RuntimeException("Not can save with empty name");
+        }
+
+        if (course.getDescription().isEmpty()) {
+            throw new RuntimeException("Not can save with empty description");
+        }
+
+        if ( courseRepository.existsByName(course.getName())) {
+            throw new RuntimeException("This Name course already existing");
+        }
+
         return courseRepository.save(course);
     }
 
@@ -32,19 +49,9 @@ public class CourseService {
         }
     }
 
-
-
     public Page<Course> findAll(Pageable pageable) {
         return courseRepository.findAllP(pageable);
     }
-
-    public Course updateCoordinate(Integer id, Coordinator coordinator) {
-        Course existingCourse = findById(id);
-        existingCourse.setCoordinator(coordinator);
-        existingCourse.setDescription(existingCourse.getDescription());
-        return courseRepository.save(existingCourse);
-    }
-    // Testar troca de descrição ^^
 
     public Course update(Integer id, Course newCourse) {
         Course existingCourse = findById(id);
@@ -61,4 +68,38 @@ public class CourseService {
         }
         courseRepository.deleteById(id);
     }
+
+    public Course addCoordinatorToCourse(String nameCourse, String email) {
+
+        Course course = findByName(nameCourse);
+        Coordinator coordinator = coordinatorRepository.findByEmail(email);
+
+        if (coordinator == null || course == null) {
+            throw new RuntimeException("Coordinator or course not founded.");
+        }
+        if (coordinator.getCourse() != null) {
+            throw new RuntimeException("Coordinator cannot manage more than one course.");
+        }
+        course.setCoordinator(coordinator);
+        return courseRepository.save(course);
+    }
+
+    public Course removeCoordinatorFromCourse(String nameCourse) {
+
+        Course course = findByName(nameCourse);
+
+        if (course == null) {
+            throw new RuntimeException("Course not found.");
+        }
+
+        // Verifica se há um coordenador associado ao curso
+        Coordinator coordinator = course.getCoordinator();
+        if (coordinator != null) {
+            coordinator.setCourse(null);
+            coordinatorRepository.save(coordinator);
+        }
+        course.setCoordinator(null);
+        return courseRepository.save(course);
+    }
+
 }

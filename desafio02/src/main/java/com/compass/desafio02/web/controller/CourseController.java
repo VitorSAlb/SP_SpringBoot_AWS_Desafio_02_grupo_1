@@ -5,10 +5,14 @@ import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.services.CoordinatorService;
 import com.compass.desafio02.domain.services.CourseService;
 import com.compass.desafio02.web.dto.*;
+import com.compass.desafio02.web.dto.course.CourseAddCooDto;
 import com.compass.desafio02.web.dto.course.CourseCreateDto;
 import com.compass.desafio02.web.dto.course.CourseResponseDto;
 import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
+import org.apache.coyote.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,6 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/courses")
 public class CourseController {
+    private static final Logger log = LoggerFactory.getLogger(CourseController.class);
 
     // MUDAR OS COORDENADORES PARA DTO
 
@@ -59,20 +64,21 @@ public class CourseController {
 
     @PostMapping
     public ResponseEntity<CourseResponseDto> create(@RequestBody CourseCreateDto courseCreateDto) {
-        Coordinator coordinator = coordinatorService.findByEmail(courseCreateDto.getCoordinatorEmail());
-
-        if (coordinator == null) {
-            throw new RuntimeException("Coordinator not found with the provided email.");
-        }
+        String coordinatorEmail = courseCreateDto.getCoordinatorEmail();
 
         Course course = Mapper.toEntity(courseCreateDto, Course.class);
-        course.setCoordinator(coordinator);
+
+        if (coordinatorEmail != null) {
+            Coordinator coo = coordinatorService.findByEmail(coordinatorEmail);
+            course.setCoordinator(coo);
+        }
 
         Course savedCourse = courseService.save(course);
         CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(savedCourse);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(courseResponseDto);
     }
+
 
 
     @PutMapping("/{id}")
@@ -87,12 +93,18 @@ public class CourseController {
         return ResponseEntity.ok(courseResponseDto);
     }
 
-    @PatchMapping("/{id_course}/coordinator/{id_coordinator}")
-    public ResponseEntity<CourseResponseDto> updateCoordinator(@PathVariable Integer id_course, @PathVariable Integer id_coordinator) {
-        Coordinator coordinator = coordinatorService.findById(id_coordinator);
-        Course updatedCourse = courseService.updateCoordinate(id_course, coordinator);
-        CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(updatedCourse);
-        return ResponseEntity.ok(courseResponseDto);
+    @PatchMapping("/coordinator")
+    public ResponseEntity<CourseResponseDto> updateCoordinator(@RequestBody CourseAddCooDto dto) {
+        log.info("email: " + dto.getCoordinatorEmail());
+        log.info("name: " + dto.getName());
+        Course updatedCourse = courseService.addCoordinatorToCourse(dto.getName(), dto.getCoordinatorEmail());
+        return ResponseEntity.ok(Mapper.toCourseResponseDto(updatedCourse));
+    }
+
+    @PatchMapping("/remove/coordinator/{name}")
+    public ResponseEntity<Void> removeCoordinator(@PathVariable String name) {
+        courseService.removeCoordinatorFromCourse(name);
+        return ResponseEntity.noContent().build();
     }
 
 }
