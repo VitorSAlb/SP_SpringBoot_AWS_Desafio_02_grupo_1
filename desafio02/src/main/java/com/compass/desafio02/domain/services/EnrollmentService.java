@@ -7,6 +7,7 @@ import com.compass.desafio02.domain.repositories.EnrollmentRepository;
 import com.compass.desafio02.domain.repositories.StudentRepository;
 import com.compass.desafio02.domain.repositories.CourseRepository;
 import com.compass.desafio02.infrastructure.exceptions.ResourceNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,15 +20,13 @@ import java.util.List;
 @Service
 public class EnrollmentService {
 
-    private final EnrollmentRepository enrollmentRepository;
-    private final StudentRepository studentRepository;
-    private final CourseRepository courseRepository;
+    @Autowired
+    private EnrollmentRepository enrollmentRepository;
+    @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
+    private CourseRepository courseRepository;
 
-    public EnrollmentService(EnrollmentRepository enrollmentRepository, StudentRepository studentRepository, CourseRepository courseRepository) {
-        this.enrollmentRepository = enrollmentRepository;
-        this.studentRepository = studentRepository;
-        this.courseRepository = courseRepository;
-    }
 
     public Page<Enrollment> getAllEnrollments(Pageable pageable) {
         return enrollmentRepository.findAll(pageable);
@@ -38,7 +37,7 @@ public class EnrollmentService {
     }
 
     @Transactional
-    public Enrollment createEnrollment(Integer studentId, Integer courseId) {
+    public Enrollment createEnrollment(Integer courseId, Integer studentId) {
         // Verifica se o aluno existe
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + studentId));
@@ -53,7 +52,7 @@ public class EnrollmentService {
         }
 
         // Verificar se o aluno está matriculado em outro curso
-        if (enrollmentRepository.existsById(student.getId())) {
+        if (enrollmentRepository.existsByStudentId(student.getId())) {
             throw new IllegalArgumentException("Student is already enrolled in another course.");
         }
 
