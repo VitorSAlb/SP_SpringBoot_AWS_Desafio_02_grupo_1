@@ -62,21 +62,23 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-
-    // COLOCAR O ENCRIPTADOR DE SENHA
-    public Student editPassword(Integer id, String currentPassword, String newPassword, String confirmPassword) {
+    public void editPassword(Integer id, String currentPassword, String newPassword, String confirmPassword) {
         if (!newPassword.equals(confirmPassword)) {
-            throw new RuntimeException(); // TROCAR EXCESSÃO
+            throw new IllegalArgumentException("New password and confirmation password do not match.");
+        }
+
+        if (!isPasswordValid(newPassword)) {
+            throw new IllegalArgumentException("Password does not meet security requirements.");
         }
 
         Student student = findById(id);
 
         if (!Objects.equals(student.getPassword(), currentPassword)) {
-            throw new RuntimeException(); // TROCAR EXCESSÃO
+            throw new IllegalArgumentException("Current password is incorrect.");
         }
+
         student.setPassword(newPassword);
         studentRepository.save(student);
-        return student;
     }
 
     private boolean isPasswordValid(String password) {

@@ -1,17 +1,14 @@
 package com.compass.desafio02.web.controller;
 
 import com.compass.desafio02.domain.entities.Coordinator;
-import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.entities.enums.Role;
 import com.compass.desafio02.domain.repositories.projection.CoordinatorProjection;
 import com.compass.desafio02.domain.services.CoordinatorService;
 import com.compass.desafio02.domain.services.CourseService;
 import com.compass.desafio02.web.dto.UserPasswordDto;
 import com.compass.desafio02.web.dto.coordinator.CoordinatorCreateDto;
-import com.compass.desafio02.web.dto.coordinator.CoordinatorNewCourseDto;
 import com.compass.desafio02.web.dto.coordinator.CoordinatorResponseDto;
 import com.compass.desafio02.web.dto.PageableDto;
-import com.compass.desafio02.web.dto.course.CourseResponseDto;
 import com.compass.desafio02.web.dto.mapper.CoordinatorMapper;
 import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;

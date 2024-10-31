@@ -64,14 +64,19 @@ public class CoordinatorService {
 
     public void editPassword(Integer id, String currentPassword, String newPassword, String confirmPassword) {
         if (!newPassword.equals(confirmPassword)) {
-            throw new RuntimeException(); // TROCAR EXCESSÃO
+            throw new IllegalArgumentException("New password and confirmation password do not match.");
+        }
+
+        if (!isPasswordValid(newPassword)) {
+            throw new IllegalArgumentException("Password does not meet security requirements.");
         }
 
         Coordinator coordinator = findById(id);
 
         if (!Objects.equals(coordinator.getPassword(), currentPassword)) {
-            throw new RuntimeException(); // TROCAR EXCESSÃO
+            throw new IllegalArgumentException("Current password is incorrect.");
         }
+
         coordinator.setPassword(newPassword);
         coordinatorRepository.save(coordinator);
     }
