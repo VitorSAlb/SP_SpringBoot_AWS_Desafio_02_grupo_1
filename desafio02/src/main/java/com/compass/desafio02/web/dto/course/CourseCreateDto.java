@@ -1,4 +1,4 @@
-package com.compass.desafio02.web.dto.Course;
+package com.compass.desafio02.web.dto.course;
 
 import jakarta.validation.constraints.NotBlank;
 

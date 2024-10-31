@@ -3,6 +3,7 @@ package com.compass.desafio02.domain.services;
 import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.repositories.CourseRepository;
+import com.compass.desafio02.infrastructure.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +20,10 @@ public class CourseService {
     }
 
     public Course findById(Integer id) {
-        return courseRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Course not founded") // TROCAR EXCESSÃO
-        );
+        return courseRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + id));
     }
+    // Troca de exceção realizada ^^
 
     public Page<Course> findAll(Pageable pageable) {
         return courseRepository.findAllP(pageable);
@@ -30,11 +31,11 @@ public class CourseService {
 
     public Course updateCoordinate(Integer id, Coordinator coordinator) {
         Course existingCourse = findById(id);
-
         existingCourse.setCoordinator(coordinator);
-
+        existingCourse.setDescription(existingCourse.getDescription());
         return courseRepository.save(existingCourse);
     }
+    // Testar troca de descrição ^^
 
     public Course update(Integer id, Course newCourse) {
         Course existingCourse = findById(id);
@@ -46,6 +47,9 @@ public class CourseService {
     }
 
     public void delete(Integer id) {
+        if (!courseRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Course not found with id: " + id);
+        }
         courseRepository.deleteById(id);
     }
 }

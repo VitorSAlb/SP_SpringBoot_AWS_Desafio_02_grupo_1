@@ -1,7 +1,10 @@
-package com.compass.desafio02.web.subject;
+package com.compass.desafio02.web.dto.subject;
 
-import com.compass.desafio02.web.dto.course.CourseResponseDto;
 import com.compass.desafio02.web.dto.professor.ProfessorResponseDto;
+import com.compass.desafio02.web.dto.student.StudentResponseDto;
+import com.compass.desafio02.web.dto.course.CourseResponseDto;
+
+import java.util.List;
 
 public class SubjectResponseDto {
 
@@ -11,17 +14,19 @@ public class SubjectResponseDto {
     private ProfessorResponseDto mainProfessor;
     private ProfessorResponseDto substituteProfessor;
     private CourseResponseDto course;
+    private List<StudentResponseDto> students;
 
     public SubjectResponseDto() {
     }
 
-    public SubjectResponseDto(Integer id, String name, String description, ProfessorResponseDto mainProfessor, ProfessorResponseDto substituteProfessor, CourseResponseDto course) {
+    public SubjectResponseDto(Integer id, String name, String description, ProfessorResponseDto mainProfessor, ProfessorResponseDto substituteProfessor, CourseResponseDto course, List<StudentResponseDto> students) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.mainProfessor = mainProfessor;
         this.substituteProfessor = substituteProfessor;
         this.course = course;
+        this.students = students;
     }
 
     public Integer getId() {
@@ -72,4 +77,11 @@ public class SubjectResponseDto {
         this.course = course;
     }
 
+    public List<StudentResponseDto> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<StudentResponseDto> students) {
+        this.students = students;
+    }
 }

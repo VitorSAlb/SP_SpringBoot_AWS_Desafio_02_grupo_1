@@ -23,8 +23,6 @@ public class ProfessorResponseDto {
         this.subjects = subjects;
     }
 
-    // Getters e Setters
-
     public Integer getId() {
         return id;
     }

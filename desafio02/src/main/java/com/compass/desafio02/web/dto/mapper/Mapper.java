@@ -2,8 +2,8 @@ package com.compass.desafio02.web.dto.mapper;
 
 import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Course;
-import com.compass.desafio02.web.dto.Coordinator.CoordinatorResponseDto;
-import com.compass.desafio02.web.dto.Course.CourseResponseDto;
+import com.compass.desafio02.web.dto.coordinator.CoordinatorResponseDto;
+import com.compass.desafio02.web.dto.course.CourseResponseDto;
 import com.compass.desafio02.web.subject.SubjectResponseDto;
 import org.modelmapper.ModelMapper;
 
