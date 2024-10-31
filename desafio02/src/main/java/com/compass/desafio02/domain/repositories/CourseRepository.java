@@ -15,4 +15,6 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 
     @Query("select c from Course c")
     Page<Course> findAllP(Pageable pageable);
+
+    boolean existsByName(String name);
 }

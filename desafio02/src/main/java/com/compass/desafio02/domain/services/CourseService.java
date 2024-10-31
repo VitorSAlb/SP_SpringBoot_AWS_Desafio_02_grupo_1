@@ -20,6 +20,19 @@ public class CourseService {
     private CoordinatorRepository coordinatorRepository;
 
     public Course save(Course course) {
+
+        if (course.getName().isEmpty()) {
+            throw new RuntimeException("Not can save with empty name");
+        }
+
+        if (course.getDescription().isEmpty()) {
+            throw new RuntimeException("Not can save with empty description");
+        }
+
+        if ( courseRepository.existsByName(course.getName())) {
+            throw new RuntimeException("This Name course already existing");
+        }
+
         return courseRepository.save(course);
     }
 
