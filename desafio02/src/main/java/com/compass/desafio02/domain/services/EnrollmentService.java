@@ -7,6 +7,8 @@ import com.compass.desafio02.domain.repositories.EnrollmentRepository;
 import com.compass.desafio02.domain.repositories.StudentRepository;
 import com.compass.desafio02.domain.repositories.CourseRepository;
 import com.compass.desafio02.infrastructure.exceptions.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +27,8 @@ public class EnrollmentService {
         this.courseRepository = courseRepository;
     }
 
-    public List<Enrollment> getAllEnrollments() {
-        return enrollmentRepository.findAll();
+    public Page<Enrollment> getAllEnrollments(Pageable pageable) {
+        return enrollmentRepository.findAll(pageable);
     }
 
     public Enrollment findEnrollmentById(Integer id) {

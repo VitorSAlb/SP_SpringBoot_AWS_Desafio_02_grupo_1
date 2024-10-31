@@ -23,7 +23,16 @@ public class CourseService {
         return courseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + id));
     }
-    // Troca de exceção realizada ^^
+
+    public Course findByName(String name) {
+        try {
+            return courseRepository.findByName(name);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Course not found with name: " + name); // Troca de exceção realizada ^^
+        }
+    }
+
+
 
     public Page<Course> findAll(Pageable pageable) {
         return courseRepository.findAllP(pageable);
