@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 @Service
@@ -37,16 +39,30 @@ public class EnrollmentService {
 
     @Transactional
     public Enrollment createEnrollment(Integer studentId, Integer courseId) {
+        // Verifica se o aluno existe
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + studentId));
 
+        // Verifica se o curso existe
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + courseId));
 
+        // Verificar se o aluno tem 18 anos ou mais
+        if (!isStudentOfAge(student)) {
+            throw new IllegalArgumentException("Student must be at least 18 years old to enroll.");
+        }
+
+        // Verificar se o aluno está matriculado em outro curso
+        if (enrollmentRepository.existsById(student.getId())) {
+            throw new IllegalArgumentException("Student is already enrolled in another course.");
+        }
+
+        // Verificar se o aluno já está matriculado neste curso
         if (enrollmentRepository.existsByStudentAndCourse(student, course)) {
             throw new IllegalArgumentException("Student is already enrolled in this course.");
         }
 
+        // Criar a nova matrícula
         Enrollment enrollment = new Enrollment(student, course);
         return enrollmentRepository.save(enrollment);
     }
@@ -56,6 +72,12 @@ public class EnrollmentService {
             throw new ResourceNotFoundException("Enrollment not found with id: " + id);
         }
         enrollmentRepository.deleteById(id);
+    }
+
+
+
+    private boolean isStudentOfAge(Student student) {
+        return Period.between(student.getBirthdate(), LocalDate.now()).getYears() >= 18;
     }
 
 }
