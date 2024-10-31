@@ -26,7 +26,7 @@ public class ProfessorService {
         );
     }
 
-    public Student findByEmail(String email) {
+    public Professor findByEmail(String email) {
         try {
             return professorRepository.findByEmail(email);
         } catch (RuntimeException e) {
