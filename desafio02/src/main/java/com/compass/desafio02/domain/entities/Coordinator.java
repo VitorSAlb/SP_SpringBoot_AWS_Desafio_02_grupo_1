@@ -1,6 +1,9 @@
 package com.compass.desafio02.domain.entities;
 
 import com.compass.desafio02.domain.entities.enums.Role;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -11,7 +14,8 @@ import java.time.LocalDate;
 
 public class Coordinator extends User implements Serializable {
 
-    @OneToOne
+    @JsonManagedReference()
+    @OneToOne(mappedBy = "coordinator")
     private Course course;
 
     public Coordinator() {
@@ -32,5 +36,9 @@ public class Coordinator extends User implements Serializable {
 
     public void setCourse(Course course) {
         this.course = course;
+        if (course != null && !course.getCoordinator().equals(this)) {
+            course.setCoordinator(this);
+        }
     }
+
 }

@@ -1,6 +1,7 @@
 package com.compass.desafio02.domain.services;
 
 import com.compass.desafio02.domain.entities.Coordinator;
+import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.repositories.CoordinatorRepository;
@@ -19,8 +20,8 @@ public class CoordinatorService {
     @Autowired
     private CoordinatorRepository coordinatorRepository;
 
-    public Coordinator save(Coordinator professor) {
-        return coordinatorRepository.save(professor);
+    public Coordinator save(Coordinator coordinator) {
+        return coordinatorRepository.save(coordinator);
     }
 
     public Coordinator findById(Integer id) {
