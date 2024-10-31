@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface CoordinatorRepository extends JpaRepository<Coordinator, Integer> {
 
-    @Query("SELECT s FROM Student s WHERE s.email = :email")
+    @Query("SELECT c FROM Coordinator c WHERE c.email = :email")
     Student findByEmail(@Param("email") String email);
 }

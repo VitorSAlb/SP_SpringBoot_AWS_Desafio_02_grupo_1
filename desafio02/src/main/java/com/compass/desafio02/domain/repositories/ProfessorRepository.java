@@ -14,6 +14,6 @@ public interface ProfessorRepository extends JpaRepository<Professor, Integer> {
     @Query("select p from Professor p")
     Page<ProfessorProjection> findAllP(Pageable pageable);
 
-    @Query("SELECT s FROM Student s WHERE s.email = :email")
+    @Query("SELECT p FROM Professor p WHERE p.email = :email")
     Student findByEmail(@Param("email") String email);
 }

@@ -12,7 +12,7 @@ public class CourseMapper {
                 course.getId(),
                 course.getName(),
                 course.getDescription(),
-                CoordinatorMapper.toDto(course.getCoordinator()),
+                CoordinatorMapper.toCoordinatorResponseDto(course.getCoordinator()),
                 course.getSubjects() != null
                         ? course.getSubjects().stream()
                         .map(SubjectMapper::toDto)

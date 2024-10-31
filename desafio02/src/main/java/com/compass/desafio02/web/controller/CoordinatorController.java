@@ -3,8 +3,8 @@ package com.compass.desafio02.web.controller;
 import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.enums.Role;
 import com.compass.desafio02.domain.services.CoordinatorService;
-import com.compass.desafio02.web.dto.Coordinator.CoordinatorCreateDto;
-import com.compass.desafio02.web.dto.Coordinator.CoordinatorResponseDto;
+import com.compass.desafio02.web.dto.coordinator.CoordinatorCreateDto;
+import com.compass.desafio02.web.dto.coordinator.CoordinatorResponseDto;
 import com.compass.desafio02.web.dto.PageableDto;
 import com.compass.desafio02.web.dto.mapper.CoordinatorMapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
@@ -35,7 +35,7 @@ public class CoordinatorController {
     @GetMapping()
     public ResponseEntity<PageableDto> getAllCoordinators(@PageableDefault(size = 5, sort = {"firstName"}) Pageable pageable) {
         Page<Coordinator> coordinators = coordinatorService.findAll(pageable);
-        return ResponseEntity.ok(PageableMapper.toDto(coordinators));
+        return ResponseEntity.ok(PageableMapper.toDto(coordinators, Coordinator.class));
     }
 
     @GetMapping("/{id}")
