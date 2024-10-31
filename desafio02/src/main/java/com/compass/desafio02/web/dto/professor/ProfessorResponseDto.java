@@ -1,6 +1,6 @@
 package com.compass.desafio02.web.dto.professor;
 
-import com.compass.desafio02.web.subject.SubjectResponseDto;
+import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
 
 import java.util.List;
 

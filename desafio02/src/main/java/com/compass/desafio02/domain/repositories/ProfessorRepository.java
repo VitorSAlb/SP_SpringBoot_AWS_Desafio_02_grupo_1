@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ProfessorRepository extends JpaRepository<Professor, Integer> {
 
-    @Query("select p from professor p")
+    @Query("select p from Professor p")
     Page<ProfessorProjection> findAllP(Pageable pageable);
 
     @Query("SELECT s FROM Student s WHERE s.email = :email")
