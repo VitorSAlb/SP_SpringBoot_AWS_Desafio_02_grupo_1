@@ -2,12 +2,16 @@ package com.compass.desafio02.domain.services;
 
 import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Professor;
+import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.repositories.CoordinatorRepository;
 import com.compass.desafio02.domain.repositories.ProfessorRepository;
+import com.compass.desafio02.domain.repositories.projection.CoordinatorProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 public class CoordinatorService {
@@ -34,8 +38,8 @@ public class CoordinatorService {
 
     }
 
-    public Page<Coordinator> findAll(Pageable pageable) {
-        return coordinatorRepository.findAll(pageable);
+    public Page<CoordinatorProjection> findAll(Pageable pageable) {
+        return coordinatorRepository.findAllP(pageable);
     }
 
     public Coordinator update(Integer id, Coordinator newCoordinator) {
@@ -51,5 +55,19 @@ public class CoordinatorService {
 
     public void delete(Integer id) {
         coordinatorRepository.deleteById(id);
+    }
+
+    public void editPassword(Integer id, String currentPassword, String newPassword, String confirmPassword) {
+        if (!newPassword.equals(confirmPassword)) {
+            throw new RuntimeException(); // TROCAR EXCESSÃO
+        }
+
+        Coordinator coordinator = findById(id);
+
+        if (!Objects.equals(coordinator.getPassword(), currentPassword)) {
+            throw new RuntimeException(); // TROCAR EXCESSÃO
+        }
+        coordinator.setPassword(newPassword);
+        coordinatorRepository.save(coordinator);
     }
 }

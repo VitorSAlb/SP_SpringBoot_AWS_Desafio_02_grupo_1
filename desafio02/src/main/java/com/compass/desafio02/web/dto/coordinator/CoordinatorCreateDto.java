@@ -26,20 +26,14 @@ public class CoordinatorCreateDto {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthdate;
 
-    private String address;
-
-    private Role role;
-
     public CoordinatorCreateDto() {}
 
-    public CoordinatorCreateDto(String firstName, String lastName, String email, String password, LocalDate birthdate, String address, Role role) {
+    public CoordinatorCreateDto(String firstName, String lastName, String email, String password, LocalDate birthdate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.birthdate = birthdate;
-        this.address = address;
-        this.role = role.ROLE_COORDINATOR;
     }
 
     public @NotBlank String getFirstName() {return firstName;}
@@ -61,12 +55,4 @@ public class CoordinatorCreateDto {
     public @NotBlank LocalDate getBirthdate() {return birthdate;}
 
     public void setBirthdate(@NotBlank LocalDate birthdate) {this.birthdate = birthdate;}
-
-    public @NotBlank String getAddress() {return address;}
-
-    public void setAddress(@NotBlank String address) {this.address = address;}
-
-    public Role getRole() {return role;}
-
-    public void setRole(@NotBlank Role role) {this.role = role;}
 }
