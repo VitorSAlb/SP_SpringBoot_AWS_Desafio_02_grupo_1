@@ -16,10 +16,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-import static com.compass.desafio02.web.dto.mapper.ProfessorMapper.toProfessor;
-
 @RestController
 @RequestMapping("/api/v1/professors")
 public class ProfessorController {
@@ -31,28 +27,28 @@ public class ProfessorController {
 
     @PostMapping
     public ResponseEntity<ProfessorResponseDto> createProfessor(@RequestBody ProfessorCreateDto professorDto) {
-        Professor professor = ProfessorMapper.toProfessor(professorDto);
+        Professor professor = ProfessorMapper.toEntity(professorDto);
         professor.setRole(Role.ROLE_PROFESSOR);
         professorService.save(professor);
-        return ResponseEntity.status(201).body(ProfessorMapper.toProfessorResponseDto(professor));
+        return ResponseEntity.status(201).body(ProfessorMapper.toDto(professor));
     }
 
     @GetMapping()
     public ResponseEntity<PageableDto> getAllProfessors(@PageableDefault(size = 5, sort = {"firstName"}) Pageable pageable) {
         Page<ProfessorProjection> professors = professorService.findAll(pageable);
-        return ResponseEntity.ok(PageableMapper.toDto(professors));
+        return ResponseEntity.ok(PageableMapper.toDto(professors, Professor.class));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProfessorResponseDto> getProfessorById(@PathVariable Integer id) {
         Professor professor = professorService.findById(id);
-        return ResponseEntity.ok(ProfessorMapper.toProfessorResponseDto(professor));
+        return ResponseEntity.ok(ProfessorMapper.toDto(professor));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProfessorResponseDto> updateProfessor(@PathVariable Integer id, @RequestBody Professor professor) {
         Professor updatedProfessor = professorService.update(id, professor);
-        return ResponseEntity.ok(ProfessorMapper.toProfessorResponseDto(updatedProfessor));
+        return ResponseEntity.ok(ProfessorMapper.toDto(updatedProfessor));
     }
 
     @DeleteMapping("/{id}")

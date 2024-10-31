@@ -30,7 +30,7 @@ public class StudentController {
     @GetMapping()
     public ResponseEntity<PageableDto> findAll(@PageableDefault(size = 5, sort = {"firstName"}) Pageable pageable) {
         Page<StudentProjection> students = studentService.findAll(pageable);
-        return ResponseEntity.ok(PageableMapper.toDto(students));
+        return ResponseEntity.ok(PageableMapper.toDto(students, Student.class));
     }
 
     @GetMapping("/{id}")

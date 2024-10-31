@@ -41,7 +41,7 @@ public class CourseController {
         List<CourseResponseDto> courseDtos = courses.getContent().stream()
                 .map(Mapper::toCourseResponseDto).toList();
         Page<CourseResponseDto> courseDtosPage = new PageImpl<>(courseDtos, pageable, courses.getTotalElements());
-        return ResponseEntity.ok(PageableMapper.toDto(courseDtosPage));
+        return ResponseEntity.ok(PageableMapper.toDto(courseDtosPage, CourseResponseDto.class));
     }
 
     @GetMapping("/{id}")
