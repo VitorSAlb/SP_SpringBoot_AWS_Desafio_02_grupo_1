@@ -23,8 +23,6 @@ public class ProfessorController {
     @Autowired
     private ProfessorService professorService;
 
-    // Professor Student ---------------------------------------------------------------------
-
     @PostMapping
     public ResponseEntity<ProfessorResponseDto> createProfessor(@RequestBody ProfessorCreateDto professorDto) {
         Professor professor = ProfessorMapper.toEntity(professorDto);
@@ -57,5 +55,4 @@ public class ProfessorController {
         return ResponseEntity.noContent().build();
     }
 
-    // End Professor ---------------------------------------------------------------------
 }

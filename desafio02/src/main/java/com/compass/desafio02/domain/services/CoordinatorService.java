@@ -2,6 +2,7 @@ package com.compass.desafio02.domain.services;
 
 import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Professor;
+import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.repositories.CoordinatorRepository;
 import com.compass.desafio02.domain.repositories.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,15 @@ public class CoordinatorService {
         return coordinatorRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Professor not founded") // TROCAR EXCESSÃO
         );
+    }
+
+    public Student findByEmail(String email) {
+        try {
+            return coordinatorRepository.findByEmail(email);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Email not founded"); // TROCAR EXCESSÃO
+        }
+
     }
 
     public Page<Coordinator> findAll(Pageable pageable) {

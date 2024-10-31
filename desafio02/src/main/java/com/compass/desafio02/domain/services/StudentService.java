@@ -29,6 +29,15 @@ public class StudentService {
         );
     }
 
+    public Student findByEmail(String email) {
+        try {
+            return studentRepository.findByEmail(email);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Email not founded"); // TROCAR EXCESSÃO
+        }
+
+    }
+
     public Page<StudentProjection> findAll(Pageable pageable) {
         return studentRepository.findAllP(pageable);
     }
