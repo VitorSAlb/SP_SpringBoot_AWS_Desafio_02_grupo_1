@@ -7,6 +7,7 @@ import com.compass.desafio02.web.dto.enrollment.EnrollmentResponseDto;
 import com.compass.desafio02.web.dto.mapper.EnrollmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
@@ -20,6 +21,7 @@ public class EnrollmentController {
     @Autowired
     private EnrollmentService enrollmentService;
 
+    @PreAuthorize("hasRole('COORDINATOR')")
     @PostMapping
     public ResponseEntity<EnrollmentResponseDto> createEnrollment(@Valid @RequestBody enrollmentCreateDto dto) {
         Enrollment enrollment = enrollmentService.createEnrollment(dto.getStudentId(), dto.getCourseId());
