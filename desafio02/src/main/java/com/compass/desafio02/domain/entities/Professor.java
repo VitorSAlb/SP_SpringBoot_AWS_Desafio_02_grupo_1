@@ -1,6 +1,7 @@
 package com.compass.desafio02.domain.entities;
 
 import com.compass.desafio02.domain.entities.enums.Role;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -19,6 +20,7 @@ public class Professor extends User implements Serializable {
     @Column(name = "Subjects")
     private List<Subject> subjectHolder = new ArrayList<>();
 
+    @JsonBackReference
     @OneToMany(mappedBy = "substituteProfessor")
     private List<Subject> subjectSub = new ArrayList<>();
 

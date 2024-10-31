@@ -1,5 +1,6 @@
 package com.compass.desafio02.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class Subject{
 
     @ManyToOne
     @JoinColumn(name = "main_professor_id", nullable = false)
+    @JsonManagedReference
     private Professor mainProfessor;
 
     @ManyToOne
