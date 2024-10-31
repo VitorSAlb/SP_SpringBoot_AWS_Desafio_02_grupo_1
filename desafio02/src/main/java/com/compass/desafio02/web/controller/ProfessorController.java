@@ -1,10 +1,13 @@
 package com.compass.desafio02.web.controller;
 
 import com.compass.desafio02.domain.entities.Professor;
+import com.compass.desafio02.domain.entities.enums.Role;
 import com.compass.desafio02.domain.repositories.projection.ProfessorProjection;
 import com.compass.desafio02.domain.services.ProfessorService;
 import com.compass.desafio02.web.dto.PageableDto;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
+import com.compass.desafio02.web.dto.mapper.ProfessorMapper;
+import com.compass.desafio02.web.dto.professor.ProfessorCreateDto;
 import com.compass.desafio02.web.dto.professor.ProfessorResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.compass.desafio02.web.dto.mapper.ProfessorMapper.toProfessor;
 
 @RestController
 @RequestMapping("/api/v1/professors")
@@ -25,9 +30,11 @@ public class ProfessorController {
     // Professor Student ---------------------------------------------------------------------
 
     @PostMapping
-    public ResponseEntity<Professor> createProfessor(@RequestBody Professor professor) {
-        Professor savedProfessor = professorService.save(professor);
-        return ResponseEntity.status(201).body(savedProfessor);
+    public ResponseEntity<ProfessorResponseDto> createProfessor(@RequestBody ProfessorCreateDto professorDto) {
+        Professor professor = ProfessorMapper.toProfessor(professorDto);
+        professor.setRole(Role.ROLE_PROFESSOR);
+        professorService.save(professor);
+        return ResponseEntity.status(201).body(ProfessorMapper.toProfessorResponseDto(professor));
     }
 
     @GetMapping()
@@ -39,13 +46,13 @@ public class ProfessorController {
     @GetMapping("/{id}")
     public ResponseEntity<ProfessorResponseDto> getProfessorById(@PathVariable Integer id) {
         Professor professor = professorService.findById(id);
-        return ResponseEntity.ok(tProfessorMapper.toDTO(professor));
+        return ResponseEntity.ok(ProfessorMapper.toProfessorResponseDto(professor));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Professor> updateProfessor(@PathVariable Integer id, @RequestBody Professor professor) {
+    public ResponseEntity<ProfessorResponseDto> updateProfessor(@PathVariable Integer id, @RequestBody Professor professor) {
         Professor updatedProfessor = professorService.update(id, professor);
-        return ResponseEntity.ok(updatedProfessor);
+        return ResponseEntity.ok(ProfessorMapper.toProfessorResponseDto(updatedProfessor));
     }
 
     @DeleteMapping("/{id}")
