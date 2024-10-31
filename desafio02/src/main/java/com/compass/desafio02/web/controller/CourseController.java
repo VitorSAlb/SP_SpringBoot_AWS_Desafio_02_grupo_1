@@ -57,22 +57,37 @@ public class CourseController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping
     public ResponseEntity<CourseResponseDto> create(@RequestBody CourseCreateDto courseCreateDto) {
+        Coordinator coordinator = coordinatorService.findByEmail(courseCreateDto.getCoordinatorEmail());
+
+        if (coordinator == null) {
+            throw new RuntimeException("Coordinator not found with the provided email.");
+        }
+
         Course course = Mapper.toEntity(courseCreateDto, Course.class);
+        course.setCoordinator(coordinator);
+
         Course savedCourse = courseService.save(course);
         CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(savedCourse);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(courseResponseDto);
     }
 
+
     @PutMapping("/{id}")
     public ResponseEntity<CourseResponseDto> update(@PathVariable Integer id, @RequestBody CourseCreateDto courseUpdateDto) {
-        Course updatedCourse = Mapper.toEntity(courseUpdateDto, Course.class);
-        Course savedCourse = courseService.update(id, updatedCourse);
+        Coordinator coordinator = coordinatorService.findByEmail(courseUpdateDto.getCoordinatorEmail());
+
+        Course course = Mapper.toEntity(courseUpdateDto, Course.class);
+        course.setCoordinator(coordinator);
+
+        Course savedCourse = courseService.update(id, course);
         CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(savedCourse);
         return ResponseEntity.ok(courseResponseDto);
     }
 
-    @PatchMapping("/{id_course}/coordinator/{id_coordinator}") // FAZER TESTES
+    @PatchMapping("/{id_course}/coordinator/{id_coordinator}")
     public ResponseEntity<CourseResponseDto> updateCoordinator(@PathVariable Integer id_course, @PathVariable Integer id_coordinator) {
         Coordinator coordinator = coordinatorService.findById(id_coordinator);
         Course updatedCourse = courseService.updateCoordinate(id_course, coordinator);
@@ -80,7 +95,4 @@ public class CourseController {
         return ResponseEntity.ok(courseResponseDto);
     }
 
-
-
-    // End Course ---------------------------------------------------------------------
 }
