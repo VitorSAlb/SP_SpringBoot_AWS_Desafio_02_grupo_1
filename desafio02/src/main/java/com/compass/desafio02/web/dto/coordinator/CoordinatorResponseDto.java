@@ -1,4 +1,4 @@
-package com.compass.desafio02.web.dto.Coordinator;
+package com.compass.desafio02.web.dto.coordinator;
 
 public class CoordinatorResponseDto {
 

@@ -7,11 +7,13 @@ import org.modelmapper.ModelMapper;
 
 public class StudentMapper {
 
-    public static Student toStudent(StudentCreateDto dto) {
-        return new ModelMapper().map(dto, Student.class);
+    private static final ModelMapper modelMapper = new ModelMapper();
+
+    public static Student toEntity(StudentCreateDto dto) {
+        return modelMapper.map(dto, Student.class);
     }
 
     public static StudentResponseDto toDto(Student student) {
-        return new ModelMapper().map(student, StudentResponseDto.class);
+        return modelMapper.map(student, StudentResponseDto.class);
     }
 }

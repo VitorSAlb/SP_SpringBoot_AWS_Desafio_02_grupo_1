@@ -1,6 +1,5 @@
-package com.compass.desafio02.web.dto.Coordinator;
+package com.compass.desafio02.web.dto.coordinator;
 
-import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.enums.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;

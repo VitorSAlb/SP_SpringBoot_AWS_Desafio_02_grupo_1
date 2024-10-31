@@ -24,7 +24,7 @@ public class Course {
     private Coordinator coordinator;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<Subject> subject = new ArrayList<>();
+    private List<Subject> subjects = new ArrayList<>();
 
 
     public Course() {
@@ -68,24 +68,24 @@ public class Course {
         this.coordinator = coordinator;
     }
 
-    public List<Subject> getSubject() {
-        return subject;
+    public List<Subject> getSubjects() {
+        return subjects;
     }
 
-    public void setSubject(List<Subject> subject) {
-        this.subject = subject;
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
     }
 
     // Método para adicionar uma disciplina - duvida
-    public void addSubject(Subject subject) {
-        this.subject.add(subject);
-        subject.setCourse(this);
+    public void addSubject(Subject subjects) {
+        this.subjects.add(subjects);
+        subjects.setCourse(this);
     }
 
     // Método para remover uma disciplina - duvida
-    public void removeSubject(Subject subject) {
-        this.subject.remove(subject);
-        subject.setCourse(null);
+    public void removeSubject(Subject subjects) {
+        this.subjects.remove(subjects);
+        subjects.setCourse(null);
     }
 
 
