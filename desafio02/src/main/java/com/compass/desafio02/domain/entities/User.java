@@ -22,11 +22,11 @@ public abstract class User implements Serializable {
     private String lastName;
     @Column(name = "email", unique = true, nullable = false)
     private String email;
-    @Column(name = "birthdate")
+    @Column(name = "birthdate", nullable = false)
     private LocalDate birthdate;
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private Role role;
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     public User() {

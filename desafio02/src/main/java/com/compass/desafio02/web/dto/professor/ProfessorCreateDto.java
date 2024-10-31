@@ -8,38 +8,34 @@ import java.time.LocalDate;
 
 public class ProfessorCreateDto {
 
-    @NotBlank
+    @NotBlank(message = "First name is required.")
+    @Pattern(regexp = "^[A-Z].*", message = "First name must start with a capital letter.")
     private String firstName;
 
-    @NotBlank
+    @NotBlank(message = "Last name is required.")
+    @Pattern(regexp = "^[A-Z].*", message = "The last name must start with a capital letter.")
     private String lastName;
 
-    @Email(message = "{Email.studentCreateDto.student}", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")
+    @NotBlank(message = "Email is required.")
+    @Email(message = "Email must be a valid format.", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")
     private String email;
 
     @NotBlank
-    @Min(value = 8, message = "Password must be at least 8 characters long")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$", message = "The password must have at least one uppercase letter, one lowercase letter, one number, one special character and at least 8 characters.")
     private String password;
 
-    @NotNull
+    @NotNull(message = "Date is required")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthdate;
 
-    private String address;
-
-    private Role role;
-
     public ProfessorCreateDto() {}
 
-    public ProfessorCreateDto(String firstName, String lastName, String email, String password, LocalDate birthdate, String address, Role role) {
+    public ProfessorCreateDto(String firstName, String lastName, String email, String password, LocalDate birthdate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.birthdate = birthdate;
-        this.address = address;
-        this.role = role.ROLE_PROFESSOR;
     }
 
     public @NotBlank String getFirstName() {return firstName;}
@@ -58,15 +54,7 @@ public class ProfessorCreateDto {
 
     public void setPassword(@NotBlank String password) {this.password = password;}
 
-    public @NotBlank LocalDate getBirthdate() {return birthdate;}
+    public @NotNull LocalDate getBirthdate() {return birthdate;}
 
-    public void setBirthdate(@NotBlank LocalDate birthdate) {this.birthdate = birthdate;}
-
-    public @NotBlank String getAddress() {return address;}
-
-    public void setAddress(@NotBlank String address) {this.address = address;}
-
-    public Role getRole() {return role;}
-
-    public void setRole(@NotBlank Role role) {this.role = role;}
+    public void setBirthdate(@NotNull LocalDate birthdate) {this.birthdate = birthdate;}
 }

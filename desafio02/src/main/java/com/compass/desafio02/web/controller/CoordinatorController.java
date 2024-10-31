@@ -34,7 +34,7 @@ public class CoordinatorController {
     private CourseService courseService;
 
     @PostMapping
-    public ResponseEntity<CoordinatorResponseDto> createCoordinator(@RequestBody CoordinatorCreateDto coordinatorDto) {
+    public ResponseEntity<CoordinatorResponseDto> createCoordinator(@RequestBody @Valid CoordinatorCreateDto coordinatorDto) {
         Coordinator coordinator = Mapper.toEntity(coordinatorDto, Coordinator.class);
         coordinator.setRole(Role.ROLE_COORDINATOR);
         coordinatorService.save(coordinator);
