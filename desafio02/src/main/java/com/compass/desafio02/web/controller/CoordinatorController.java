@@ -44,6 +44,14 @@ public class CoordinatorController {
         return ResponseEntity.ok(CoordinatorMapper.toCoordinatorResponseDto(coordinator));
     }
 
+    @GetMapping("/coo/{email}")
+    public ResponseEntity<CoordinatorResponseDto> getCoordinatorByEmail(@PathVariable String email) {
+            Coordinator coordinator = coordinatorService.findByEmail(email);
+            return ResponseEntity.ok(CoordinatorMapper.toCoordinatorResponseDto(coordinator));
+
+        }
+
+
     @PutMapping("/{id}")
     public ResponseEntity<CoordinatorResponseDto> updateCoordinator(@PathVariable Integer id, @RequestBody Coordinator coordinator) {
         Coordinator updatedCoordinator = coordinatorService.update(id, coordinator);

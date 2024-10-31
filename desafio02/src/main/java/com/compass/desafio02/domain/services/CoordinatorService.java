@@ -2,7 +2,6 @@ package com.compass.desafio02.domain.services;
 
 import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Professor;
-import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.repositories.CoordinatorRepository;
 import com.compass.desafio02.domain.repositories.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class CoordinatorService {
         );
     }
 
-    public Student findByEmail(String email) {
+    public Coordinator findByEmail(String email) {
         try {
             return coordinatorRepository.findByEmail(email);
         } catch (RuntimeException e) {
