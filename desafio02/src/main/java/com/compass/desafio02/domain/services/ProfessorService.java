@@ -54,11 +54,10 @@ public class ProfessorService {
     }
 
     public Professor save(Professor professor) {
-        Professor savedProfessor = professorRepository.save(professor);
-
-        validateProfessorSubjects(savedProfessor);
-
-        return savedProfessor;
+        if (!isPasswordValid(professor.getPassword())) {
+            throw new IllegalArgumentException("The password must have at least one uppercase letter, one lowercase letter, one number, one special character and at least 8 characters.");
+        }
+        return professorRepository.save(professor);
     }
 
     public Professor findById(Integer id) {
@@ -93,4 +92,9 @@ public class ProfessorService {
     public void delete(Integer id) {
         professorRepository.deleteById(id);
     }
+
+    private boolean isPasswordValid(String password) {
+        return password != null && password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$");
+    }
 }
+
