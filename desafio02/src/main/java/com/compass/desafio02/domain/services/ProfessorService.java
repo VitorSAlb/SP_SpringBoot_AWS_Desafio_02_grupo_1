@@ -32,7 +32,6 @@ public class ProfessorService {
         } catch (RuntimeException e) {
             throw new RuntimeException("Email not founded"); // TROCAR EXCESSÃO
         }
-
     }
 
     public Page<ProfessorProjection> findAll(Pageable pageable) {
