@@ -2,9 +2,7 @@ package com.compass.desafio02.web.dto.professor;
 
 import com.compass.desafio02.domain.entities.enums.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
@@ -20,6 +18,8 @@ public class ProfessorCreateDto {
     private String email;
 
     @NotBlank
+    @Min(value = 8, message = "Password must be at least 8 characters long")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$", message = "The password must have at least one uppercase letter, one lowercase letter, one number, one special character and at least 8 characters.")
     private String password;
 
     @NotNull
