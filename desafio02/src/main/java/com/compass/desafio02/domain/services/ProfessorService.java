@@ -2,6 +2,8 @@ package com.compass.desafio02.domain.services;
 
 import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.repositories.ProfessorRepository;
+import com.compass.desafio02.domain.repositories.projection.ProfessorProjection;
+import com.compass.desafio02.domain.repositories.projection.StudentProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,8 +25,8 @@ public class ProfessorService {
         );
     }
 
-    public Page<Professor> findAll(Pageable pageable) {
-        return professorRepository.findAll(pageable);
+    public Page<ProfessorProjection> findAll(Pageable pageable) {
+        return professorRepository.findAllP(pageable);
     }
 
     public Professor update(Integer id, Professor newProfessor) {
