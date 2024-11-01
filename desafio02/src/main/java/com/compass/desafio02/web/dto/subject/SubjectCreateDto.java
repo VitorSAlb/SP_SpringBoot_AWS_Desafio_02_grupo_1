@@ -21,18 +21,18 @@ public class SubjectCreateDto {
     @NotNull(message = "The Course ID is required.")
     private Integer courseId;
 
-    private List<Integer> studentIds;
+    private List<String> studentEmails;
 
     public SubjectCreateDto() {
     }
 
-    public SubjectCreateDto(String name, String description, Integer mainProfessor, Integer substituteProfessor, Integer courseId, List<Integer> studentIds) {
+    public SubjectCreateDto(String name, String description, Integer mainProfessor, Integer substituteProfessor, Integer courseId, List<String> studentEmails) {
         this.name = name;
         this.description = description;
         this.mainProfessor = mainProfessor;
         this.substituteProfessor = substituteProfessor;
         this.courseId = courseId;
-        this.studentIds = studentIds;
+        this.studentEmails = studentEmails;
     }
 
     public @NotBlank(message = "The name of the discipline is required.") String getName() {
@@ -75,11 +75,11 @@ public class SubjectCreateDto {
         this.courseId = courseId;
     }
 
-    public List<Integer> getStudentIds() {
-        return studentIds;
+    public List<String> getStudentEmails() {
+        return studentEmails;
     }
 
-    public void setStudentIds(List<Integer> studentIds) {
-        this.studentIds = studentIds;
+    public void setStudentEmails(List<String> studentEmails) {
+        this.studentEmails = studentEmails;
     }
 }
