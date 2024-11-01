@@ -103,6 +103,23 @@ public class CourseController {
         return ResponseEntity.ok(courseResponseDto);
     }
 
+    @Operation(summary = "Find a Course", description = "Resource to locate a Course by Email." +
+            "Request requires use.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource located successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CourseResponseDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Course not found",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Feature not allowed",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
+            })
+    @GetMapping("/name/{name}")
+    public ResponseEntity<CourseResponseDto> findByEmail(@PathVariable String name) {
+        Course course = courseService.findByName(name);
+        CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(course);
+        return ResponseEntity.ok(courseResponseDto);
+    }
+
     @Operation(summary = "Delete a new Course",
             description = "Resource to delete a new student linked to a registered Course." +
                     "Request requires use.",
