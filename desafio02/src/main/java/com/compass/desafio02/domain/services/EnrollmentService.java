@@ -73,7 +73,17 @@ public class EnrollmentService {
         enrollmentRepository.deleteById(id);
     }
 
+    public List<Enrollment> getEnrollmentsByCourseId(Integer courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + courseId));
+        return enrollmentRepository.findByCourseId(courseId);
+    }
 
+    public List<Enrollment> getEnrollmentsByStudentId(Integer studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + studentId));
+        return enrollmentRepository.findByStudentId(studentId);
+    }
 
     private boolean isStudentOfAge(Student student) {
         return Period.between(student.getBirthdate(), LocalDate.now()).getYears() >= 18;
