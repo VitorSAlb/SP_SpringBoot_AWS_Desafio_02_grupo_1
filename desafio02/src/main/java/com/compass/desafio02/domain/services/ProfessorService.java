@@ -1,11 +1,16 @@
 package com.compass.desafio02.domain.services;
 
+import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.repositories.ProfessorRepository;
 import com.compass.desafio02.domain.repositories.SubjectRepository;
 import com.compass.desafio02.domain.repositories.projection.ProfessorProjection;
 import com.compass.desafio02.domain.entities.Subject;
 import com.compass.desafio02.infrastructure.exceptions.BusinessRuleException;
+import com.compass.desafio02.infrastructure.exceptions.user.PasswordUpdateException;
+import com.compass.desafio02.infrastructure.exceptions.user.UserCreationException;
+import com.compass.desafio02.infrastructure.exceptions.user.UserDeletionException;
+import com.compass.desafio02.infrastructure.exceptions.user.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,12 +63,17 @@ public class ProfessorService {
         if (!isPasswordValid(professor.getPassword())) {
             throw new IllegalArgumentException("The password must have at least one uppercase letter, one lowercase letter, one number, one special character and at least 8 characters.");
         }
-        return professorRepository.save(professor);
+
+        try {
+            return professorRepository.save(professor);
+        } catch (Exception e) {
+            throw new UserCreationException("Error saving professor: " + e.getMessage());
+        }
     }
 
     public Professor findById(Integer id) {
         return professorRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Professor not found") // CHANGE EXCEPTION
+                () -> new UserNotFoundException("Professor not found with ID: " + id)
         );
     }
 
@@ -71,7 +81,7 @@ public class ProfessorService {
         try {
             return professorRepository.findByEmail(email);
         } catch (RuntimeException e) {
-            throw new RuntimeException("Email not found"); // CHANGE EXCEPTION
+            throw new UserNotFoundException("Email not found with email: " + email);
         }
     }
 
@@ -90,27 +100,41 @@ public class ProfessorService {
         return professorRepository.save(existingProfessor);
     }
 
-    public void delete(Integer id) {
-        professorRepository.deleteById(id);
+    public void delete(String email) {
+        Professor professor = findByEmail(email);
+
+        if (!professorRepository.existsById(professor.getId())) {
+            throw new UserDeletionException("Cannot delete professor: Professor not found with Email: " + email);
+        }
+
+        try {
+            professorRepository.deleteById(professor.getId());
+        } catch (Exception e) {
+            throw new UserDeletionException("Error deleting professor: " + e.getMessage());
+        }
     }
   
     public void editPassword(Integer id, String currentPassword, String newPassword, String confirmPassword) {
         if (!newPassword.equals(confirmPassword)) {
-            throw new IllegalArgumentException("New password and confirmation password do not match.");
+            throw new PasswordUpdateException("New password and confirmation password do not match.");
         }
 
         if (!isPasswordValid(newPassword)) {
-            throw new IllegalArgumentException("Password does not meet security requirements.");
+            throw new PasswordUpdateException("Password does not meet security requirements.");
         }
 
         Professor professor = findById(id);
 
         if (!Objects.equals(professor.getPassword(), currentPassword)) {
-            throw new IllegalArgumentException("Current password is incorrect.");
+            throw new PasswordUpdateException("Current password is incorrect.");
         }
 
         professor.setPassword(newPassword);
-        professorRepository.save(professor);
+        try {
+            professorRepository.save(professor);
+        } catch (Exception e) {
+            throw new PasswordUpdateException("Error updating password: " + e.getMessage());
+        }
     }
 
     private boolean isPasswordValid(String password) {

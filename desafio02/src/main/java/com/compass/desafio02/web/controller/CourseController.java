@@ -5,12 +5,20 @@ import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.services.CoordinatorService;
 import com.compass.desafio02.domain.services.CourseService;
 import com.compass.desafio02.web.dto.*;
-import com.compass.desafio02.web.dto.course.CourseAddCooDto;
-import com.compass.desafio02.web.dto.course.CourseCreateDto;
-import com.compass.desafio02.web.dto.course.CourseResponseDto;
+import com.compass.desafio02.web.dto.course.*;
 import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
-import org.apache.coyote.Response;
+import com.compass.desafio02.web.dto.student.StudentResponseDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.modelmapper.spi.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Course", description = "Contains all operations related to a Course resource")
 @RestController
 @RequestMapping("api/v1/courses")
 public class CourseController {
@@ -39,8 +48,34 @@ public class CourseController {
 
     // Start Course ---------------------------------------------------------------------
 
+    @Operation(summary = "Retrieve student list",
+            description = "Request requires Student.",
+            parameters = {
+                    @Parameter(in = ParameterIn.QUERY, name = "page",
+                            content = @Content(schema = @Schema(type = "integer", defaultValue = "0")),
+                            description = "Represents the returned page"
+                    ),
+                    @Parameter(in = ParameterIn.QUERY, name = "size",
+                            content = @Content(schema = @Schema(type = "integer", defaultValue = "5")),
+                            description = "Represents the total number of elements per page"
+                    ),
+                    @Parameter(in = ParameterIn.QUERY, name = "sort", hidden = true,
+                            array = @ArraySchema(schema = @Schema(type = "string", defaultValue = "firstName,asc")),
+                            description = "Represents the ordering of results. Multiple sorting criteria are supported."
+                    )
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource retrieved successfully",
+                            content = @Content(mediaType = "application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = PageableDto.class))
+                    ),
+                    @ApiResponse(responseCode = "403", description = "I don't allow this feature.",
+                            content = @Content(mediaType = "application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = ErrorMessage.class))
+                    )
+            })
     @GetMapping()
-    public ResponseEntity<PageableDto> findAll(@PageableDefault(size = 5, sort = {"name"}) Pageable pageable) {
+    public ResponseEntity<PageableDto> findAll(@PageableDefault(size = 5, page = 0, sort = {"name"}) Pageable pageable) {
         Page<Course> courses = courseService.findAll(pageable);
 
         List<CourseResponseDto> courseDtos = courses.getContent().stream()
@@ -49,6 +84,16 @@ public class CourseController {
         return ResponseEntity.ok(PageableMapper.toDto(courseDtosPage, CourseResponseDto.class));
     }
 
+    @Operation(summary = "Find a Course", description = "Resource to locate a Course by ID." +
+            "Request requires use.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource located successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CourseResponseDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Course not found",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Feature not allowed",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @GetMapping("/{id}")
     public ResponseEntity<CourseResponseDto> findById(@PathVariable Integer id) {
         Course course = courseService.findById(id);
@@ -56,14 +101,51 @@ public class CourseController {
         return ResponseEntity.ok(courseResponseDto);
     }
 
+    @Operation(summary = "Find a Course", description = "Resource to locate a Course by Email." +
+            "Request requires use.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource located successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CourseResponseDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Course not found",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Feature not allowed",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
+            })
+    @GetMapping("/name/{name}")
+    public ResponseEntity<CourseResponseDto> findByEmail(@PathVariable String name) {
+        Course course = courseService.findByName(name);
+        CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(course);
+        return ResponseEntity.ok(courseResponseDto);
+    }
+
+    @Operation(summary = "Delete a new Course",
+            description = "Resource to delete a new student linked to a registered Course." +
+                    "Request requires use.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CourseResponseDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Not Fount",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         courseService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Create a new Course",
+            description = "Resource to create a new Course linked to a registered user." +
+                    "Request requires use.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource created successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CourseResponseDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+            })
     @PostMapping
-    public ResponseEntity<CourseResponseDto> create(@RequestBody CourseCreateDto courseCreateDto) {
+    public ResponseEntity<CourseNoSubjectsNoCoordinatorResponseDto> create(@RequestBody @Valid CourseCreateDto courseCreateDto) {
         String coordinatorEmail = courseCreateDto.getCoordinatorEmail();
 
         Course course = Mapper.toEntity(courseCreateDto, Course.class);
@@ -76,23 +158,40 @@ public class CourseController {
         Course savedCourse = courseService.save(course);
         CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(savedCourse);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(courseResponseDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Mapper.toDto(courseResponseDto, CourseNoSubjectsNoCoordinatorResponseDto.class));
     }
 
-
-
-    @PutMapping("/{id}")
-    public ResponseEntity<CourseResponseDto> update(@PathVariable Integer id, @RequestBody CourseCreateDto courseUpdateDto) {
-        Coordinator coordinator = coordinatorService.findByEmail(courseUpdateDto.getCoordinatorEmail());
-
+    @Operation(summary = "Update a Course",
+            description = "Resource to update a new student linked to a update password." +
+                    "Request requires use.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Resource update successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CourseResponseDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Course not found",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+            })
+    @PutMapping("/{name}")
+    public ResponseEntity<CourseResponseDto> update(@PathVariable String name, @RequestBody CourseUpdateDto courseUpdateDto) {
         Course course = Mapper.toEntity(courseUpdateDto, Course.class);
-        course.setCoordinator(coordinator);
 
-        Course savedCourse = courseService.update(id, course);
+        Course savedCourse = courseService.update(name, course);
         CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(savedCourse);
         return ResponseEntity.ok(courseResponseDto);
     }
 
+    @Operation(summary = "Update a new Course",
+            description = "Resource to Course." +
+                    "Request requires use.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Resource update successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Course not found",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+            })
     @PatchMapping("/coordinator")
     public ResponseEntity<CourseResponseDto> updateCoordinator(@RequestBody CourseAddCooDto dto) {
         log.info("email: " + dto.getCoordinatorEmail());
@@ -101,6 +200,17 @@ public class CourseController {
         return ResponseEntity.ok(Mapper.toCourseResponseDto(updatedCourse));
     }
 
+    @Operation(summary = "Update a new Course",
+            description = "Resource to Course." +
+                    "Request requires use.'",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Resource update successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Course not found",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+            })
     @PatchMapping("/remove/coordinator/{name}")
     public ResponseEntity<Void> removeCoordinator(@PathVariable String name) {
         courseService.removeCoordinatorFromCourse(name);

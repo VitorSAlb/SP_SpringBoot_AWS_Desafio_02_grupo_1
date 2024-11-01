@@ -48,8 +48,8 @@ public class StudentService {
         return studentRepository.findAllP(pageable);
     }
 
-    public Student update(Integer id, Student newStudent) {
-        Student existingStudent = findById(id);
+    public Student update(String email, Student newStudent) {
+        Student existingStudent = findByEmail(email);
         try {
             existingStudent.setEmail(newStudent.getEmail());
             existingStudent.setFirstName(newStudent.getFirstName());
@@ -74,7 +74,22 @@ public class StudentService {
         }
     }
 
-    public void editPassword(Integer id, String currentPassword, String newPassword, String confirmPassword) {
+    public void delete(String email) {
+        Student student = findByEmail(email);
+
+        if (!studentRepository.existsById(student.getId())) {
+            throw new UserDeletionException("Cannot delete student: Student not found with Email: " + email);
+        }
+
+        try {
+            studentRepository.deleteById(student.getId());
+        } catch (Exception e) {
+            throw new UserDeletionException("Error deleting student: " + e.getMessage());
+        }
+    }
+
+
+    public void editPassword(String email, String currentPassword, String newPassword, String confirmPassword) {
         if (!newPassword.equals(confirmPassword)) {
             throw new PasswordUpdateException("New password and confirmation password do not match.");
         }
@@ -83,7 +98,7 @@ public class StudentService {
             throw new PasswordUpdateException("The password does not meet security requirements.");
         }
 
-        Student student = findById(id);
+        Student student = findByEmail(email);
 
         if (!Objects.equals(student.getPassword(), currentPassword)) {
             throw new PasswordUpdateException("Current password is incorrect.");

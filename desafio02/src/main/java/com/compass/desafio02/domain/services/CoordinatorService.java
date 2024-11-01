@@ -48,8 +48,8 @@ public class CoordinatorService {
         return coordinatorRepository.findAllP(pageable);
     }
 
-    public Coordinator update(Integer id, Coordinator newCoordinator) {
-        Coordinator existingProfessor = findById(id);
+    public Coordinator update(String email, Coordinator newCoordinator) {
+        Coordinator existingProfessor = findByEmail(email);
         try {
             existingProfessor.setEmail(newCoordinator.getEmail());
             existingProfessor.setFirstName(newCoordinator.getFirstName());
@@ -61,19 +61,21 @@ public class CoordinatorService {
         }
     }
 
-    public void delete(Integer id) {
-        if (!coordinatorRepository.existsById(id)) {
-            throw new UserDeletionException("Cannot delete coordinator: Coordinator not found with ID: " + id);
+    public void delete(String email) {
+        Coordinator coordinator = findByEmail(email);
+
+        if (!coordinatorRepository.existsById(coordinator.getId())) {
+            throw new UserDeletionException("Cannot delete coordinator: Coordinator not found with Email: " + email);
         }
 
         try {
-            coordinatorRepository.deleteById(id);
+            coordinatorRepository.deleteById(coordinator.getId());
         } catch (Exception e) {
-            throw new UserDeletionException("Error deleting coordinator: " + e.getMessage());
+            throw new UserDeletionException("Error deleting Coordinator: " + e.getMessage());
         }
     }
 
-    public void editPassword(Integer id, String currentPassword, String newPassword, String confirmPassword) {
+    public void editPassword(String email, String currentPassword, String newPassword, String confirmPassword) {
         if (!newPassword.equals(confirmPassword)) {
             throw new PasswordUpdateException("New password and confirmation password do not match.");
         }
@@ -82,7 +84,7 @@ public class CoordinatorService {
             throw new PasswordUpdateException("The password does not meet security requirements.");
         }
 
-        Coordinator coordinator = findById(id);
+        Coordinator coordinator = findByEmail(email);
 
         if (!Objects.equals(coordinator.getPassword(), currentPassword)) {
             throw new PasswordUpdateException("Current password is incorrect.");
