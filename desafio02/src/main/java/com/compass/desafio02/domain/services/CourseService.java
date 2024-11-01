@@ -4,8 +4,7 @@ import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.repositories.CoordinatorRepository;
 import com.compass.desafio02.domain.repositories.CourseRepository;
-import com.compass.desafio02.infrastructure.exceptions.ResourceNotFoundException;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import com.compass.desafio02.infrastructure.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,15 +21,15 @@ public class CourseService {
     public Course save(Course course) {
 
         if (course.getName().isEmpty()) {
-            throw new RuntimeException("Not can save with empty name");
+            throw new EmptyFieldException("Course name cannot be empty");
         }
 
         if (course.getDescription().isEmpty()) {
-            throw new RuntimeException("Not can save with empty description");
+            throw new EmptyFieldException("Course description cannot be empty");
         }
 
-        if ( courseRepository.existsByName(course.getName())) {
-            throw new RuntimeException("This Name course already existing");
+        if (courseRepository.existsByName(course.getName())) {
+            throw new DuplicateCourseException("Course name already exists");
         }
 
         return courseRepository.save(course);
@@ -42,11 +41,11 @@ public class CourseService {
     }
 
     public Course findByName(String name) {
-        try {
-            return courseRepository.findByName(name);
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Course not found with name: " + name); // Troca de exceção realizada ^^
+        Course course = courseRepository.findByName(name);
+        if (course == null) {
+            throw new ResourceNotFoundException("Course not found with name: " + name);
         }
+        return course;
     }
 
     public Page<Course> findAll(Pageable pageable) {
@@ -59,7 +58,7 @@ public class CourseService {
         existingCourse.setName(newCourse.getName());
         existingCourse.setDescription(newCourse.getDescription());
 
-        return courseRepository.save(existingCourse);
+        return save(existingCourse);
     }
 
     public void delete(Integer id) {
@@ -75,31 +74,26 @@ public class CourseService {
         Coordinator coordinator = coordinatorRepository.findByEmail(email);
 
         if (coordinator == null || course == null) {
-            throw new RuntimeException("Coordinator or course not founded.");
+            throw new CoordinatorOrCourseNotFoundException("Coordinator or course not found.");
         }
         if (coordinator.getCourse() != null) {
-            throw new RuntimeException("Coordinator cannot manage more than one course.");
+            throw new CoordinatorAlreadyAssignedException("Coordinator is already assigned to another course.");
         }
         course.setCoordinator(coordinator);
         return courseRepository.save(course);
     }
 
-    public Course removeCoordinatorFromCourse(String nameCourse) {
+    public void removeCoordinatorFromCourse(String nameCourse) {
 
         Course course = findByName(nameCourse);
 
-        if (course == null) {
-            throw new RuntimeException("Course not found.");
-        }
-
-        // Verifica se há um coordenador associado ao curso
         Coordinator coordinator = course.getCoordinator();
         if (coordinator != null) {
             coordinator.setCourse(null);
             coordinatorRepository.save(coordinator);
         }
         course.setCoordinator(null);
-        return courseRepository.save(course);
+        courseRepository.save(course);
     }
 
 }
