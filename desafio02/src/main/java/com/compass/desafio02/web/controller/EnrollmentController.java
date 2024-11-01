@@ -137,4 +137,29 @@ public class EnrollmentController {
         enrollmentService.deleteEnrollment(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/course/{courseId}")
+    public ResponseEntity<List<EnrollmentResponseDto>> getEnrollmentsByCourseId(@PathVariable Integer courseId) {
+        List<Enrollment> enrollments = enrollmentService.getEnrollmentsByCourseId(courseId);
+        List<EnrollmentResponseDto> enrollmentDtos = enrollments.stream()
+                .map(EnrollmentMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(enrollmentDtos);
+    }
+
+    @Operation(summary = "List enrollments by student ID", description = "Retrieve all enrollments associated with a specific student.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Enrollments retrieved successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = EnrollmentResponseDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Student not found or no enrollments for this student",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+            })
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<List<EnrollmentResponseDto>> getEnrollmentsByStudentId(@PathVariable Integer studentId) {
+        List<Enrollment> enrollments = enrollmentService.getEnrollmentsByStudentId(studentId);
+        List<EnrollmentResponseDto> enrollmentDtos = enrollments.stream()
+                .map(EnrollmentMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(enrollmentDtos);
+    }
 }
