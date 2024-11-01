@@ -54,12 +54,6 @@ public class ProfessorController {
         return ResponseEntity.ok(ProfessorMapper.toDto(updatedProfessor));
     }
 
-    @PatchMapping("/password/update/{id}")
-    public ResponseEntity<Void> updatePassword(@PathVariable Integer id, @RequestBody @Valid UserPasswordDto dto) {
-        professorService.editPassword(id, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmPassword());
-        return ResponseEntity.noContent().build();
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProfessor(@PathVariable Integer id) {
         professorService.delete(id);

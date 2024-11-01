@@ -38,7 +38,7 @@ public class EnrollmentController {
     @Autowired
     private CourseService courseService;
 
-//    @PreAuthorize("hasRole('COORDINATOR')")
+    //    @PreAuthorize("hasRole('COORDINATOR')")
     @PostMapping
     public ResponseEntity<EnrollmentResponseDto> createEnrollment(@Valid @RequestBody enrollmentCreateDto dto) {
         Student student = studentService.findByEmail(dto.getStudentEmail());
