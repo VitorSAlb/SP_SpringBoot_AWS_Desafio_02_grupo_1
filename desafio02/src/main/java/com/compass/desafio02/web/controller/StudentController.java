@@ -54,13 +54,13 @@ public class StudentController {
     }
 
     @Operation(summary = "Create a new student",
-            description = "Resource to create a new student linked to a registered user. " +
-                    "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
+            description = "Add a new student to the system",
+            security = @SecurityRequirement(name = "bearerAuth"),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Resource created successfully",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
-                    @ApiResponse(responseCode = "404", description = "Resource not processed due to missing or invalid data",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "201", description = "Student created",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentResponseDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid data",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @PostMapping()
     public ResponseEntity<StudentResponseDto> create(@RequestBody @Valid StudentCreateDto dto) {
