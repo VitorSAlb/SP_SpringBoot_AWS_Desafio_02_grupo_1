@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.modelmapper.spi.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ import java.util.List;
 
 @Tag(name = "Course", description = "Contains all operations related to a Course resource")
 @RestController
-@RequestMapping("api/v1/c")
+@RequestMapping("api/v1/courses")
 public class CourseController {
     private static final Logger log = LoggerFactory.getLogger(CourseController.class);
 
@@ -129,7 +130,7 @@ public class CourseController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    public ResponseEntity<CourseResponseDto> create(@RequestBody CourseCreateDto courseCreateDto) {
+    public ResponseEntity<CourseResponseDto> create(@RequestBody @Valid CourseCreateDto courseCreateDto) {
         String coordinatorEmail = courseCreateDto.getCoordinatorEmail();
 
         Course course = Mapper.toEntity(courseCreateDto, Course.class);
@@ -179,7 +180,7 @@ public class CourseController {
                     @ApiResponse(responseCode = "404", description = "Course not found",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
-    @PatchMapping("/coordinator/{id}")
+    @PatchMapping("/coordinator")
     public ResponseEntity<CourseResponseDto> updateCoordinator(@RequestBody CourseAddCooDto dto) {
         log.info("email: " + dto.getCoordinatorEmail());
         log.info("name: " + dto.getName());
