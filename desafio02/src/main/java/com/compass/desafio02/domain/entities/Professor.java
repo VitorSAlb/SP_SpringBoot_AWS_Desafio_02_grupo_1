@@ -2,6 +2,9 @@ package com.compass.desafio02.domain.entities;
 
 import com.compass.desafio02.domain.entities.enums.Role;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -10,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Professor extends User implements Serializable {
 
     @ManyToOne
@@ -20,7 +24,6 @@ public class Professor extends User implements Serializable {
     @Column(name = "Subjects")
     private List<Subject> subjectHolder = new ArrayList<>();
 
-    @JsonBackReference
     @OneToMany(mappedBy = "substituteProfessor")
     private List<Subject> subjectSub = new ArrayList<>();
 

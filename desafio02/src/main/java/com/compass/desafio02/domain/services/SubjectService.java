@@ -22,18 +22,16 @@ public class SubjectService {
 
     public Subject save(Subject subject) {
 
-
-        //Trocar para ingles dps
         if (subject.getMainProfessor() == null || subject.getSubstituteProfessor() == null) {
-            throw new BusinessRuleException("A disciplina deve ter um professor titular e um substituto.");
+            throw new BusinessRuleException("The subject must have both a main and substitute professor.");
         }
 
         if (subject.getMainProfessor().getId().equals(subject.getSubstituteProfessor().getId())) {
-            throw new BusinessRuleException("O professor titular e o substituto não podem ser a mesma pessoa.");
+            throw new BusinessRuleException("The main professor and substitute cannot be the same person.");
         }
 
         if (subject.getStudents() != null && subject.getStudents().size() > 10) {
-            throw new BusinessRuleException("Uma disciplina não pode ter mais de 10 alunos.");
+            throw new BusinessRuleException("A subject cannot have more than 10 students.");
         }
 
         return subjectRepository.save(subject);
@@ -41,7 +39,7 @@ public class SubjectService {
 
     public Subject findById(Integer id) {
         return subjectRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Disciplina não encontrada com o id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with id: " + id));
     }
 
     public Page<Subject> findAll(Pageable pageable) {
@@ -58,33 +56,13 @@ public class SubjectService {
         existingSubject.setCourse(updatedSubject.getCourse());
         existingSubject.setStudents(updatedSubject.getStudents());
 
-        if (existingSubject.getMainProfessor() == null || existingSubject.getSubstituteProfessor() == null) {
-            throw new BusinessRuleException("A disciplina deve ter um professor titular e um substituto.");
-        }
-
-        if (existingSubject.getMainProfessor().getId().equals(existingSubject.getSubstituteProfessor().getId())) {
-            throw new BusinessRuleException("O professor titular e o substituto não podem ser a mesma pessoa.");
-        }
-
-        if (existingSubject.getStudents() != null && existingSubject.getStudents().size() > 10) {
-            throw new BusinessRuleException("Uma disciplina não pode ter mais de 10 alunos.");
-        }
-
         return subjectRepository.save(existingSubject);
     }
 
     public void delete(Integer id) {
         if (!subjectRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Disciplina não encontrada com o id: " + id);
+            throw new ResourceNotFoundException("Subject not found with id: " + id);
         }
         subjectRepository.deleteById(id);
-    }
-
-    public Student findByEmail(String email) {
-        Student student = studentRepository.findByEmail(email);
-        if (student == null) {
-            throw new ResourceNotFoundException("Student with email " + email + " not found");
-        }
-        return student;
     }
 }
