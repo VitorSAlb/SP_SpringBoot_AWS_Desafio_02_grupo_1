@@ -10,6 +10,7 @@ import com.compass.desafio02.domain.services.CourseService;
 import com.compass.desafio02.domain.services.StudentService;
 import com.compass.desafio02.web.dto.course.CourseResponseDto;
 import com.compass.desafio02.web.dto.mapper.Mapper;
+import com.compass.desafio02.web.dto.subject.SubjectAddProfessorDto;
 import com.compass.desafio02.web.dto.subject.SubjectCreateDto;
 import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
 import com.compass.desafio02.web.dto.PageableDto;
@@ -28,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -100,6 +102,22 @@ public class SubjectController {
         return ResponseEntity.ok(Mapper.toDto(subject, SubjectResponseDto.class));
     }
 
+    @Operation(summary = "Find a Subjects", description = "Resource to locate a Subjects by Email." +
+            "Request requires use.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource located successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = SubjectResponseDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Subjects not found",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Feature not allowed",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
+            })
+    @GetMapping("/{name}")
+    public ResponseEntity<SubjectResponseDto> findById(@PathVariable String name) {
+        Subject subject = subjectService.findByName(name);
+        return ResponseEntity.ok(Mapper.toDto(subject, SubjectResponseDto.class));
+    }
+
     @Operation(summary = "Create a new Subjects",
             description = "Resource to create a new subjects linked to a registered user." +
                     "Request requires use.",
@@ -111,14 +129,14 @@ public class SubjectController {
             })
     @PostMapping
     public ResponseEntity<SubjectResponseDto> create(@RequestBody @Valid SubjectCreateDto subjectCreateDto) {
-        Professor mainProfessor = professorService.findById(subjectCreateDto.getMainProfessor());
-        Professor substituteProfessor = professorService.findById(subjectCreateDto.getSubstituteProfessor());
-        Course course = courseService.findById(subjectCreateDto.getCourseId());
-        List<Student> students = subjectCreateDto.getStudentEmails().stream()
-                .map(email -> studentService.findByEmail(email))
-                .collect(Collectors.toList());
+        Subject subject = new Subject();
 
-        Subject subject = SubjectMapper.toEntity(subjectCreateDto, mainProfessor, substituteProfessor, course, students);
+        Course course = courseService.findByName(subjectCreateDto.getCourseName());
+
+        subject.setName(subjectCreateDto.getName());
+        subject.setDescription(subjectCreateDto.getDescription());
+        subject.setCourse(course);
+
         Subject savedSubject = subjectService.save(subject);
         return ResponseEntity.status(201).body(Mapper.toDto(savedSubject, SubjectResponseDto.class));
     }
@@ -135,17 +153,14 @@ public class SubjectController {
                     @ApiResponse(responseCode = "404", description = "Course not found",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
-    @PutMapping("/{id}")
-    public ResponseEntity<SubjectResponseDto> updateSubject(@PathVariable Integer id, @RequestBody SubjectCreateDto dto) {
-        Professor mainProfessor = professorService.findById(dto.getMainProfessor());
-        Professor substituteProfessor = professorService.findById(dto.getSubstituteProfessor());
-        Course course = courseService.findById(dto.getCourseId());
-        List<Student> students = dto.getStudentEmails().stream()
-                .map(email -> studentService.findByEmail(email))
-                .collect(Collectors.toList());
+    @PutMapping("/{name}")
+    public ResponseEntity<SubjectResponseDto> updateSubject(@PathVariable String name, @RequestBody SubjectCreateDto dto) {
+        Subject subject = new Subject();
 
-        Subject newSubject = SubjectMapper.toEntity(dto, mainProfessor, substituteProfessor, course, students);
-        Subject updatedSubject = subjectService.update(id, newSubject);
+        Course course = courseService.findByName(dto.getCourseName());
+        subject.setCourse(course);
+
+        Subject updatedSubject = subjectService.update(name, subject);
         return ResponseEntity.ok(Mapper.toDto(updatedSubject, SubjectResponseDto.class));
     }
 
@@ -160,9 +175,18 @@ public class SubjectController {
                     @ApiResponse(responseCode = "404", description = "Not Fount",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        subjectService.delete(id);
+    @DeleteMapping("/{name}")
+    public ResponseEntity<Void> delete(@PathVariable String name) {
+        subjectService.delete(name);
         return ResponseEntity.noContent().build();
     }
+
+
+    @PatchMapping("/add/professor/{name}")
+    public ResponseEntity<SubjectResponseDto> addProfessor(@PathVariable String name, @RequestBody SubjectAddProfessorDto dto) {
+        Subject subject = subjectService.addProfessorToSubject(name, dto.getEmailProfessor());
+        return ResponseEntity.ok(Mapper.toDto(subject, SubjectResponseDto.class));
+    }
+
+
 }

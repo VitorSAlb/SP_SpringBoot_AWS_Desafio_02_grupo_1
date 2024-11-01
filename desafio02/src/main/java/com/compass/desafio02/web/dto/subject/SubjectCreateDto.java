@@ -12,27 +12,16 @@ public class SubjectCreateDto {
     @NotBlank(message = "The description of the discipline is required.")
     private String description;
 
-    @NotNull(message = "The description of the discipline is mandatory.")
-    private Integer mainProfessor;
-
-    @NotNull(message = "The Substitute teacher ID is required.")
-    private Integer substituteProfessor;
-
-    @NotNull(message = "The Course ID is required.")
-    private Integer courseId;
-
-    private List<String> studentEmails;
+    @NotBlank(message = "The Course Name is required.")
+    private String courseName;
 
     public SubjectCreateDto() {
     }
 
-    public SubjectCreateDto(String name, String description, Integer mainProfessor, Integer substituteProfessor, Integer courseId, List<String> studentEmails) {
+    public SubjectCreateDto(String name, String description, String courseName) {
         this.name = name;
         this.description = description;
-        this.mainProfessor = mainProfessor;
-        this.substituteProfessor = substituteProfessor;
-        this.courseId = courseId;
-        this.studentEmails = studentEmails;
+        this.courseName = courseName;
     }
 
     public @NotBlank(message = "The name of the discipline is required.") String getName() {
@@ -51,35 +40,11 @@ public class SubjectCreateDto {
         this.description = description;
     }
 
-    public @NotNull(message = "The description of the discipline is mandatory.") Integer getMainProfessor() {
-        return mainProfessor;
+    public @NotBlank(message = "The Course Name is required.") String getCourseName() {
+        return courseName;
     }
 
-    public void setMainProfessor(@NotNull(message = "The description of the discipline is mandatory.") Integer mainProfessor) {
-        this.mainProfessor = mainProfessor;
-    }
-
-    public @NotNull(message = "The Substitute teacher ID is required.") Integer getSubstituteProfessor() {
-        return substituteProfessor;
-    }
-
-    public void setSubstituteProfessor(@NotNull(message = "The Substitute teacher ID is required.") Integer substituteProfessor) {
-        this.substituteProfessor = substituteProfessor;
-    }
-
-    public @NotNull(message = "The Course ID is required.") Integer getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(@NotNull(message = "The Course ID is required.") Integer courseId) {
-        this.courseId = courseId;
-    }
-
-    public List<String> getStudentEmails() {
-        return studentEmails;
-    }
-
-    public void setStudentEmails(List<String> studentEmails) {
-        this.studentEmails = studentEmails;
+    public void setCourseName(@NotBlank(message = "The Course Name is required.") String courseName) {
+        this.courseName = courseName;
     }
 }

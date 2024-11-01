@@ -58,7 +58,6 @@ public class Student extends User implements Serializable {
         }
     }
 
-    // Método para remover uma matéria
     public void removeSubject(Subject subject) {
         if (subjects.remove(subject)) {
             subject.getStudents().remove(this);

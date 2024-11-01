@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface SubjectRepository extends JpaRepository<Subject, Integer> {
+
     @Query("SELECT s FROM Subject s")
     Page<SubjectProjection> findAllP(Pageable pageable);
 
@@ -23,4 +24,6 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
 
     @Query("SELECT COUNT(s) > 0 FROM Subject s WHERE s.name = :name")
     boolean existsByName(@Param("name") String name);
+
+    Subject findByName(String name);
 }
