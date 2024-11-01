@@ -2,29 +2,33 @@ package com.compass.desafio02.web.dto.student;
 
 import com.compass.desafio02.domain.entities.enums.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
 public class StudentCreateDto {
 
-    @NotBlank
+    @NotBlank(message = "First name is required.")
+    @Pattern(regexp = "^[A-Z].*", message = "First name must start with a capital letter.")
     private String firstName;
-    @NotBlank
+
+    @NotBlank(message = "Last name is required.")
+    @Pattern(regexp = "^[A-Z].*", message = "The last name must start with a capital letter.")
     private String lastName;
-    @NotBlank
-    @Email(message = "{Email.studentCreateDto.student}", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")
+
+    @NotBlank(message = "Email is required.")
+    @Email(message = "Email must be a valid format.", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")
     private String email;
 
     @NotBlank
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$", message = "The password must have at least one uppercase letter, one lowercase letter, one number, one special character and at least 8 characters.")
     private String password;
 
-    @NotNull
+    @NotNull(message = "Date is required")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthdate;
 
+    @NotBlank
     private String address;
 
     private Role role;
@@ -74,11 +78,11 @@ public class StudentCreateDto {
         this.password = password;
     }
 
-    public @NotBlank LocalDate getBirthdate() {
+    public @NotNull LocalDate getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(@NotBlank LocalDate birthdate) {
+    public void setBirthdate(@NotNull LocalDate birthdate) {
         this.birthdate = birthdate;
     }
 

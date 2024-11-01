@@ -7,11 +7,13 @@ import com.compass.desafio02.domain.repositories.projection.ProfessorProjection;
 import com.compass.desafio02.domain.services.ProfessorService;
 import com.compass.desafio02.web.dto.PageableDto;
 import com.compass.desafio02.web.dto.mapper.Mapper;
+import com.compass.desafio02.web.dto.UserPasswordDto;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
 import com.compass.desafio02.web.dto.mapper.ProfessorMapper;
 import com.compass.desafio02.web.dto.professor.ProfessorCreateDto;
 import com.compass.desafio02.web.dto.professor.ProfessorResponseDto;
 import com.compass.desafio02.web.dto.student.StudentResponseDto;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,6 +52,12 @@ public class ProfessorController {
     public ResponseEntity<ProfessorResponseDto> updateProfessor(@PathVariable Integer id, @RequestBody Professor professor) {
         Professor updatedProfessor = professorService.update(id, professor);
         return ResponseEntity.ok(ProfessorMapper.toDto(updatedProfessor));
+    }
+
+    @PatchMapping("/password/update/{id}")
+    public ResponseEntity<Void> updatePassword(@PathVariable Integer id, @RequestBody @Valid UserPasswordDto dto) {
+        professorService.editPassword(id, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmPassword());
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

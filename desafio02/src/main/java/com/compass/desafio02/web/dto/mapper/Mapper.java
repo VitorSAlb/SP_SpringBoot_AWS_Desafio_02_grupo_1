@@ -2,6 +2,7 @@ package com.compass.desafio02.web.dto.mapper;
 
 import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Course;
+import com.compass.desafio02.web.dto.coordinator.CoordinatorNoCourseResponseDto;
 import com.compass.desafio02.web.dto.coordinator.CoordinatorResponseDto;
 import com.compass.desafio02.web.dto.course.CourseResponseDto;
 import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
@@ -26,8 +27,8 @@ public class Mapper {
 
     public static CourseResponseDto toCourseResponseDto(Course course) {
         Coordinator coordinator = course.getCoordinator();
-        CoordinatorResponseDto coordinatorDto = coordinator != null
-                ? modelMapper.map(coordinator, CoordinatorResponseDto.class)
+        CoordinatorNoCourseResponseDto coordinatorDto = coordinator != null
+                ? modelMapper.map(coordinator, CoordinatorNoCourseResponseDto.class)
                 : null;
 
         List<SubjectResponseDto> subjectDtos = course.getSubjects() != null && !course.getSubjects().isEmpty()

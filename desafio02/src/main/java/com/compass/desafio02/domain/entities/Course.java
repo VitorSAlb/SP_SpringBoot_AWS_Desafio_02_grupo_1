@@ -1,5 +1,7 @@
 package com.compass.desafio02.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +21,9 @@ public class Course {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @OneToOne
-    @JoinColumn(name = "coordinator_id", referencedColumnName = "id", nullable = false, unique = true)
+    @JsonBackReference
+    @OneToOne(optional = true)
+    @JoinColumn(name = "coordinator_id", referencedColumnName = "id")
     private Coordinator coordinator;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
@@ -66,7 +69,13 @@ public class Course {
 
     public void setCoordinator(Coordinator coordinator) {
         this.coordinator = coordinator;
+        if (coordinator != null) {
+            if (coordinator.getCourse() != this) {
+                coordinator.setCourse(this);
+            }
+        }
     }
+
 
     public List<Subject> getSubjects() {
         return subjects;

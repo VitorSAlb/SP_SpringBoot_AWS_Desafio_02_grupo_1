@@ -1,18 +1,20 @@
 package com.compass.desafio02.web.dto.enrollment;
 
+import com.compass.desafio02.domain.repositories.projection.StudentProjection;
+import com.compass.desafio02.web.dto.student.StudentGResponseDto;
 import com.compass.desafio02.web.dto.student.StudentResponseDto;
 import com.compass.desafio02.web.dto.course.CourseResponseDto;
 
 public class EnrollmentResponseDto {
 
     private Integer id;
-    private StudentResponseDto student;
+    private StudentGResponseDto student;
     private CourseResponseDto course;
 
     public EnrollmentResponseDto() {
     }
 
-    public EnrollmentResponseDto(Integer id, StudentResponseDto student, CourseResponseDto course) {
+    public EnrollmentResponseDto(Integer id, StudentGResponseDto student, CourseResponseDto course) {
         this.id = id;
         this.student = student;
         this.course = course;
@@ -26,11 +28,11 @@ public class EnrollmentResponseDto {
         this.id = id;
     }
 
-    public StudentResponseDto getStudent() {
+    public StudentGResponseDto getStudent() {
         return student;
     }
 
-    public void setStudent(StudentResponseDto student) {
+    public void setStudent(StudentGResponseDto student) {
         this.student = student;
     }
 
