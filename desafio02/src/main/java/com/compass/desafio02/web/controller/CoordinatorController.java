@@ -12,6 +12,7 @@ import com.compass.desafio02.web.dto.PageableDto;
 import com.compass.desafio02.web.dto.mapper.CoordinatorMapper;
 import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Coordinators", description = "Contains all operations related to a coordinators resource")
 @RestController
 @RequestMapping("/api/v1/coordinators")
 public class CoordinatorController {

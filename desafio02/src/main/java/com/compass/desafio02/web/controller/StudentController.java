@@ -12,7 +12,14 @@ import com.compass.desafio02.web.dto.UserPasswordDto;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
 import com.compass.desafio02.web.dto.mapper.StudentMapper;
 import com.compass.desafio02.web.dto.student.StudentUpdateDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.modelmapper.spi.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +27,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Student", description = "Contains all operations related to a students resource")
 @RestController
 @RequestMapping("api/v1/students")
 public class StudentController {
@@ -45,6 +53,15 @@ public class StudentController {
         return ResponseEntity.ok(Mapper.toDto(student, StudentResponseDto.class));
     }
 
+    @Operation(summary = "Create a new student",
+            description = "Resource to create a new student linked to a registered user. " +
+                    "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource created successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Resource not processed due to missing or invalid data",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+            })
     @PostMapping()
     public ResponseEntity<StudentResponseDto> create(@RequestBody @Valid StudentCreateDto dto) {
         Student student = StudentMapper.toEntity(dto);
