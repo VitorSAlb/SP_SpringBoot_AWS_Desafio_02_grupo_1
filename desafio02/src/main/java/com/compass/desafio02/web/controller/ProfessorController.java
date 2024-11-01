@@ -11,6 +11,8 @@ import com.compass.desafio02.web.dto.mapper.ProfessorMapper;
 import com.compass.desafio02.web.dto.professor.ProfessorCreateDto;
 import com.compass.desafio02.web.dto.professor.ProfessorNoSubjectResponseDto;
 import com.compass.desafio02.web.dto.professor.ProfessorResponseDto;
+import com.compass.desafio02.web.dto.student.StudentResponseDto;
+import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -19,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.modelmapper.spi.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -115,7 +118,6 @@ public class ProfessorController {
         Professor professor = professorService.findByEmail(email);
         return ResponseEntity.ok(Mapper.toDto(professor, ProfessorResponseDto.class));
     }
-
     @Operation(summary = "Update a Professor",
             description = "Resource to update a new Professor linked to a update." +
                     "Request requires use.",
@@ -144,6 +146,7 @@ public class ProfessorController {
                     @ApiResponse(responseCode = "404", description = "Not Fount",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
+
     @DeleteMapping("/{email}")
     public ResponseEntity<Void> deleteProfessor(@PathVariable String email) {
         professorService.delete(email);

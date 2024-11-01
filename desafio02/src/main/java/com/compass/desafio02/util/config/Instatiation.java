@@ -4,6 +4,9 @@ import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.Student;
+import com.compass.desafio02.domain.repositories.CoordinatorRepository;
+import com.compass.desafio02.domain.repositories.CourseRepository;
+import com.compass.desafio02.domain.repositories.StudentRepository;
 import com.compass.desafio02.domain.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -23,13 +26,13 @@ public class Instatiation implements CommandLineRunner {
 
     @Autowired
     private CoordinatorRepository coordinatorRepository;
+  
     @Autowired
     private EnrollmentRepository enrollmentRepository;
     @Autowired
     private ProfessorRepository professorRepository;
     @Autowired
     private SubjectRepository subjectRepository;
-
 
     @Override
     public void run(String... args) throws Exception {

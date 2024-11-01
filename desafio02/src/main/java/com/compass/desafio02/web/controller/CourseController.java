@@ -146,6 +146,7 @@ public class CourseController {
             })
     @PostMapping
     public ResponseEntity<CourseNoSubjectsNoCoordinatorResponseDto> create(@RequestBody @Valid CourseCreateDto courseCreateDto) {
+
         String coordinatorEmail = courseCreateDto.getCoordinatorEmail();
 
         Course course = Mapper.toEntity(courseCreateDto, Course.class);
@@ -172,6 +173,7 @@ public class CourseController {
                     @ApiResponse(responseCode = "404", description = "Course not found",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
+
     @PutMapping("/{name}")
     public ResponseEntity<CourseResponseDto> update(@PathVariable String name, @RequestBody CourseUpdateDto courseUpdateDto) {
         Course course = Mapper.toEntity(courseUpdateDto, Course.class);

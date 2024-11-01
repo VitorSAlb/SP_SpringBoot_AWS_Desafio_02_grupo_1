@@ -132,9 +132,11 @@ public class CoordinatorController {
                     @ApiResponse(responseCode = "404", description = "Coordinator not found",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
+
     @PutMapping("/update/{email}")
     public ResponseEntity<CoordinatorResponseDto> updateCoordinator(@PathVariable String email, @RequestBody CoordinatorCreateDto coordinator) {
         Coordinator updatedCoordinator = coordinatorService.update(email, Mapper.toEntity(coordinator, Coordinator.class));
+
         return ResponseEntity.ok(CoordinatorMapper.toCoordinatorResponseDto(updatedCoordinator));
     }
 
@@ -149,9 +151,11 @@ public class CoordinatorController {
                     @ApiResponse(responseCode = "404", description = "Coordinator not found",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
+
     @PatchMapping("/password/update/{email}")
     public ResponseEntity<Void> updatePassword(@PathVariable String email, @RequestBody @Valid UserPasswordDto dto) {
         coordinatorService.editPassword(email, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmPassword());
+
         return ResponseEntity.noContent().build();
     }
 
@@ -166,9 +170,11 @@ public class CoordinatorController {
                     @ApiResponse(responseCode = "404", description = "Not Fount",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
+
     @DeleteMapping("/{email}")
     public ResponseEntity<Void> deleteCoordinator(@PathVariable String email) {
         coordinatorService.delete(email);
+
         return ResponseEntity.noContent().build();
     }
 }

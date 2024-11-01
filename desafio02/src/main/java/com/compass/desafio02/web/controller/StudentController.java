@@ -151,6 +151,7 @@ public class StudentController {
                     @ApiResponse(responseCode = "404", description = "Student not found",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
+
     @PatchMapping("/password/update/{email}")
     public ResponseEntity<Void> updatePassword(@PathVariable String email, @RequestBody @Valid UserPasswordDto dto) {
         studentService.editPassword(email, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmPassword());
@@ -168,9 +169,11 @@ public class StudentController {
                     @ApiResponse(responseCode = "404", description = "Not Fount",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
+
     @DeleteMapping("/{email}")
     public ResponseEntity<Void> delete(@PathVariable String email) {
         studentService.delete(email);
+
         return ResponseEntity.noContent().build();
     }
 }
