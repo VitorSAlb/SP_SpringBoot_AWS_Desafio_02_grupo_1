@@ -5,9 +5,7 @@ import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.services.CoordinatorService;
 import com.compass.desafio02.domain.services.CourseService;
 import com.compass.desafio02.web.dto.*;
-import com.compass.desafio02.web.dto.course.CourseAddCooDto;
-import com.compass.desafio02.web.dto.course.CourseCreateDto;
-import com.compass.desafio02.web.dto.course.CourseResponseDto;
+import com.compass.desafio02.web.dto.course.*;
 import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
 import com.compass.desafio02.web.dto.student.StudentResponseDto;
@@ -147,7 +145,8 @@ public class CourseController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    public ResponseEntity<CourseResponseDto> create(@RequestBody @Valid CourseCreateDto courseCreateDto) {
+    public ResponseEntity<CourseNoSubjectsNoCoordinatorResponseDto> create(@RequestBody @Valid CourseCreateDto courseCreateDto) {
+
         String coordinatorEmail = courseCreateDto.getCoordinatorEmail();
 
         Course course = Mapper.toEntity(courseCreateDto, Course.class);
@@ -160,7 +159,7 @@ public class CourseController {
         Course savedCourse = courseService.save(course);
         CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(savedCourse);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(courseResponseDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Mapper.toDto(courseResponseDto, CourseNoSubjectsNoCoordinatorResponseDto.class));
     }
 
     @Operation(summary = "Update a Course",
@@ -174,14 +173,12 @@ public class CourseController {
                     @ApiResponse(responseCode = "404", description = "Course not found",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
-    @PutMapping("/{id}")
-    public ResponseEntity<CourseResponseDto> update(@PathVariable Integer id, @RequestBody CourseCreateDto courseUpdateDto) {
-        Coordinator coordinator = coordinatorService.findByEmail(courseUpdateDto.getCoordinatorEmail());
 
+    @PutMapping("/{name}")
+    public ResponseEntity<CourseResponseDto> update(@PathVariable String name, @RequestBody CourseUpdateDto courseUpdateDto) {
         Course course = Mapper.toEntity(courseUpdateDto, Course.class);
-        course.setCoordinator(coordinator);
 
-        Course savedCourse = courseService.update(id, course);
+        Course savedCourse = courseService.update(name, course);
         CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(savedCourse);
         return ResponseEntity.ok(courseResponseDto);
     }

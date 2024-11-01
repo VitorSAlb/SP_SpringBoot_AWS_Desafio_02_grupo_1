@@ -52,8 +52,16 @@ public class CourseService {
         return courseRepository.findAllP(pageable);
     }
 
-    public Course update(Integer id, Course newCourse) {
-        Course existingCourse = findById(id);
+    public Course update(String name, Course newCourse) {
+        Course existingCourse = findByName(name);
+
+        if (newCourse.getName() == null || newCourse.getName().isEmpty()) {
+            throw new EmptyFieldException("Updated course name cannot be empty");
+        }
+
+        if (courseRepository.existsByName(newCourse.getName())) {
+            throw new InvalidCredentialsException("New name of course already registered");
+        }
 
         existingCourse.setName(newCourse.getName());
         existingCourse.setDescription(newCourse.getDescription());

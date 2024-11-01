@@ -134,9 +134,9 @@ public class StudentController {
                     @ApiResponse(responseCode = "404", description = "Student not found",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
-    @PutMapping("/update/{id}")
-    public ResponseEntity<StudentResponseDto> updateStudent(@PathVariable Integer id, @RequestBody StudentUpdateDto dto) {
-        Student student = studentService.update(id, Mapper.toEntity(dto, Student.class));
+    @PutMapping("/update/{email}")
+    public ResponseEntity<StudentResponseDto> updateStudent(@PathVariable String email, @RequestBody StudentUpdateDto dto) {
+        Student student = studentService.update(email, Mapper.toEntity(dto, Student.class));
         return ResponseEntity.ok(Mapper.toDto(student, StudentResponseDto.class));
     }
 
@@ -151,9 +151,10 @@ public class StudentController {
                     @ApiResponse(responseCode = "404", description = "Student not found",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
-    @PatchMapping("/password/update/{id}")
-    public ResponseEntity<Void> updatePassword(@PathVariable Integer id, @RequestBody @Valid UserPasswordDto dto) {
-        studentService.editPassword(id, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmPassword());
+
+    @PatchMapping("/password/update/{email}")
+    public ResponseEntity<Void> updatePassword(@PathVariable String email, @RequestBody @Valid UserPasswordDto dto) {
+        studentService.editPassword(email, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmPassword());
         return ResponseEntity.noContent().build();
     }
 
@@ -168,9 +169,11 @@ public class StudentController {
                     @ApiResponse(responseCode = "404", description = "Not Fount",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        studentService.delete(id);
+
+    @DeleteMapping("/{email}")
+    public ResponseEntity<Void> delete(@PathVariable String email) {
+        studentService.delete(email);
+
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,16 +1,15 @@
 package com.compass.desafio02.web.controller;
 
 import com.compass.desafio02.domain.entities.Professor;
-import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.entities.enums.Role;
 import com.compass.desafio02.domain.repositories.projection.ProfessorProjection;
 import com.compass.desafio02.domain.services.ProfessorService;
 import com.compass.desafio02.web.dto.PageableDto;
 import com.compass.desafio02.web.dto.mapper.Mapper;
-import com.compass.desafio02.web.dto.UserPasswordDto;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
 import com.compass.desafio02.web.dto.mapper.ProfessorMapper;
 import com.compass.desafio02.web.dto.professor.ProfessorCreateDto;
+import com.compass.desafio02.web.dto.professor.ProfessorNoSubjectResponseDto;
 import com.compass.desafio02.web.dto.professor.ProfessorResponseDto;
 import com.compass.desafio02.web.dto.student.StudentResponseDto;
 import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
@@ -49,11 +48,11 @@ public class ProfessorController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    public ResponseEntity<ProfessorResponseDto> createProfessor(@RequestBody ProfessorCreateDto professorDto) {
+    public ResponseEntity<ProfessorNoSubjectResponseDto> createProfessor(@RequestBody ProfessorCreateDto professorDto) {
         Professor professor = ProfessorMapper.toEntity(professorDto);
         professor.setRole(Role.ROLE_PROFESSOR);
         professorService.save(professor);
-        return ResponseEntity.status(201).body(ProfessorMapper.toDto(professor));
+        return ResponseEntity.status(201).body(Mapper.toDto(professor, ProfessorNoSubjectResponseDto.class));
     }
 
     @Operation(summary = "Retrieve Professor list",
@@ -85,7 +84,7 @@ public class ProfessorController {
     @GetMapping()
     public ResponseEntity<PageableDto> getAllProfessors(@PageableDefault(size = 5, sort = {"firstName"}) Pageable pageable) {
         Page<ProfessorProjection> professors = professorService.findAll(pageable);
-        return ResponseEntity.ok(PageableMapper.toDto(professors, Professor.class));
+        return ResponseEntity.ok(PageableMapper.toDto(professors, ProfessorProjection.class));
     }
 
     @Operation(summary = "Find a Professor", description = "Resource to locate a professor by ID." +
@@ -101,9 +100,24 @@ public class ProfessorController {
     @GetMapping("/{id}")
     public ResponseEntity<ProfessorResponseDto> getProfessorById(@PathVariable Integer id) {
         Professor professor = professorService.findById(id);
-        return ResponseEntity.ok(ProfessorMapper.toDto(professor));
+        return ResponseEntity.ok(Mapper.toDto(professor, ProfessorResponseDto.class));
     }
 
+    @Operation(summary = "Find a Professor", description = "Resource to locate a professor by Email." +
+            "Request requires use.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource located successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ProfessorResponseDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Professor not found",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Feature not allowed",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
+            })
+    @GetMapping("/email/{email}")
+    public ResponseEntity<ProfessorResponseDto> getProfessorByEmail(@PathVariable String email) {
+        Professor professor = professorService.findByEmail(email);
+        return ResponseEntity.ok(Mapper.toDto(professor, ProfessorResponseDto.class));
+    }
     @Operation(summary = "Update a Professor",
             description = "Resource to update a new Professor linked to a update." +
                     "Request requires use.",
@@ -132,9 +146,10 @@ public class ProfessorController {
                     @ApiResponse(responseCode = "404", description = "Not Fount",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProfessor(@PathVariable Integer id) {
-        professorService.delete(id);
+
+    @DeleteMapping("/{email}")
+    public ResponseEntity<Void> deleteProfessor(@PathVariable String email) {
+        professorService.delete(email);
         return ResponseEntity.noContent().build();
     }
 
