@@ -1,17 +1,14 @@
 package com.compass.desafio02.web.controller;
 
 import com.compass.desafio02.domain.entities.Professor;
-import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.entities.enums.Role;
 import com.compass.desafio02.domain.repositories.projection.ProfessorProjection;
 import com.compass.desafio02.domain.services.ProfessorService;
 import com.compass.desafio02.web.dto.PageableDto;
-import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
 import com.compass.desafio02.web.dto.mapper.ProfessorMapper;
 import com.compass.desafio02.web.dto.professor.ProfessorCreateDto;
 import com.compass.desafio02.web.dto.professor.ProfessorResponseDto;
-import com.compass.desafio02.web.dto.student.StudentResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,7 +1,7 @@
 package com.compass.desafio02.domain.entities;
 
 import jakarta.persistence.*;
-//import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tb_enrollment", uniqueConstraints = {@UniqueConstraint(columnNames = {"student_id", "course_id"})})
@@ -11,12 +11,12 @@ public class Enrollment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    //@NotNull
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    //@NotNull
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;

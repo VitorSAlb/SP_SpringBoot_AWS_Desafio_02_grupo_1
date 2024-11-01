@@ -20,6 +20,10 @@ public class StudentService {
     private StudentRepository studentRepository;
 
     public Student save(Student student) {
+        if (!isPasswordValid(student.getPassword())) {
+            throw new IllegalArgumentException("The password must have at least one uppercase letter, one lowercase letter, one number, one special character and at least 8 characters.");
+        }
+
         return studentRepository.save(student);
     }
 
@@ -58,20 +62,26 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-
-    // COLOCAR O ENCRIPTADOR DE SENHA
-    public Student editPassword(Integer id, String currentPassword, String newPassword, String confirmPassword) {
+    public void editPassword(Integer id, String currentPassword, String newPassword, String confirmPassword) {
         if (!newPassword.equals(confirmPassword)) {
-            throw new RuntimeException(); // TROCAR EXCESSÃO
+            throw new IllegalArgumentException("New password and confirmation password do not match.");
+        }
+
+        if (!isPasswordValid(newPassword)) {
+            throw new IllegalArgumentException("Password does not meet security requirements.");
         }
 
         Student student = findById(id);
 
         if (!Objects.equals(student.getPassword(), currentPassword)) {
-            throw new RuntimeException(); // TROCAR EXCESSÃO
+            throw new IllegalArgumentException("Current password is incorrect.");
         }
+
         student.setPassword(newPassword);
         studentRepository.save(student);
-        return student;
+    }
+
+    private boolean isPasswordValid(String password) {
+        return password != null && password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$");
     }
 }

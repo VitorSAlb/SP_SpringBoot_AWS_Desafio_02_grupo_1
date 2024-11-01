@@ -1,13 +1,16 @@
 package com.compass.desafio02.web.dto.course;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
 public class CourseCreateDto {
 
     @NotBlank(message = "The course name is required.")
+    @NotEmpty
     private String name;
 
     @NotBlank(message = "The course description is required.")
+    @NotEmpty
     private String description;
 
     private String coordinatorEmail;

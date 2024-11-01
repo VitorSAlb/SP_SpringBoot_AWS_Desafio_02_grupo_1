@@ -4,6 +4,7 @@ import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.enums.Role;
 import com.compass.desafio02.domain.repositories.projection.CoordinatorProjection;
 import com.compass.desafio02.domain.services.CoordinatorService;
+import com.compass.desafio02.domain.services.CourseService;
 import com.compass.desafio02.web.dto.UserPasswordDto;
 import com.compass.desafio02.web.dto.coordinator.CoordinatorCreateDto;
 import com.compass.desafio02.web.dto.coordinator.CoordinatorResponseDto;
@@ -26,8 +27,11 @@ public class CoordinatorController {
     @Autowired
     private CoordinatorService coordinatorService;
 
+    @Autowired
+    private CourseService courseService;
+
     @PostMapping
-    public ResponseEntity<CoordinatorResponseDto> createCoordinator(@RequestBody CoordinatorCreateDto coordinatorDto) {
+    public ResponseEntity<CoordinatorResponseDto> createCoordinator(@RequestBody @Valid CoordinatorCreateDto coordinatorDto) {
         Coordinator coordinator = Mapper.toEntity(coordinatorDto, Coordinator.class);
         coordinator.setRole(Role.ROLE_COORDINATOR);
         coordinatorService.save(coordinator);

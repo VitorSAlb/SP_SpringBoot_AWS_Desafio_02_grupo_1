@@ -2,11 +2,9 @@ package com.compass.desafio02.util.config;
 
 import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Course;
-import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.repositories.CoordinatorRepository;
 import com.compass.desafio02.domain.repositories.CourseRepository;
-import com.compass.desafio02.domain.repositories.ProfessorRepository;
 import com.compass.desafio02.domain.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -26,8 +24,6 @@ public class Instatiation implements CommandLineRunner {
 
     @Autowired
     private CoordinatorRepository coordinatorRepository;
-    @Autowired
-    private ProfessorRepository professorRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -35,7 +31,6 @@ public class Instatiation implements CommandLineRunner {
         studentRepository.deleteAll();
         courseRepository.deleteAll();
         coordinatorRepository.deleteAll();
-        professorRepository.deleteAll();
 
 
         Student s1 = new Student("s01", "s01", "s1@email.com", LocalDate.now(), "123456", "test1 address");
@@ -43,13 +38,19 @@ public class Instatiation implements CommandLineRunner {
         Student s3 = new Student("s03", "s03", "s3@email.com", LocalDate.now(), "123456", "test3 address");
 
 
-        studentRepository.saveAll(Arrays.asList(s1, s2, s3));
+        studentRepository.save(s1);
+        studentRepository.save(s2);
+        studentRepository.save(s3);
+
+
 
         Coordinator coo1 = new Coordinator("coo1", "coo1", "coo1@email.com", LocalDate.now(), "123456", null);
         Coordinator coo2 = new Coordinator("coo2", "coo2", "coo2@email.com", LocalDate.now(), "123456", null);
         Coordinator coo3 = new Coordinator("coo3", "coo3", "coo3@email.com", LocalDate.now(), "123456", null);
 
-        coordinatorRepository.saveAll(Arrays.asList(coo1, coo2, coo3));
+        coordinatorRepository.save(coo1);
+        coordinatorRepository.save(coo2);
+        coordinatorRepository.save(coo3);
 
 
 
@@ -57,16 +58,9 @@ public class Instatiation implements CommandLineRunner {
         Course c2 = new Course("c2","c1 description", coo2);
         Course c3 = new Course("c3","c1 description", coo3);
 
-        courseRepository.saveAll(Arrays.asList(c1, c2, c3));
-
-        Professor P1 = new Professor("Prof1", "Prof1", "prof001@email.com", LocalDate.now(), "123456");
-        Professor P2 = new Professor("Prof2", "Prof2", "prof002@email.com", LocalDate.now(), "123456");
-        Professor P3 = new Professor("Prof3", "Prof3", "prof003@email.com", LocalDate.now(), "123456");
-        Professor P4 = new Professor("Prof4", "Prof4", "prof004@email.com", LocalDate.now(), "123456");
-        Professor P5 = new Professor("Prof5", "Prof5", "prof005@email.com", LocalDate.now(), "123456");
-        Professor P6 = new Professor("Prof6", "Prof6", "prof006@email.com", LocalDate.now(), "123456");
-
-        professorRepository.saveAll(Arrays.asList(P1, P2, P3, P4, P5, P6));
+        courseRepository.save(c1);
+        courseRepository.save(c2);
+        courseRepository.save(c3);
 
     }
 }

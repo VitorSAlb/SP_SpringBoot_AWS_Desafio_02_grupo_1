@@ -1,6 +1,7 @@
 package com.compass.desafio02.domain.services;
 
 import com.compass.desafio02.domain.entities.Coordinator;
+import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.repositories.CoordinatorRepository;
@@ -19,8 +20,12 @@ public class CoordinatorService {
     @Autowired
     private CoordinatorRepository coordinatorRepository;
 
-    public Coordinator save(Coordinator professor) {
-        return coordinatorRepository.save(professor);
+    public Coordinator save(Coordinator coordinator) {
+        if (!isPasswordValid(coordinator.getPassword())) {
+            throw new IllegalArgumentException("The password must have at least one uppercase letter, one lowercase letter, one number, one special character and at least 8 characters.");
+        }
+
+        return coordinatorRepository.save(coordinator);
     }
 
     public Coordinator findById(Integer id) {
@@ -59,15 +64,24 @@ public class CoordinatorService {
 
     public void editPassword(Integer id, String currentPassword, String newPassword, String confirmPassword) {
         if (!newPassword.equals(confirmPassword)) {
-            throw new RuntimeException(); // TROCAR EXCESSÃO
+            throw new IllegalArgumentException("New password and confirmation password do not match.");
+        }
+
+        if (!isPasswordValid(newPassword)) {
+            throw new IllegalArgumentException("Password does not meet security requirements.");
         }
 
         Coordinator coordinator = findById(id);
 
         if (!Objects.equals(coordinator.getPassword(), currentPassword)) {
-            throw new RuntimeException(); // TROCAR EXCESSÃO
+            throw new IllegalArgumentException("Current password is incorrect.");
         }
+
         coordinator.setPassword(newPassword);
         coordinatorRepository.save(coordinator);
+    }
+
+    private boolean isPasswordValid(String password) {
+        return password != null && password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$");
     }
 }
