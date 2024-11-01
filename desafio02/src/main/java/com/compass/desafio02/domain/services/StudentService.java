@@ -48,7 +48,8 @@ public class StudentService {
         return studentRepository.findAllP(pageable);
     }
 
-    public Student update(Integer id, Student newStudent) {        Student existingStudent = findById(id);
+    public Student update(Integer id, Student newStudent) {
+        Student existingStudent = findById(id);
         try {
             existingStudent.setEmail(newStudent.getEmail());
             existingStudent.setFirstName(newStudent.getFirstName());
