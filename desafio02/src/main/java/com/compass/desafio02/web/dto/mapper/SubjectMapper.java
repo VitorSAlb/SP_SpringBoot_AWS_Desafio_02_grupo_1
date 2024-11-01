@@ -4,6 +4,7 @@ import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.entities.Subject;
+import com.compass.desafio02.web.dto.course.CourseNoSubjectsResponseDto;
 import com.compass.desafio02.web.dto.course.CourseResponseDto;
 import com.compass.desafio02.web.dto.subject.SubjectCreateDto;
 import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
@@ -32,7 +33,7 @@ public class SubjectMapper {
         dto.setDescription(subject.getDescription());
         dto.setMainProfessor(ProfessorMapper.toDto(subject.getMainProfessor()));
         dto.setSubstituteProfessor(ProfessorMapper.toDto(subject.getSubstituteProfessor()));
-        dto.setCourse(Mapper.toDto(subject.getCourse(), CourseResponseDto.class));
+        dto.setCourse(Mapper.toDto(subject.getCourse(), CourseNoSubjectsResponseDto.class));
         dto.setStudents(subject.getStudents().stream()
                 .map(StudentMapper::toDto)
                 .collect(Collectors.toList()));

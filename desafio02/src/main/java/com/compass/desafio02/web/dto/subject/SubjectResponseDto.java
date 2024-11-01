@@ -1,5 +1,6 @@
 package com.compass.desafio02.web.dto.subject;
 
+import com.compass.desafio02.web.dto.course.CourseNoSubjectsResponseDto;
 import com.compass.desafio02.web.dto.professor.ProfessorResponseDto;
 import com.compass.desafio02.web.dto.student.StudentResponseDto;
 import com.compass.desafio02.web.dto.course.CourseResponseDto;
@@ -13,13 +14,13 @@ public class SubjectResponseDto {
     private String description;
     private ProfessorResponseDto mainProfessor;
     private ProfessorResponseDto substituteProfessor;
-    private CourseResponseDto course;
+    private CourseNoSubjectsResponseDto course;
     private List<StudentResponseDto> students;
 
     public SubjectResponseDto() {
     }
 
-    public SubjectResponseDto(Integer id, String name, String description, ProfessorResponseDto mainProfessor, ProfessorResponseDto substituteProfessor, CourseResponseDto course, List<StudentResponseDto> students) {
+    public SubjectResponseDto(Integer id, String name, String description, ProfessorResponseDto mainProfessor, ProfessorResponseDto substituteProfessor, CourseNoSubjectsResponseDto course, List<StudentResponseDto> students) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -69,11 +70,11 @@ public class SubjectResponseDto {
         this.substituteProfessor = substituteProfessor;
     }
 
-    public CourseResponseDto getCourse() {
+    public CourseNoSubjectsResponseDto getCourse() {
         return course;
     }
 
-    public void setCourse(CourseResponseDto course) {
+    public void setCourse(CourseNoSubjectsResponseDto course) {
         this.course = course;
     }
 

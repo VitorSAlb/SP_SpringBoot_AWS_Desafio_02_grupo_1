@@ -4,10 +4,7 @@ import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.Student;
-import com.compass.desafio02.domain.repositories.CoordinatorRepository;
-import com.compass.desafio02.domain.repositories.CourseRepository;
-import com.compass.desafio02.domain.repositories.EnrollmentRepository;
-import com.compass.desafio02.domain.repositories.StudentRepository;
+import com.compass.desafio02.domain.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -28,16 +25,28 @@ public class Instatiation implements CommandLineRunner {
     private CoordinatorRepository coordinatorRepository;
     @Autowired
     private EnrollmentRepository enrollmentRepository;
+    @Autowired
+    private ProfessorRepository professorRepository;
+    @Autowired
+    private SubjectRepository subjectRepository;
 
 
     @Override
     public void run(String... args) throws Exception {
 
+        subjectRepository.deleteAll();
         enrollmentRepository.deleteAll();
         studentRepository.deleteAll();
         courseRepository.deleteAll();
         coordinatorRepository.deleteAll();
         studentRepository.deleteAll();
+        professorRepository.deleteAll();
+
+        Professor p1 = new Professor("P1", "P1", "p1@email.com", LocalDate.now(), "123456");
+        Professor p2 = new Professor("P2", "P2", "p2@email.com", LocalDate.now(), "123456");
+        Professor p3 = new Professor("P3", "P3", "p3@email.com", LocalDate.now(), "123456");
+
+        professorRepository.saveAll(Arrays.asList(p1, p2, p3));
 
 
         Student s1 = new Student("s01", "s01", "s1@email.com", LocalDate.now(), "123456", "test1 address");
