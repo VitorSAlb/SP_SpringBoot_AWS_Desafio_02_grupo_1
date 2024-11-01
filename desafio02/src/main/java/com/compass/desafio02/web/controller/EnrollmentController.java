@@ -12,6 +12,16 @@ import com.compass.desafio02.web.dto.enrollment.enrollmentCreateDto;
 import com.compass.desafio02.web.dto.enrollment.EnrollmentResponseDto;
 import com.compass.desafio02.web.dto.mapper.EnrollmentMapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
+import com.compass.desafio02.web.dto.professor.ProfessorResponseDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.modelmapper.spi.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,6 +35,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(name = "Enrollments", description = "Contains all operations related to a enrollments resource")
 @RestController
 @RequestMapping("/api/v1/enrollments")
 public class EnrollmentController {
@@ -39,6 +50,15 @@ public class EnrollmentController {
     private CourseService courseService;
 
     //    @PreAuthorize("hasRole('COORDINATOR')")
+    @Operation(summary = "Create a new Enrollment",
+            description = "Resource to create a new Enrollment linked to a registered user." +
+                    "Request requires use.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource created successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = EnrollmentResponseDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+            })
     @PostMapping
     public ResponseEntity<EnrollmentResponseDto> createEnrollment(@Valid @RequestBody enrollmentCreateDto dto) {
         Student student = studentService.findByEmail(dto.getStudentEmail());
@@ -47,6 +67,32 @@ public class EnrollmentController {
         return ResponseEntity.status(201).body(EnrollmentMapper.toDto(enrollment));
     }
 
+    @Operation(summary = "Retrieve Enrollment list",
+            description = "Request requires Enrollment.",
+            parameters = {
+                    @Parameter(in = ParameterIn.QUERY, name = "page",
+                            content = @Content(schema = @Schema(type = "integer", defaultValue = "0")),
+                            description = "Represents the returned page"
+                    ),
+                    @Parameter(in = ParameterIn.QUERY, name = "size",
+                            content = @Content(schema = @Schema(type = "integer", defaultValue = "5")),
+                            description = "Represents the total number of elements per page"
+                    ),
+                    @Parameter(in = ParameterIn.QUERY, name = "sort", hidden = true,
+                            array = @ArraySchema(schema = @Schema(type = "string", defaultValue = "firstName,asc")),
+                            description = "Represents the ordering of results. Multiple sorting criteria are supported."
+                    )
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource retrieved successfully",
+                            content = @Content(mediaType = "application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = PageableDto.class))
+                    ),
+                    @ApiResponse(responseCode = "403", description = "I don't allow this feature.",
+                            content = @Content(mediaType = "application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = ErrorMessage.class))
+                    )
+            })
     @GetMapping
     public ResponseEntity<PageableDto> getAllEnrollments(@PageableDefault(size = 5) Pageable pageable) {
         Page<Enrollment> enrollments = enrollmentService.getAllEnrollments(pageable);
@@ -59,12 +105,33 @@ public class EnrollmentController {
         return ResponseEntity.ok(PageableMapper.toDto(enrollmentDtosPage, EnrollmentResponseDto.class));
     }
 
+    @Operation(summary = "Find a Enrollment", description = "Resource to locate a Enrollment by ID." +
+            "Request requires use.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource located successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = EnrollmentResponseDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Enrollment not found",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Feature not allowed",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @GetMapping("/{id}")
     public ResponseEntity<EnrollmentResponseDto> getEnrollmentById(@PathVariable Integer id) {
         Enrollment enrollment = enrollmentService.findEnrollmentById(id);
         return ResponseEntity.ok(EnrollmentMapper.toDto(enrollment));
     }
 
+    @Operation(summary = "Delete a new Enrollment",
+            description = "Resource to delete a new student linked to a registered Enrollment." +
+                    "Request requires use.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = EnrollmentResponseDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Not Fount",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEnrollment(@PathVariable Integer id) {
         enrollmentService.deleteEnrollment(id);

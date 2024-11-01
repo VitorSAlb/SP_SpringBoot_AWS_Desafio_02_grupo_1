@@ -64,7 +64,9 @@ public class StudentController {
                     @ApiResponse(responseCode = "403", description = "I don't allow this feature.",
                             content = @Content(mediaType = "application/json;charset=UTF-8",
                                     schema = @Schema(implementation = ErrorMessage.class))
-                    )
+                    ),
+                    @ApiResponse(responseCode = "404", description = "Student not found",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping()
     public ResponseEntity<PageableDto> findAll(@PageableDefault(size = 5, page = 0,sort = {"firstName"}) Pageable pageable) {
@@ -125,10 +127,12 @@ public class StudentController {
             description = "Resource to update a new student linked to a update password. " +
                     "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
             responses = {
-                    @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
+                    @ApiResponse(responseCode = "204", description = "Resource update successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
                     @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Student not found",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @PutMapping("/update/{id}")
     public ResponseEntity<StudentResponseDto> updateStudent(@PathVariable Integer id, @RequestBody StudentUpdateDto dto) {
@@ -144,6 +148,8 @@ public class StudentController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
                     @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Student not found",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @PatchMapping("/password/update/{id}")
     public ResponseEntity<Void> updatePassword(@PathVariable Integer id, @RequestBody @Valid UserPasswordDto dto) {
@@ -159,6 +165,8 @@ public class StudentController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
                     @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Not Fount",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
