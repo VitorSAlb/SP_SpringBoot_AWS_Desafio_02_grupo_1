@@ -49,9 +49,9 @@ public class Instatiation implements CommandLineRunner {
         professorRepository.saveAll(Arrays.asList(p1, p2, p3));
 
 
-        Student s1 = new Student("s01", "s01", "s1@email.com", LocalDate.now(), "123456", "test1 address");
-        Student s2 = new Student("s02", "s02", "s2@email.com", LocalDate.now(), "123456", "test2 address");
-        Student s3 = new Student("s03", "s03", "s3@email.com", LocalDate.now(), "123456", "test3 address");
+        Student s1 = new Student("s01", "s01", "s1@email.com", LocalDate.parse("2000-01-01"), "@Ab12345", "test1 address");
+        Student s2 = new Student("s02", "s02", "s2@email.com", LocalDate.now(), "@Ab12345", "test2 address");
+        Student s3 = new Student("s03", "s03", "s3@email.com", LocalDate.now(), "@Ab12345", "test3 address");
 
 
         studentRepository.saveAll(Arrays.asList(s1, s2, s3));

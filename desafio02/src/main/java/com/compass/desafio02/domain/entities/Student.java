@@ -49,7 +49,7 @@ public class Student extends User implements Serializable {
 
     public void setCourse(Course course) {
         this.course = course;
-        if (course != null && !course.getCoordinator().equals(this)) {
+        if (course != null) {
             course.addStudent(this);
         }
     }

@@ -26,6 +26,10 @@ public class EnrollmentService {
     private StudentRepository studentRepository;
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private CourseService courseService;
+    @Autowired
+    private StudentService studentService;
 
 
     public Page<Enrollment> getAllEnrollments(Pageable pageable) {
@@ -61,13 +65,17 @@ public class EnrollmentService {
             throw new IllegalArgumentException("Student is already enrolled in this course.");
         }
 
+        // Adicionar as matérias do curso ao estudante
+        course.getSubjects().forEach(student::addSubject);
+        studentService.save(student);
+
+        // Adicionar Course a Student
+        courseService.addStudentToCourse(course.getName(), student.getEmail());
+
+
         // Criar a nova matrícula
         Enrollment enrollment = new Enrollment(student, course);
         enrollmentRepository.save(enrollment);
-
-        // Adicionar as matérias do curso ao estudante
-        course.getSubjects().forEach(student::addSubject);
-        studentRepository.save(student);
 
         return enrollment;
     }
