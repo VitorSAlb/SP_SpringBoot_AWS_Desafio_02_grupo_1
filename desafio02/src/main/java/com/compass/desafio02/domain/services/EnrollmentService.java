@@ -63,7 +63,13 @@ public class EnrollmentService {
 
         // Criar a nova matrícula
         Enrollment enrollment = new Enrollment(student, course);
-        return enrollmentRepository.save(enrollment);
+        enrollmentRepository.save(enrollment);
+
+        // Adicionar as matérias do curso ao estudante
+        course.getSubjects().forEach(student::addSubject);
+        studentRepository.save(student);
+
+        return enrollment;
     }
 
     public void deleteEnrollment(Integer id) {

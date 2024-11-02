@@ -49,7 +49,6 @@ public class EnrollmentController {
     @Autowired
     private CourseService courseService;
 
-    //    @PreAuthorize("hasRole('COORDINATOR')")
     @Operation(summary = "Create a new Enrollment",
             description = "Resource to create a new Enrollment linked to a registered user." +
                     "Request requires use.",
