@@ -1,12 +1,15 @@
 package com.compass.desafio02.domain.services;
 
 import com.compass.desafio02.domain.entities.Coordinator;
+import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.entities.Professor;
+import com.compass.desafio02.domain.repositories.CourseRepository;
 import com.compass.desafio02.domain.repositories.ProfessorRepository;
 import com.compass.desafio02.domain.repositories.SubjectRepository;
 import com.compass.desafio02.domain.repositories.projection.ProfessorProjection;
 import com.compass.desafio02.domain.entities.Subject;
 import com.compass.desafio02.infrastructure.exceptions.BusinessRuleException;
+import com.compass.desafio02.infrastructure.exceptions.ResourceNotFoundException;
 import com.compass.desafio02.infrastructure.exceptions.user.PasswordUpdateException;
 import com.compass.desafio02.infrastructure.exceptions.user.UserCreationException;
 import com.compass.desafio02.infrastructure.exceptions.user.UserDeletionException;
@@ -24,38 +27,76 @@ public class ProfessorService {
 
     @Autowired
     private ProfessorRepository professorRepository;
-
+    @Autowired
+    private CourseRepository courseRepository;
     @Autowired
     private SubjectRepository subjectRepository;
 
-    public void validateProfessorSubjects(Professor professor) {
+    public void addMainProfessor(String emailProfessor, String nameCourse, String subjectName) {
+        Professor professor = findByEmail(emailProfessor);
+        Subject subject = subjectRepository.findByNameAndCourseName(subjectName, nameCourse)
+                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with name: " + subjectName + " in course: " + nameCourse));
+
+        validateMainProfessorAssignment(professor, subject);
+
+        subject.setMainProfessor(professor);
+        subjectRepository.save(subject);
+    }
+
+    public void addSubstituteProfessor(String emailProfessor, String nameCourse, String subjectName) {
+        Professor professor = findByEmail(emailProfessor);
+        Subject subject = subjectRepository.findByNameAndCourseName(subjectName, nameCourse)
+                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with name: " + subjectName + " in course: " + nameCourse));
+
+        validateSubstituteProfessorAssignment(professor, subject);
+
+        subject.setSubstituteProfessor(professor);
+        subjectRepository.save(subject);
+    }
+
+    public void removeMainProfessor(String emailProfessor, String nameCourse, String subjectName) {
+        Professor professor = findByEmail(emailProfessor);
+        Subject subject = subjectRepository.findByNameAndCourseName(subjectName, nameCourse)
+                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with name: " + subjectName + " in course: " + nameCourse));
+
+        if (subject.getMainProfessor() != null && subject.getMainProfessor().equals(professor)) {
+            subject.setMainProfessor(null);
+            subjectRepository.save(subject);
+        }
+    }
+
+    public void removeSubstituteProfessor(String emailProfessor, String nameCourse, String subjectName) {
+        Professor professor = findByEmail(emailProfessor);
+        Subject subject = subjectRepository.findByNameAndCourseName(subjectName, nameCourse)
+                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with name: " + subjectName + " in course: " + nameCourse));
+
+        if (subject.getSubstituteProfessor() != null && subject.getSubstituteProfessor().equals(professor)) {
+            subject.setSubstituteProfessor(null);
+            subjectRepository.save(subject);
+        }
+    }
+
+    private void validateMainProfessorAssignment(Professor professor, Subject subject) {
+        List<Subject> subjectsAsMain = subjectRepository.findByMainProfessor(professor);
+        if (!subjectsAsMain.isEmpty()) {
+            throw new BusinessRuleException("A professor can only be a main professor in one subject.");
+        }
+        validateProfessorSubjects(professor);
+    }
+
+    private void validateSubstituteProfessorAssignment(Professor professor, Subject subject) {
+        validateProfessorSubjects(professor);
+    }
+
+    private void validateProfessorSubjects(Professor professor) {
         List<Subject> subjectsAsMain = subjectRepository.findByMainProfessor(professor);
         List<Subject> subjectsAsSubstitute = subjectRepository.findBySubstituteProfessor(professor);
-
-        int totalSubjects = subjectsAsMain.size() + subjectsAsSubstitute.size();
-
-        if (totalSubjects > 3) {
-            throw new BusinessRuleException("A professor can participate in a maximum of 3 subjects.");
-        }
 
         if (subjectsAsMain.size() > 1) {
             throw new BusinessRuleException("A professor can only be a main professor in one subject.");
         }
-
-        long substituteInSameCourse = subjectsAsSubstitute.stream()
-                .filter(subject -> subject.getCourse().equals(professor.getCourse()))
-                .count();
-
-        if (substituteInSameCourse > 1) {
-            throw new BusinessRuleException("A professor can only be a substitute in one subject within their own course.");
-        }
-
-        long substituteInOtherCourses = subjectsAsSubstitute.stream()
-                .filter(subject -> !subject.getCourse().equals(professor.getCourse()))
-                .count();
-
-        if (substituteInOtherCourses > 1) {
-            throw new BusinessRuleException("A professor can only be a substitute in one subject of another course.");
+        if ((subjectsAsMain.size() + subjectsAsSubstitute.size()) > 3) {
+            throw new BusinessRuleException("A professor can participate in a maximum of 3 subjects.");
         }
     }
 

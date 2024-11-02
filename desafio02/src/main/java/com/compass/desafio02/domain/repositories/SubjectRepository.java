@@ -10,20 +10,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SubjectRepository extends JpaRepository<Subject, Integer> {
-    @Query("SELECT s FROM Subject s")
-    Page<SubjectProjection> findAllP(Pageable pageable);
-
-    @Query("SELECT s FROM Subject s WHERE s.mainProfessor = :professor")
-    List<Subject> findByMainProfessor(@Param("professor") Professor professor);
-
-    @Query("SELECT s FROM Subject s WHERE s.substituteProfessor = :professor")
-    List<Subject> findBySubstituteProfessor(@Param("professor") Professor professor);
-
-    @Query("SELECT COUNT(s) > 0 FROM Subject s WHERE s.name = :name")
-    boolean existsByName(@Param("name") String name);
 
     @Query("SELECT s FROM Subject s WHERE s.name = :name")
     Subject findByName(String name);
+
+    @Query("SELECT s FROM Subject s WHERE s.name = :subjectName AND s.course.name = :courseName")
+    Optional<Subject> findByNameAndCourseName(@Param("subjectName") String subjectName, @Param("courseName") String courseName);
+
+    List<Subject> findByMainProfessor(Professor professor);
+    List<Subject> findBySubstituteProfessor(Professor professor);
+
 }

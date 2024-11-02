@@ -9,7 +9,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "tb_subject")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") public class Subject{
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class Subject{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -106,19 +107,6 @@ import java.util.List;
 
     public void setStudents(List<Student> students) {
         this.students = students;
-    }
-
-    public void addStudent(Student student) {
-        if (!students.contains(student)) {
-            this.students.add(student);
-            student.getSubjects().add(this);
-        }
-    }
-
-    public void removeStudent(Student student) {
-        if (students.remove(student)) {
-            student.getSubjects().remove(this);
-        }
     }
 
 }

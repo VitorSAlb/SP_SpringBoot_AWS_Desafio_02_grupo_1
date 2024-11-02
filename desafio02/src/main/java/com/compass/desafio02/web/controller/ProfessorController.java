@@ -4,10 +4,12 @@ import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.enums.Role;
 import com.compass.desafio02.domain.repositories.projection.ProfessorProjection;
 import com.compass.desafio02.domain.services.ProfessorService;
+import com.compass.desafio02.infrastructure.exceptions.user.UserNotFoundException;
 import com.compass.desafio02.web.dto.PageableDto;
 import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
 import com.compass.desafio02.web.dto.mapper.ProfessorMapper;
+import com.compass.desafio02.web.dto.professor.ProfessorAddCourseDto;
 import com.compass.desafio02.web.dto.professor.ProfessorCreateDto;
 import com.compass.desafio02.web.dto.professor.ProfessorNoSubjectResponseDto;
 import com.compass.desafio02.web.dto.professor.ProfessorResponseDto;
@@ -27,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -151,6 +154,62 @@ public class ProfessorController {
     public ResponseEntity<Void> deleteProfessor(@PathVariable String email) {
         professorService.delete(email);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(
+            summary = "Assign Main Professor",
+            description = "Assigns a professor as the main professor for a specific subject in a course.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Professor assigned as main successfully"),
+                    @ApiResponse(responseCode = "404", description = "Professor or Subject not found", content = @Content(schema = @Schema(implementation = UserNotFoundException.class)))
+            }
+    )
+    @PostMapping("/assign-main")
+    public ResponseEntity<Void> assignMainProfessor(@RequestBody @Valid ProfessorAddCourseDto dto) {
+        professorService.addMainProfessor(dto.getEmailProfessor(), dto.getNameCourse(), dto.getSubjectName());
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            summary = "Remove Main Professor",
+            description = "Removes a professor from being the main professor of a specific subject in a course.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Main professor removed successfully"),
+                    @ApiResponse(responseCode = "404", description = "Professor or Subject not found", content = @Content(schema = @Schema(implementation = UserNotFoundException.class)))
+            }
+    )
+    @DeleteMapping("/remove-main")
+    public ResponseEntity<Void> removeMainProfessor(@RequestBody @Valid ProfessorAddCourseDto dto) {
+        professorService.removeMainProfessor(dto.getEmailProfessor(), dto.getNameCourse(), dto.getSubjectName());
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            summary = "Assign Substitute Professor",
+            description = "Assigns a professor as the substitute professor for a specific subject in a course.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Professor assigned as substitute successfully"),
+                    @ApiResponse(responseCode = "404", description = "Professor or Subject not found", content = @Content(schema = @Schema(implementation = UserNotFoundException.class)))
+            }
+    )
+    @PostMapping("/assign-substitute")
+    public ResponseEntity<Void> assignSubstituteProfessor(@RequestBody @Valid ProfessorAddCourseDto dto) {
+        professorService.addSubstituteProfessor(dto.getEmailProfessor(), dto.getNameCourse(), dto.getSubjectName());
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            summary = "Remove Substitute Professor",
+            description = "Removes a professor from being the substitute professor of a specific subject in a course.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Substitute professor removed successfully"),
+                    @ApiResponse(responseCode = "404", description = "Professor or Subject not found", content = @Content(schema = @Schema(implementation = UserNotFoundException.class)))
+            }
+    )
+    @DeleteMapping("/remove-substitute")
+    public ResponseEntity<Void> removeSubstituteProfessor(@RequestBody @Valid ProfessorAddCourseDto dto) {
+        professorService.removeSubstituteProfessor(dto.getEmailProfessor(), dto.getNameCourse(), dto.getSubjectName());
+        return ResponseEntity.ok().build();
     }
 
 }
