@@ -1,5 +1,7 @@
 package com.compass.desafio02.domain.services;
 
+import com.compass.desafio02.domain.entities.Course;
+import com.compass.desafio02.domain.entities.Subject;
 import com.compass.desafio02.domain.repositories.projection.StudentProjection;
 import com.compass.desafio02.infrastructure.exceptions.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,5 +116,10 @@ public class StudentService {
 
     private boolean isPasswordValid(String password) {
         return password != null && password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$");
+    }
+
+    public void addCourse(Course course, Student student) {
+        student.setCourse(course);
+        studentRepository.save(student);
     }
 }

@@ -1,12 +1,9 @@
 package com.compass.desafio02.web.dto.student;
 
-import com.compass.desafio02.domain.entities.Course;
-import com.compass.desafio02.domain.entities.Subject;
 import com.compass.desafio02.domain.entities.enums.Role;
+import com.compass.desafio02.web.dto.course.CourseNoCoordinatorResponseDto;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class StudentResponseDto {
 
@@ -17,13 +14,13 @@ public class StudentResponseDto {
     private LocalDate birthdate;
     private Role role;
     private String address;
-    private String nameCourse;
-    private List<Subject> subjects = new ArrayList<>();
+    private CourseNoCoordinatorResponseDto course;
+
 
     public StudentResponseDto() {
     }
 
-    public StudentResponseDto(Integer id, String firstName, String lastName, String email, LocalDate birthdate, Role role, String address, Course course, List<Subject> subjects) {
+    public StudentResponseDto(Integer id, String firstName, String lastName, String email, LocalDate birthdate, Role role, String address, CourseNoCoordinatorResponseDto course) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -31,8 +28,7 @@ public class StudentResponseDto {
         this.birthdate = birthdate;
         this.role = role;
         this.address = address;
-        this.nameCourse = course.getName();
-        this.subjects = subjects;
+        this.course = course;
     }
 
     public Integer getId() {
@@ -59,6 +55,14 @@ public class StudentResponseDto {
         this.lastName = lastName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public LocalDate getBirthdate() {
         return birthdate;
     }
@@ -83,19 +87,11 @@ public class StudentResponseDto {
         this.address = address;
     }
 
-    public String getEmail() {
-        return email;
+    public CourseNoCoordinatorResponseDto getCourse() {
+        return course;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getNameCourse() {
-        return nameCourse;
-    }
-
-    public List<Subject> getSubjects() {
-        return subjects;
+    public void setCourse(CourseNoCoordinatorResponseDto course) {
+        this.course = course;
     }
 }

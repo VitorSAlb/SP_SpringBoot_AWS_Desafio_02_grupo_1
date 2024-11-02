@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handleInvalidCredentialsException(InvalidCredentialsException ex, HttpServletRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(
                 HttpStatus.UNAUTHORIZED,
-                "Invalid credentials. Please check your username and password.",
+                ex.getMessage(),
                 request.getRequestURI()
         );
         return new ResponseEntity<>(errorMessage, HttpStatus.UNAUTHORIZED);
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handleUserCreationException(UserCreationException ex, HttpServletRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(
                 HttpStatus.BAD_REQUEST,
-                "User creation failed. Please check the provided data for any issues.",
+                ex.getMessage(),
                 request.getRequestURI()
         );
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handleUserUpdateException(UserUpdateException ex, HttpServletRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(
                 HttpStatus.BAD_REQUEST,
-                "User update failed. Ensure the data is valid and try again.",
+                ex.getMessage(),
                 request.getRequestURI()
         );
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
@@ -70,7 +70,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handleUserDeletionException(UserDeletionException ex, HttpServletRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(
                 HttpStatus.NOT_FOUND,
-                "User deletion failed. The specified user could not be found.",
+                ex.getMessage(),
                 request.getRequestURI()
         );
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
@@ -80,7 +80,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handlePasswordUpdateException(PasswordUpdateException ex, HttpServletRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(
                 HttpStatus.BAD_REQUEST,
-                "Password update failed. Ensure that the provided password meets the required criteria.",
+                ex.getMessage(),
                 request.getRequestURI()
         );
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
@@ -118,7 +118,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handleCoordinatorOrCourseNotFoundException(CoordinatorOrCourseNotFoundException ex, HttpServletRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(
                 HttpStatus.NOT_FOUND,
-                "Coordinator or course not found. Please check if the provided IDs are correct.",
+                ex.getMessage(),
                 request.getRequestURI()
         );
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
@@ -128,7 +128,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handleCoordinatorAlreadyAssignedException(CoordinatorAlreadyAssignedException ex, HttpServletRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(
                 HttpStatus.CONFLICT,
-                "Coordinator assignment failed. The coordinator is already assigned to this course.",
+                ex.getMessage(),
                 request.getRequestURI()
         );
         return new ResponseEntity<>(errorMessage, HttpStatus.CONFLICT);

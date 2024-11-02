@@ -2,6 +2,7 @@ package com.compass.desafio02.domain.services;
 
 import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Course;
+import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.entities.Subject;
 import com.compass.desafio02.domain.repositories.CoordinatorRepository;
 import com.compass.desafio02.domain.repositories.CourseRepository;
@@ -20,6 +21,8 @@ public class CourseService {
     private CoordinatorRepository coordinatorRepository;
     @Autowired
     private SubjectService subjectService;
+    @Autowired
+    private StudentService studentService;
 
     public Course save(Course course) {
 
@@ -120,7 +123,6 @@ public class CourseService {
         }
 
         subjectService.addCourse(course, subject);
-
     }
 
     public void removeSubjectToCourse(String nameCourse, String nameSubject) {
@@ -133,5 +135,16 @@ public class CourseService {
 
         subjectService.removeCourse(course, subject);
         course.removeSubject(subject);
+    }
+
+    public void addStudentToCourse(String nameCourse, String emailStudent) {
+        Course course = findByName(nameCourse);
+        Student student = studentService.findByEmail(emailStudent);
+
+        if (student.getCourse() != null) {
+            throw new DuplicateException("Student already exists in course.");
+        }
+
+        studentService.addCourse(course, student);
     }
 }
