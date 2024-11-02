@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.modelmapper.spi.ErrorMessage;
@@ -43,6 +44,7 @@ public class CoordinatorController {
     @Operation(summary = "Create a new Coordinator",
             description = "Resource to create a new Coordinator. " +
                     "Request requires use.'",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource created successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CoordinatorResponseDto.class))),
@@ -59,6 +61,7 @@ public class CoordinatorController {
 
     @Operation(summary = "Retrieve Coordinators list",
             description = "Request requires Coordinators.",
+            security = @SecurityRequirement(name = "security"),
             parameters = {
                     @Parameter(in = ParameterIn.QUERY, name = "page",
                             content = @Content(schema = @Schema(type = "integer", defaultValue = "0")),
@@ -91,6 +94,7 @@ public class CoordinatorController {
 
     @Operation(summary = "Find a Coordinators", description = "Resource to locate a Coordinators by ID." +
             "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource located successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CoordinatorResponseDto.class))),
@@ -107,6 +111,7 @@ public class CoordinatorController {
 
     @Operation(summary = "Find a Coordinators", description = "Resource to locate a Coordinators by Email." +
             "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource located successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CoordinatorResponseDto.class))),
@@ -124,6 +129,7 @@ public class CoordinatorController {
     @Operation(summary = "Update a new Coordinator",
             description = "Resource to update. " +
                     "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource update successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CoordinatorResponseDto.class))),
@@ -143,6 +149,7 @@ public class CoordinatorController {
     @Operation(summary = "Update a new Coordinator",
             description = "Resource to update. Update Password" +
                     "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource update successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CoordinatorResponseDto.class))),
@@ -162,6 +169,7 @@ public class CoordinatorController {
     @Operation(summary = "Delete a new Coordinators",
             description = "Resource to delete a new Coordinators linked to a registered Coordinators." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CoordinatorResponseDto.class))),

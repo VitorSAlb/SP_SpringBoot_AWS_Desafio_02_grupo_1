@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.modelmapper.spi.ErrorMessage;
@@ -41,6 +42,7 @@ public class ProfessorController {
     @Operation(summary = "Create a new Professor",
             description = "Resource to create a new professor linked to a registered user." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource created successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ProfessorResponseDto.class))),
@@ -57,6 +59,7 @@ public class ProfessorController {
 
     @Operation(summary = "Retrieve Professor list",
             description = "Request requires Professor.",
+            security = @SecurityRequirement(name = "security"),
             parameters = {
                     @Parameter(in = ParameterIn.QUERY, name = "page",
                             content = @Content(schema = @Schema(type = "integer", defaultValue = "0")),
@@ -105,6 +108,7 @@ public class ProfessorController {
 
     @Operation(summary = "Find a Professor", description = "Resource to locate a professor by Email." +
             "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource located successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ProfessorResponseDto.class))),
@@ -121,6 +125,7 @@ public class ProfessorController {
     @Operation(summary = "Update a Professor",
             description = "Resource to update a new Professor linked to a update." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource update successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ProfessorResponseDto.class))),
@@ -138,6 +143,7 @@ public class ProfessorController {
     @Operation(summary = "Delete a new Professor",
             description = "Resource to delete a new student linked to a registered Professor." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ProfessorResponseDto.class))),
@@ -146,7 +152,6 @@ public class ProfessorController {
                     @ApiResponse(responseCode = "404", description = "Not Fount",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
-
     @DeleteMapping("/{email}")
     public ResponseEntity<Void> deleteProfessor(@PathVariable String email) {
         professorService.delete(email);

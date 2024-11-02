@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.spi.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ public class EnrollmentController {
     @Operation(summary = "Create a new Enrollment",
             description = "Resource to create a new Enrollment linked to a registered user." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource created successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = EnrollmentResponseDto.class))),
@@ -69,6 +71,7 @@ public class EnrollmentController {
 
     @Operation(summary = "Retrieve Enrollment list",
             description = "Request requires Enrollment.",
+            security = @SecurityRequirement(name = "security"),
             parameters = {
                     @Parameter(in = ParameterIn.QUERY, name = "page",
                             content = @Content(schema = @Schema(type = "integer", defaultValue = "0")),
@@ -107,6 +110,7 @@ public class EnrollmentController {
 
     @Operation(summary = "Find a Enrollment", description = "Resource to locate a Enrollment by ID." +
             "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource located successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = EnrollmentResponseDto.class))),
@@ -124,6 +128,7 @@ public class EnrollmentController {
     @Operation(summary = "Delete a new Enrollment",
             description = "Resource to delete a new student linked to a registered Enrollment." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = EnrollmentResponseDto.class))),

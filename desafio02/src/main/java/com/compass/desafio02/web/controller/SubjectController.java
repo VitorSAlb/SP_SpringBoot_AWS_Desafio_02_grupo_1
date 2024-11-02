@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.spi.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,7 @@ public class SubjectController {
 
     @Operation(summary = "Retrieve Subjects list",
             description = "Request requires Subjects.",
+            security = @SecurityRequirement(name = "security"),
             parameters = {
                     @Parameter(in = ParameterIn.QUERY, name = "page",
                             content = @Content(schema = @Schema(type = "integer", defaultValue = "0")),
@@ -86,6 +88,7 @@ public class SubjectController {
 
     @Operation(summary = "Find a Subjects", description = "Resource to locate a Subjects by ID." +
             "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource located successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = SubjectResponseDto.class))),
@@ -103,6 +106,7 @@ public class SubjectController {
     @Operation(summary = "Create a new Subjects",
             description = "Resource to create a new subjects linked to a registered user." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource created successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = SubjectResponseDto.class))),
@@ -127,6 +131,7 @@ public class SubjectController {
     @Operation(summary = "Update a Course",
             description = "Resource to update a new student." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource update successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = SubjectResponseDto.class))),
@@ -152,6 +157,7 @@ public class SubjectController {
     @Operation(summary = "Delete a new Course",
             description = "Resource to delete a new student linked to a registered Course." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = SubjectResponseDto.class))),
