@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handleUserNotFoundException(UserNotFoundException ex, HttpServletRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(
                 HttpStatus.NOT_FOUND,
-                "User not found. Please verify the user ID or Email provided.",
+                ex.getMessage(),
                 request.getRequestURI()
         );
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(
                 HttpStatus.BAD_REQUEST,
-                "An illegal argument was provided. Please check the request data.",
+                ex.getMessage(),
                 request.getRequestURI()
         );
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
@@ -96,7 +96,7 @@ public class GlobalExceptionHandler {
         String path = request.getDescription(false).replace("uri=", "");
         ErrorMessage errorMessage = new ErrorMessage(
                 HttpStatus.BAD_REQUEST,
-                "Validation failed for one or more fields. Please correct the errors and try again.",
+                ex.getMessage(),
                 path
         );
         errorMessage.setErrors(errors);
@@ -108,7 +108,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handleDuplicateCourseException(DuplicateCourseException ex, HttpServletRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(
                 HttpStatus.CONFLICT,
-                "Course creation failed. A course with the same name already exists.",
+                ex.getMessage(),
                 request.getRequestURI()
         );
         return new ResponseEntity<>(errorMessage, HttpStatus.CONFLICT);
