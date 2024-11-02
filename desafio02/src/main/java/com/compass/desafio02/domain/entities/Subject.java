@@ -22,7 +22,7 @@ import java.util.List;
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "main_professor_id", nullable = false)
+    @JoinColumn(name = "main_professor_id")
     private Professor mainProfessor;
 
     @ManyToOne
@@ -30,7 +30,7 @@ import java.util.List;
     private Professor substituteProfessor;
 
     @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
+    @JoinColumn(name = "course_id")
     private Course course;
 
     @ManyToMany
@@ -108,7 +108,6 @@ import java.util.List;
         this.students = students;
     }
 
-    // Método para adicionar um aluno - Duvida se mantem ou não para o futuro
     public void addStudent(Student student) {
         if (!students.contains(student)) {
             this.students.add(student);
@@ -116,7 +115,6 @@ import java.util.List;
         }
     }
 
-    // Método para remover um aluno - Duvida se mantem ou não para o futuro
     public void removeStudent(Student student) {
         if (students.remove(student)) {
             student.getSubjects().remove(this);

@@ -13,7 +13,7 @@ public class Student extends User implements Serializable {
     @Column(name = "address")
     private String address;
 
-    @OneToOne
+    @ManyToOne
     private Course course;
 
     @ManyToMany(mappedBy = "students", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -49,6 +49,9 @@ public class Student extends User implements Serializable {
 
     public void setCourse(Course course) {
         this.course = course;
+        if (course != null && !course.getCoordinator().equals(this)) {
+            course.addStudent(this);
+        }
     }
 
     public void addSubject(Subject subject) {
@@ -58,10 +61,10 @@ public class Student extends User implements Serializable {
         }
     }
 
-    // Método para remover uma matéria
     public void removeSubject(Subject subject) {
         if (subjects.remove(subject)) {
             subject.getStudents().remove(this);
         }
     }
+
 }

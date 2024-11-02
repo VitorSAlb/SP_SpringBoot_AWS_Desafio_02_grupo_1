@@ -23,4 +23,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
 
     @Query("SELECT COUNT(s) > 0 FROM Subject s WHERE s.name = :name")
     boolean existsByName(@Param("name") String name);
+
+    @Query("SELECT s FROM Subject s WHERE s.name = :name")
+    Subject findByName(String name);
 }

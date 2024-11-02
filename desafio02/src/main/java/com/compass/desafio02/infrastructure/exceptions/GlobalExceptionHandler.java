@@ -104,8 +104,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(DuplicateCourseException.class)
-    public ResponseEntity<ErrorMessage> handleDuplicateCourseException(DuplicateCourseException ex, HttpServletRequest request) {
+    @ExceptionHandler(DuplicateException.class)
+    public ResponseEntity<ErrorMessage> handleDuplicateCourseException(DuplicateException ex, HttpServletRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(
                 HttpStatus.CONFLICT,
                 ex.getMessage(),

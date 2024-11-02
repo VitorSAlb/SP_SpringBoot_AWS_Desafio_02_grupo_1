@@ -15,6 +15,8 @@ import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
 import com.compass.desafio02.web.dto.PageableDto;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
 import com.compass.desafio02.web.dto.mapper.SubjectMapper;
+import com.compass.desafio02.web.dto.subject.SubjectResponseNameAndDescriptionDto;
+import com.compass.desafio02.web.dto.subject.SubjectResponseNameDescriptionCourseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -81,7 +83,7 @@ public class SubjectController {
     @GetMapping
     public ResponseEntity<PageableDto> findAll(@PageableDefault(size = 5, page = 0, sort = {"name"}) Pageable pageable) {
         Page<Subject> subjects = subjectService.findAll(pageable);
-        return ResponseEntity.ok(PageableMapper.toDto(subjects, SubjectResponseDto.class));
+        return ResponseEntity.ok(PageableMapper.toDto(subjects, SubjectResponseNameDescriptionCourseDto.class));
     }
 
     @Operation(summary = "Find a Subjects", description = "Resource to locate a Subjects by ID." +
@@ -110,17 +112,9 @@ public class SubjectController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    public ResponseEntity<SubjectResponseDto> create(@RequestBody @Valid SubjectCreateDto subjectCreateDto) {
-        Professor mainProfessor = professorService.findById(subjectCreateDto.getMainProfessor());
-        Professor substituteProfessor = professorService.findById(subjectCreateDto.getSubstituteProfessor());
-        Course course = courseService.findById(subjectCreateDto.getCourseId());
-        List<Student> students = subjectCreateDto.getStudentEmails().stream()
-                .map(email -> studentService.findByEmail(email))
-                .collect(Collectors.toList());
-
-        Subject subject = SubjectMapper.toEntity(subjectCreateDto, mainProfessor, substituteProfessor, course, students);
-        Subject savedSubject = subjectService.save(subject);
-        return ResponseEntity.status(201).body(Mapper.toDto(savedSubject, SubjectResponseDto.class));
+    public ResponseEntity<SubjectResponseNameAndDescriptionDto> create(@RequestBody @Valid SubjectCreateDto dto) {
+        Subject savedSubject = subjectService.save(Mapper.toEntity(dto, Subject.class));
+        return ResponseEntity.status(201).body(Mapper.toDto(savedSubject, SubjectResponseNameAndDescriptionDto.class));
     }
 
 
@@ -137,15 +131,7 @@ public class SubjectController {
             })
     @PutMapping("/{id}")
     public ResponseEntity<SubjectResponseDto> updateSubject(@PathVariable Integer id, @RequestBody SubjectCreateDto dto) {
-        Professor mainProfessor = professorService.findById(dto.getMainProfessor());
-        Professor substituteProfessor = professorService.findById(dto.getSubstituteProfessor());
-        Course course = courseService.findById(dto.getCourseId());
-        List<Student> students = dto.getStudentEmails().stream()
-                .map(email -> studentService.findByEmail(email))
-                .collect(Collectors.toList());
-
-        Subject newSubject = SubjectMapper.toEntity(dto, mainProfessor, substituteProfessor, course, students);
-        Subject updatedSubject = subjectService.update(id, newSubject);
+        Subject updatedSubject = subjectService.save(Mapper.toEntity(dto, Subject.class));
         return ResponseEntity.ok(Mapper.toDto(updatedSubject, SubjectResponseDto.class));
     }
 

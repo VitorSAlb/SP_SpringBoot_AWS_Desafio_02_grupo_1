@@ -2,6 +2,7 @@ package com.compass.desafio02.domain.services;
 
 import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Course;
+import com.compass.desafio02.domain.entities.Subject;
 import com.compass.desafio02.domain.repositories.CoordinatorRepository;
 import com.compass.desafio02.domain.repositories.CourseRepository;
 import com.compass.desafio02.infrastructure.exceptions.*;
@@ -17,6 +18,8 @@ public class CourseService {
     private CourseRepository courseRepository;
     @Autowired
     private CoordinatorRepository coordinatorRepository;
+    @Autowired
+    private SubjectService subjectService;
 
     public Course save(Course course) {
 
@@ -29,7 +32,7 @@ public class CourseService {
         }
 
         if (courseRepository.existsByName(course.getName())) {
-            throw new DuplicateCourseException("Course name already exists");
+            throw new DuplicateException("Course name already exists");
         }
 
         return courseRepository.save(course);
@@ -104,4 +107,31 @@ public class CourseService {
         courseRepository.save(course);
     }
 
+    public void addSubjectToCourse(String nameCourse, String nameSubject) {
+        Course course = findByName(nameCourse);
+        Subject subject = subjectService.findByName(nameSubject);
+
+        if (course.getSubjects().contains(subject)) {
+            throw new DuplicateException("Subject already exists in course.");
+        }
+
+        if (course.getSubjects().size() >= 5) {
+            throw new DuplicateException("Not can exists more than 5 subjects");
+        }
+
+        subjectService.addCourse(course, subject);
+
+    }
+
+    public void removeSubjectToCourse(String nameCourse, String nameSubject) {
+        Course course = findByName(nameCourse);
+        Subject subject = subjectService.findByName(nameSubject);
+
+        if (!course.getSubjects().contains(subject)) {
+            throw new DuplicateException("Subject not exists in course .");
+        }
+
+        subjectService.removeCourse(course, subject);
+        course.removeSubject(subject);
+    }
 }
