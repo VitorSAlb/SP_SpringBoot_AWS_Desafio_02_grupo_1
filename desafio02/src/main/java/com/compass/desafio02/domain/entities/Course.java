@@ -31,7 +31,7 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<Subject> subjects = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Student> students = new ArrayList<>();
 
 
@@ -81,6 +81,13 @@ public class Course {
         }
     }
 
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
 
     public List<Subject> getSubjects() {
         return subjects;
