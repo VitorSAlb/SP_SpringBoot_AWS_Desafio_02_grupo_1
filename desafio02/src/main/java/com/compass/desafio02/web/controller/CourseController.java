@@ -5,6 +5,7 @@ import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.entities.Subject;
 import com.compass.desafio02.domain.services.CoordinatorService;
 import com.compass.desafio02.domain.services.CourseService;
+import com.compass.desafio02.infrastructure.exceptions.ResourceNotFoundException;
 import com.compass.desafio02.web.dto.*;
 import com.compass.desafio02.web.dto.course.*;
 import com.compass.desafio02.web.dto.mapper.Mapper;
@@ -153,7 +154,9 @@ public class CourseController {
 
         String coordinatorEmail = courseCreateDto.getCoordinatorEmail();
 
-        Course course = Mapper.toEntity(courseCreateDto, Course.class);
+        Course course = new Course();
+        course.setName(courseCreateDto.getName());
+        course.setDescription(courseCreateDto.getDescription());
 
         if (coordinatorEmail != null) {
             Coordinator coo = coordinatorService.findByEmail(coordinatorEmail);
@@ -161,9 +164,12 @@ public class CourseController {
         }
 
         Course savedCourse = courseService.save(course);
-        CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(savedCourse);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(Mapper.toDto(courseResponseDto, CourseNoSubjectsNoCoordinatorResponseDto.class));
+        CourseNoSubjectsNoCoordinatorResponseDto courseResponseDto = new CourseNoSubjectsNoCoordinatorResponseDto();
+        courseResponseDto.setName(savedCourse.getName());
+        courseResponseDto.setDescription(savedCourse.getDescription());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(courseResponseDto);
     }
 
     @Operation(summary = "Update a Course",

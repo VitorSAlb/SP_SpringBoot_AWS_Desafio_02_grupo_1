@@ -24,7 +24,7 @@ public class Course {
     private String description;
 
     @JsonBackReference
-    @OneToOne(optional = true)
+    @OneToOne(optional = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "coordinator_id", referencedColumnName = "id")
     private Coordinator coordinator;
 

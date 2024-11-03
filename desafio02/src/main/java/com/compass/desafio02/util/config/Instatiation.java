@@ -36,12 +36,12 @@ public class Instatiation implements CommandLineRunner {
 
         subjectRepository.deleteAll();
         enrollmentRepository.deleteAll();
-//        studentRepository.deleteAll();
-//        courseRepository.deleteAll();
-//        coordinatorRepository.deleteAll();
-//        studentRepository.deleteAll();
-//        professorRepository.deleteAll();
-//
+        studentRepository.deleteAll();
+        courseRepository.deleteAll();
+        coordinatorRepository.deleteAll();
+        studentRepository.deleteAll();
+        professorRepository.deleteAll();
+
 //        Professor p1 = new Professor("P1", "P1", "p1@email.com", LocalDate.now(), "123456");
 //        Professor p2 = new Professor("P2", "P2", "p2@email.com", LocalDate.now(), "123456");
 //        Professor p3 = new Professor("P3", "P3", "p3@email.com", LocalDate.now(), "123456");
