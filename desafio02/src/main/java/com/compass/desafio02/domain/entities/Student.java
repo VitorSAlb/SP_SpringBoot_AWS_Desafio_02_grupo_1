@@ -48,15 +48,11 @@ public class Student extends User implements Serializable {
     }
 
     public void setCourse(Course course) {
-        if (this.course != null) {
-            this.course.getStudents().remove(this);
-        }
         this.course = course;
-        if (course != null && !course.getStudents().contains(this)) {
+        if (course != null) {
             course.addStudent(this);
         }
     }
-
 
     public void addSubject(Subject subject) {
         if (!subjects.contains(subject)) {
