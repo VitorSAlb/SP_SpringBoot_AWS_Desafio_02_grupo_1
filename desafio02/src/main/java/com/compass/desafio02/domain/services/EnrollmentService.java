@@ -42,34 +42,27 @@ public class EnrollmentService {
 
     @Transactional
     public Enrollment createEnrollment(Integer courseId, Integer studentId) {
-        // Verifica se o aluno existe
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + studentId));
 
-        // Verifica se o curso existe
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + courseId));
 
-        // Verificar se o aluno tem 18 anos ou mais
         if (!isStudentOfAge(student)) {
             throw new IllegalArgumentException("Student must be at least 18 years old to enroll.");
         }
 
-        // Verificar se o aluno está matriculado em outro curso
         if (enrollmentRepository.existsByStudentId(student.getId())) {
             throw new IllegalArgumentException("Student is already enrolled in another course.");
         }
 
-        // Verificar se o aluno já está matriculado neste curso
         if (enrollmentRepository.existsByStudentAndCourse(student, course)) {
             throw new IllegalArgumentException("Student is already enrolled in this course.");
         }
 
-        // Adicionar Course a Student
         courseService.addStudentToCourse(course.getName(), student.getEmail());
 
 
-        // Criar a nova matrícula
         Enrollment enrollment = new Enrollment(student, course);
         enrollmentRepository.save(enrollment);
 

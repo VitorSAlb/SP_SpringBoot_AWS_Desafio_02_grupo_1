@@ -65,21 +65,21 @@ public class CourseService {
     }
 
     public Course update(String name, Course newCourse) {
-        Course existingCourse = findByName(name);
-
         if (newCourse.getName() == null || newCourse.getName().isEmpty()) {
             throw new EmptyFieldException("Updated course name cannot be empty");
         }
 
+        Course existingCourse = findByName(name);
+
         if (courseRepository.existsByName(newCourse.getName())) {
             throw new InvalidCredentialsException("New name of course already registered");
         }
-
         existingCourse.setName(newCourse.getName());
         existingCourse.setDescription(newCourse.getDescription());
 
         return save(existingCourse);
     }
+
 
     public void delete(String name) {
         Course course = findByName(name);
