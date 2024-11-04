@@ -1,3 +1,4 @@
+
 # 🎓 University Management System
 
 ## 📝 Description
@@ -10,7 +11,6 @@ This project is a RESTful API developed in Java with Spring Boot, aimed at manag
 - [Prerequisites](#prerequisites)
 - [Database Configuration](#database-configuration)
 - [How to Run the Project](#how-to-run-the-project)
-- [Demonstration](#demonstration)
 - [Folder Structure](#folder-structure)
 
 ## 🚀 Features
@@ -31,113 +31,112 @@ Make sure you have the following tools installed:
 - [Maven](https://maven.apache.org/install.html): To build and manage the project dependencies.
 - [Docker](https://www.docker.com/): For setting up the database using a container.
 
+## 🛠 Database Configuration
 
-## 🛠 Configuração do Banco de Dados
-
-1. Crie um banco de dados MySQL/PostgreSQL utilizando o Docker (ou crie manualmente):
+1. Create a MySQL/PostgreSQL database using Docker (or create it manually):
+   
    ```bash
-   docker run --name universidade-db -e MYSQL_ROOT_PASSWORD=admin -e MYSQL_DATABASE=universidade_db -p 3306:3306 -d mysql:latest
+   docker run --name university-db -e MYSQL_ROOT_PASSWORD=admin -e MYSQL_DATABASE=university_db -p 3306:3306 -d mysql:latest
    ```
 
-2. No arquivo `application.properties`, configure as credenciais de acesso ao banco de dados:
+2. In the `application.properties` file, configure the database access credentials:
+
    ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/universidade_db
+   spring.datasource.url=jdbc:mysql://localhost:3306/university_db
    spring.datasource.username=root
    spring.datasource.password=admin
    ```
 
-3. Execute o projeto para que as tabelas sejam criadas automaticamente no banco de dados.
+3. Run the project so that the tables are automatically created in the database.
 
-## 🚀 Como Executar o Projeto
+## 🚀 How to Run the Project
 
-1. **Clone o repositório:**
+1. **Clone the repository:**
 
-    ```bash
-    git clone https://github.com/VictorHugoCC/SP_SpringBoot_AWS_Desafio_02.git
-    cd SP_SpringBoot_AWS_Desafio_02
-    ```
+   ```bash
+   git clone https://github.com/VictorHugoCC/SP_SpringBoot_AWS_Desafio_02.git
+   cd SP_SpringBoot_AWS_Desafio_02
+   ```
 
-2. **Compile o projeto com Maven:**
+2. **Build the project with Maven:**
 
-    ```bash
-    mvn clean install
-    ```
+   ```bash
+   mvn clean install
+   ```
 
-3. **Execute o projeto:**
+3. **Run the project:**
 
-    ```bash
-    mvn spring-boot:run
-    ```
+   ```bash
+   mvn spring-boot:run
+   ```
 
-4. **Acesse a documentação Swagger da API em:**
+4. **Access the API Swagger documentation at:**
 
-    ```
-    http://localhost:8080/swagger-ui.html
-    ```
+   ```
+   http://localhost:8080/swagger-ui.html
+   ```
 
-## 📂 Estrutura de Pastas
+## 📂 Folder Structure
 
 ### **Entities**
 
-- **Aluno:** Representa os alunos matriculados nos cursos.
-- **Professor:** Armazena as informações dos professores, suas disciplinas e cursos.
-- **Coordenador:** Representa os coordenadores responsáveis pelos cursos.
-- **Curso:** Contém as informações sobre os cursos oferecidos na universidade.
-- **Disciplina:** Contém as informações sobre as disciplinas, com professores titulares e substitutos.
-- **Matrícula:** Relação entre alunos e cursos.
-- **User:** Serve como uma entidade de herança
+- **Student:** Represents students enrolled in courses.
+- **Professor:** Stores information about professors, their subjects, and courses.
+- **Coordinator:** Represents coordinators responsible for the courses.
+- **Course:** Contains information about the courses offered at the university.
+- **Subject:** Contains information about subjects, with main and substitute professors.
+- **Enrollment:** Relationship between students and courses.
+- **User:** Serves as an inheritance entity.
 
 ### **Services**
 
-- **AlunoService:** Responsável pela lógica de negócio do cadastro e gerenciamento de alunos.
-- **ProfessorService:** Lida com o gerenciamento de professores e atribuição de disciplinas.
-- **CoordenadorService:** Lida com a associação dos coordenadores aos cursos e a conversão de coordenadores para professores.
-- **CursoService:** Gerencia os cursos, criação, atualização e vinculação de disciplinas.
-- **DisciplinaService:** Lida com o gerenciamento de disciplinas e associação a professores e alunos.
-- **MatriculaService:** Lida com a lógica de matrícula de alunos em cursos.
+- **StudentService:** Responsible for the business logic of student registration and management.
+- **ProfessorService:** Handles the management of professors and subject assignments.
+- **CoordinatorService:** Deals with the association of coordinators with courses and the conversion of coordinators to professors.
+- **CourseService:** Manages courses, creation, updating, and subject linking.
+- **SubjectService:** Manages subjects and associations with professors and students.
+- **EnrollmentService:** Handles the logic of enrolling students in courses.
 
 ### **Repositories**
 
-- **AlunoRepository:** Interface responsável pela persistência de dados de alunos.
-- **ProfessorRepository:** Interface responsável pela persistência de dados de professores.
-- **CoordenadorRepository:** Interface responsável pela persistência de dados de coordenadores.
-- **CursoRepository:** Interface responsável pela persistência de dados de cursos.
-- **DisciplinaRepository:** Interface responsável pela persistência de dados de disciplinas.
-- **MatriculaRepository:** Interface responsável pela persistência de matrículas.
+- **StudentRepository:** Interface responsible for student data persistence.
+- **ProfessorRepository:** Interface responsible for professor data persistence.
+- **CoordinatorRepository:** Interface responsible for coordinator data persistence.
+- **CourseRepository:** Interface responsible for course data persistence.
+- **SubjectRepository:** Interface responsible for subject data persistence.
+- **EnrollmentRepository:** Interface responsible for enrollment persistence.
 
 ### **Controllers**
 
-- **AlunoController:** Expondo os endpoints para criação e gerenciamento de alunos.
-- **ProfessorController:** Controla os endpoints de professores e suas disciplinas.
-- **CoordenadorController:** Controla os endpoints para coordenadores, permitindo que eles também sejam atribuídos como professores.
-- **CursoController:** Expondo os endpoints de criação e gerenciamento de cursos.
-- **DisciplinaController:** Controla os endpoints de gerenciamento de disciplinas e associação de professores e alunos.
+- **StudentController:** Exposes endpoints for creating and managing students.
+- **ProfessorController:** Manages professor endpoints and their subjects.
+- **CoordinatorController:** Manages coordinator endpoints, allowing them to also be assigned as professors.
+- **CourseController:** Exposes endpoints for creating and managing courses.
+- **SubjectController:** Manages endpoints for subject management and association with professors and students.
 
 ### **DTOs**
 
-- **AlunoDTO:** Definindo as representações de dados que serão expostas ou recebidas pela API em relação aos alunos.
-- **ProfessorDTO:** Representações dos dados dos professores e suas disciplinas.
-- **CoordenadorTeachDTO:** DTO que permite a conversão de coordenadores para professores de disciplinas.
-- **CursoDTO:** Definições dos dados de curso a serem expostos ou recebidos.
-- **DisciplinaDTO:** Representações de disciplinas, com seus professores titulares e substitutos.
+- **StudentDTO:** Defines the data representations to be exposed or received by the API for students.
+- **ProfessorDTO:** Representations of professor data and their subjects.
+- **CoordinatorTeachDTO:** DTO that allows the conversion of coordinators to professors of subjects.
+- **CourseDTO:** Definitions of course data to be exposed or received.
+- **SubjectDTO:** Representations of subjects, with their main and substitute professors.
 
 ### **Security**
 
-- **JWTAuthenticationFilter:** Filtro responsável por gerenciar a autenticação JWT.
-- **JWTAuthorizationFilter:** Filtro responsável por autorizar acessos baseados em tokens JWT.
-- **SecurityConfig:** Configuração da segurança, definindo regras de acesso para diferentes perfis (aluno, professor, coordenador).
+- **JWTAuthenticationFilter:** Filter responsible for managing JWT authentication.
+- **JWTAuthorizationFilter:** Filter responsible for authorizing access based on JWT tokens.
+- **SecurityConfig:** Security configuration, defining access rules for different profiles (student, professor, coordinator).
 
+## 💡 Tests
 
-## 💡 Testes
+- Implement unit tests with JUnit to cover the main functionalities of the API.
+- Implement integration tests to ensure the correct functioning of business flows.
 
-- Implementar testes unitários com JUnit para cobrir as principais funcionalidades da API.
-- Implementar testes de integração para garantir o correto funcionamento dos fluxos de negócios.
+## 📄 Documentation
 
-## 📄 Documentação
+- **Swagger UI:** For automatic API documentation and direct testing from the interface.
 
-- **Swagger UI:** Para documentação automática da API e execução de testes diretamente na interface.
   ```
   http://localhost:8080/swagger-ui.html
   ```
-
----
