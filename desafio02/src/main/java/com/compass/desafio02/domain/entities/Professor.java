@@ -21,11 +21,11 @@ public class Professor extends User implements Serializable {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @OneToMany(mappedBy = "mainProfessor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "mainProfessor", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @Column(name = "Subjects")
     private List<Subject> subjectHolder = new ArrayList<>();
 
-    @OneToMany(mappedBy = "substituteProfessor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "substituteProfessor", cascade = CascadeType.PERSIST , fetch = FetchType.LAZY)
     private List<Subject> subjectSub = new ArrayList<>();
 
     public Professor() {

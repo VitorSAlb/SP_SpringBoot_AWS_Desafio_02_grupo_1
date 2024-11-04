@@ -113,4 +113,16 @@ public class Course {
             student.setCourse(null);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", coordinator=" + coordinator.getEmail() +
+                ", subjects=" + subjects +
+                ", students=" + students +
+                '}';
+    }
 }

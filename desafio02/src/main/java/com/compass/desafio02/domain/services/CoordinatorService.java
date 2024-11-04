@@ -68,6 +68,10 @@ public class CoordinatorService {
             throw new UserDeletionException("Cannot delete coordinator: Coordinator not found with Email: " + email);
         }
 
+        if (coordinator.getCourse() != null) {
+            throw new UserDeletionException("Error Coordinator is linked to a course, remove this coordinator of course to delete with successfully");
+        }
+
         try {
             coordinatorRepository.deleteById(coordinator.getId());
         } catch (Exception e) {

@@ -1,6 +1,7 @@
 package com.compass.desafio02.domain.services;
 
 import com.compass.desafio02.domain.entities.Course;
+import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.entities.Subject;
 import com.compass.desafio02.domain.repositories.CourseRepository;
@@ -22,13 +23,12 @@ public class SubjectService {
 
     @Autowired
     private SubjectRepository subjectRepository;
-
     @Autowired
-    private StudentRepository studentRepository;
-    @Autowired
-    private CourseRepository courseRepository;
+    private ProfessorService professorService;
 
     public Subject save(Subject subject) {
+        Professor main = professorService.findByEmail(subject.getMainProfessor().getEmail());
+        Professor sub = professorService.findByEmail(subject.getSubstituteProfessor().getEmail());
 
         if (subjectRepository.existsByName(subject.getName())) {
             throw new DuplicateException("This Subject already exists");
@@ -48,6 +48,14 @@ public class SubjectService {
 
         if (subject.getSubstituteProfessor() == null) {
             throw new BusinessRuleException("A subject needs Substitute Professor");
+        }
+
+        if(main.getCourse() == null) {
+            throw new BusinessRuleException("The Main Professor must be registered in a course to associate with a subject. ");
+        }
+
+        if(sub.getCourse() == null) {
+            throw new BusinessRuleException("The Substitute Professor must be registered in a course to associate with a subject. ");
         }
 
         subject.getMainProfessor().addSubjectHolder(subject);
