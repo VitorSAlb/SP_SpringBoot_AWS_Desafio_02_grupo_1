@@ -12,7 +12,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "tb_user")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class User implements Serializable {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
