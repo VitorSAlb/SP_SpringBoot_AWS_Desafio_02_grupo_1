@@ -31,7 +31,6 @@ public class StudentRepositoryTest {
 
     @Test
     public void testFindAllP() {
-        // Cenário: Criar e salvar alguns estudantes
         Student student1 = new Student();
         student1.setEmail("student1@university.com");
         student1.setFirstName("John");
