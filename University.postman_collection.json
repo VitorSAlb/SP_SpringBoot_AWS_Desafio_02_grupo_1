@@ -1,0 +1,1087 @@
+{
+	"info": {
+		"_postman_id": "fea984f6-4803-41f9-9e8c-e05ca27e4ee8",
+		"name": "University",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39118500"
+	},
+	"item": [
+		{
+			"name": "Student - Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Vitor\",\r\n    \"lastName\": \"Albuquerque\",\r\n    \"email\": \"s2@email.com\",\r\n    \"password\": \"@Aa12345\",\r\n    \"birthdate\": \"2004-07-02\",\r\n    \"cep\": \"40100000\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Students - Get ALL",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0by5kby5saXN0LmJhY2tlbmQiLCJzdWIiOiJ2aXRvckBlbWFpbC5jb20iLCJleHAiOjE3NjA3MzE1NDQsImlhdCI6MTczMDczMTU0NCwicm9sZXMiOiJST0xFX0NPT1JESU5BVE9SIn0.tVJ2NrXNdX8rMfU-tqsNtRdVj3jFkpCnyVmTRTftgLsc3sGKEAihlCfGok1TANgBH4DLsA7UxB_NXNk9gC-mAlAUMabO1mWHP-8-3Wu1YLQAlqyLeRv5vJQRV6o6_wTQO5qpScHRnza-EEDjgarfkQPw7gPNzJbOufqUkfbm8PfubvedYExilxfgFQ1Lv2cs8w-U1fxQ58cS8Z5lVMQCP91WuLpdTDqExxx4BXelRQzyc0NolPUFj224rQoxXAYD4Kf8f-4WFQHFPHR4-vRvdPT5vy0I5x29Zd5Pm7U2rseXKO-u3QpntHck4d0LqYYEr_Nb5MxcxhYqDyIYPxwQbw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Students - Get By Email",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/email/s1@email.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"email",
+						"s1@email.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Students - Update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"firstName\": \"Vitor2\",\r\n    \"lastName\": \"albuquerque\",\r\n    \"email\": \"s1@email.com\",\r\n    \"birthdate\": \"2004-07-02\",\r\n    \"cep\": \"40100000\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/update/s1@email.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"update",
+						"s1@email.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Student - delete By Email",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0by5kby5saXN0LmJhY2tlbmQiLCJzdWIiOiJ2aXRvckBlbWFpbC5jb20iLCJleHAiOjE3NjA3MzE1NDQsImlhdCI6MTczMDczMTU0NCwicm9sZXMiOiJST0xFX0NPT1JESU5BVE9SIn0.tVJ2NrXNdX8rMfU-tqsNtRdVj3jFkpCnyVmTRTftgLsc3sGKEAihlCfGok1TANgBH4DLsA7UxB_NXNk9gC-mAlAUMabO1mWHP-8-3Wu1YLQAlqyLeRv5vJQRV6o6_wTQO5qpScHRnza-EEDjgarfkQPw7gPNzJbOufqUkfbm8PfubvedYExilxfgFQ1Lv2cs8w-U1fxQ58cS8Z5lVMQCP91WuLpdTDqExxx4BXelRQzyc0NolPUFj224rQoxXAYD4Kf8f-4WFQHFPHR4-vRvdPT5vy0I5x29Zd5Pm7U2rseXKO-u3QpntHck4d0LqYYEr_Nb5MxcxhYqDyIYPxwQbw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/s13@email.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"s13@email.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "coordinators - Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Vitor\",\r\n    \"lastName\": \"Albuquerque\",\r\n    \"email\": \"vitor1@email.com\",\r\n    \"password\": \"@Ab12345\",\r\n    \"birthdate\": \"2004-07-02\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/coordinators",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"coordinators"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "coordinators - Get ALL",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0by5kby5saXN0LmJhY2tlbmQiLCJzdWIiOiJnYWJyaWVsQGF1dGguY29tIiwiZXhwIjoxNzYwNzI5OTk0LCJpYXQiOjE3MzA3Mjk5OTQsInJvbGVzIjoiUk9MRV9DT09SRElOQVRPUiJ9.i-3sFPlgkMzn8bjZTf9gK7qJMySeXgeMCmVy-FzFXDf6TPOB5X2iKYY8kGQoZeCEIyjIcr1JNeiMwezxw_tEpwB0ncl8lviK-YCs7-ntCCqa6exmcoHS5yHFI7VH-zWqjKIc0oXmvRJ6v_ksJyVEBmuhytJiiYvIQk3MDbjeGeAx1PshRV_K7JulkMZ-TOxYpwThOUbjfdFqGwVaU8OSEPzWrZ0hseHtEOQh27ccPrH3xrLX4FrPVvzUMHOOR-cG4Y1r3gydtzfVxUsV5XYSH41gf2MoCP5jsrfLmZipdv0I2UcotungiTloGxBGrCoF4PHa80PJ7ZcMoAiErdHSAA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/coordinators",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"coordinators"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "coordinators - Get By Email",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0by5kby5saXN0LmJhY2tlbmQiLCJzdWIiOiJ2aXRvckBlbWFpbC5jb20iLCJleHAiOjE3NjA3MzE1NDQsImlhdCI6MTczMDczMTU0NCwicm9sZXMiOiJST0xFX0NPT1JESU5BVE9SIn0.tVJ2NrXNdX8rMfU-tqsNtRdVj3jFkpCnyVmTRTftgLsc3sGKEAihlCfGok1TANgBH4DLsA7UxB_NXNk9gC-mAlAUMabO1mWHP-8-3Wu1YLQAlqyLeRv5vJQRV6o6_wTQO5qpScHRnza-EEDjgarfkQPw7gPNzJbOufqUkfbm8PfubvedYExilxfgFQ1Lv2cs8w-U1fxQ58cS8Z5lVMQCP91WuLpdTDqExxx4BXelRQzyc0NolPUFj224rQoxXAYD4Kf8f-4WFQHFPHR4-vRvdPT5vy0I5x29Zd5Pm7U2rseXKO-u3QpntHck4d0LqYYEr_Nb5MxcxhYqDyIYPxwQbw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/coordinators/email/vitor1@email.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"coordinators",
+						"email",
+						"vitor1@email.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "coordinators - Update",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0by5kby5saXN0LmJhY2tlbmQiLCJzdWIiOiJ2aXRvckBlbWFpbC5jb20iLCJleHAiOjE3NjA3MzE1NDQsImlhdCI6MTczMDczMTU0NCwicm9sZXMiOiJST0xFX0NPT1JESU5BVE9SIn0.tVJ2NrXNdX8rMfU-tqsNtRdVj3jFkpCnyVmTRTftgLsc3sGKEAihlCfGok1TANgBH4DLsA7UxB_NXNk9gC-mAlAUMabO1mWHP-8-3Wu1YLQAlqyLeRv5vJQRV6o6_wTQO5qpScHRnza-EEDjgarfkQPw7gPNzJbOufqUkfbm8PfubvedYExilxfgFQ1Lv2cs8w-U1fxQ58cS8Z5lVMQCP91WuLpdTDqExxx4BXelRQzyc0NolPUFj224rQoxXAYD4Kf8f-4WFQHFPHR4-vRvdPT5vy0I5x29Zd5Pm7U2rseXKO-u3QpntHck4d0LqYYEr_Nb5MxcxhYqDyIYPxwQbw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"firstName\": \"Vitor2\",\r\n    \"lastName\": \"Albuquerque\",\r\n    \"email\": \"coo1@email.com\",\r\n    \"birthdate\": \"2004-07-02\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/coordinators/update/vitor1@email.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"coordinators",
+						"update",
+						"vitor1@email.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "coordinators - delete",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0by5kby5saXN0LmJhY2tlbmQiLCJzdWIiOiJ2aXRvckBlbWFpbC5jb20iLCJleHAiOjE3NjA3MzE1NDQsImlhdCI6MTczMDczMTU0NCwicm9sZXMiOiJST0xFX0NPT1JESU5BVE9SIn0.tVJ2NrXNdX8rMfU-tqsNtRdVj3jFkpCnyVmTRTftgLsc3sGKEAihlCfGok1TANgBH4DLsA7UxB_NXNk9gC-mAlAUMabO1mWHP-8-3Wu1YLQAlqyLeRv5vJQRV6o6_wTQO5qpScHRnza-EEDjgarfkQPw7gPNzJbOufqUkfbm8PfubvedYExilxfgFQ1Lv2cs8w-U1fxQ58cS8Z5lVMQCP91WuLpdTDqExxx4BXelRQzyc0NolPUFj224rQoxXAYD4Kf8f-4WFQHFPHR4-vRvdPT5vy0I5x29Zd5Pm7U2rseXKO-u3QpntHck4d0LqYYEr_Nb5MxcxhYqDyIYPxwQbw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/coordinators/coo1@email.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"coordinators",
+						"coo1@email.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Professor - Find All",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/professors?page=0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"professors"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Professor - Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"firstName\": \"Vitor\",\r\n    \"lastName\": \"Albuquerque\",\r\n    \"email\": \"p10@email.com\",\r\n    \"password\": \"@Ab12345\",\r\n    \"birthdate\": \"2004-07-02\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/professors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"professors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Professor - Find ByEmail",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"firstName\": \"Vitor\",\r\n    \"lastName\": \"Albuquerque\",\r\n    \"email\": \"vitor@email.com\",\r\n    \"password\": \"@Ab12345\",\r\n    \"birthdate\": \"2004-07-02\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/professors/email/p1@email.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"professors",
+						"email",
+						"p1@email.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Professor - update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"João\",\r\n    \"lastName\": \"Silva\",\r\n    \"email\": \"p1@email.com\",\r\n    \"birthdate\": \"1985-07-20\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/professors/update/p1@email.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"professors",
+						"update",
+						"p1@email.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Professor - Delete By Email",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"firstName\": \"Vitor\",\r\n    \"lastName\": \"Albuquerque\",\r\n    \"email\": \"vitor@email.com\",\r\n    \"password\": \"@Ab12345\",\r\n    \"birthdate\": \"2004-07-02\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/professors/p6@email.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"professors",
+						"p6@email.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Courses - Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"c4\",\r\n    \"description\": \"adsdasd\",\r\n    \"coordinatorEmail\": \"coo4@email.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Course - Get ALL",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Courses - edit",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Updated Course Name\",\r\n  \"description\": \"testeUpdated description for the course.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses/c4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses",
+						"c4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Course - Get By Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses/name/c3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses",
+						"name",
+						"c3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Course - Delete By Name",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses/c1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses",
+						"c1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Courses - Edit Coordinator",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"c2\",\r\n    \"coordinatorEmail\": \"coo2@email.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses/coordinator",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses",
+						"coordinator"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Courses - Remove Coordinator",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"CSC\",\r\n    \"coordinatorEmail\": \"vitor@email.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses/remove/coordinator/c2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses",
+						"remove",
+						"coordinator",
+						"c2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Courses - Add Professor",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"emailProfessor\": \"p10@email.com\",\r\n    \"nameCourse\": \"c2\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses/add/professor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses",
+						"add",
+						"professor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Courses - Edit course",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"c2\",\r\n    \"description\": \"nada\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses/c1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses",
+						"c1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Enrollment - Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"studentEmail\": \"s11@email.com\",\r\n    \"courseName\": \"c2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/enrollments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"enrollments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Enrollments - GET ALL",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/enrollments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"enrollments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Enrollment - Get By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/enrollments/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"enrollments",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Enrollment - Delete By Id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/enrollments/9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"enrollments",
+						"9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Subject - Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"H\",\r\n    \"description\": \"Advanced Physics Concepts\",\r\n    \"mainProfessorEmail\": \"p10@email.com\",\r\n    \"substituteProfessorEmail\": \"p9@email.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/subjects",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"subjects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Subject - Find All",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/subjects",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"subjects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Subject - Find By Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/subjects/B",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"subjects",
+						"B"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Courses - Add Subject",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nameCourse\": \"c3\",\r\n    \"subjectName\": \"A\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses/add/subject",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses",
+						"add",
+						"subject"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Courses - Remove Subject",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nameCourse\": \"c3\",\r\n    \"subjectName\": \"A\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses/remove/subject",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses",
+						"remove",
+						"subject"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Students - Add Subject",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"studentEmail\": \"s12@email.com\",\r\n    \"subjectName\": \"B\"\r\n\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/add/subject",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"add",
+						"subject"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"vitor@email.com\",\r\n    \"password\": \"@Ab12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/v1/courses",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"courses"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
