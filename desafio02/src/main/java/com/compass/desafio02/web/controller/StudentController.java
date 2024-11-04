@@ -56,6 +56,7 @@ public class StudentController {
 
     @Operation(summary = "Retrieve student list",
             description = "Request requires Student.",
+            security = @SecurityRequirement(name = "security"),
             parameters = {
                     @Parameter(in = ParameterIn.QUERY, name = "page",
                             content = @Content(schema = @Schema(type = "integer", defaultValue = "0")),
@@ -90,6 +91,7 @@ public class StudentController {
 
     @Operation(summary = "Find a student", description = "Resource to locate a student by ID." +
             "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource located successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
@@ -106,6 +108,7 @@ public class StudentController {
 
     @Operation(summary = "Find a student", description = "Resource to locate a student by Email." +
             "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource located successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
@@ -123,6 +126,7 @@ public class StudentController {
     @Operation(summary = "Create a new student",
             description = "Resource to create a new student linked to a registered user. " +
                     "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource created successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
@@ -140,6 +144,7 @@ public class StudentController {
     @Operation(summary = "Update a new student",
             description = "Resource to update a new student linked to a update password. " +
                     "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource update successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
@@ -157,6 +162,7 @@ public class StudentController {
     @Operation(summary = "Update a new student",
             description = "Resource to update a new student linked to a update password. " +
                     "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
@@ -175,6 +181,7 @@ public class StudentController {
     @Operation(summary = "Delete a new student",
             description = "Resource to delete a new student linked to a registered user. " +
                     "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),

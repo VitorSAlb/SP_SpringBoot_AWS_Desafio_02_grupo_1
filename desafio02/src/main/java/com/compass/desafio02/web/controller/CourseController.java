@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.modelmapper.spi.ErrorMessage;
@@ -57,6 +58,7 @@ public class CourseController {
 
     @Operation(summary = "Retrieve student list",
             description = "Request requires Student.",
+            security = @SecurityRequirement(name = "security"),
             parameters = {
                     @Parameter(in = ParameterIn.QUERY, name = "page",
                             content = @Content(schema = @Schema(type = "integer", defaultValue = "0")),
@@ -93,6 +95,7 @@ public class CourseController {
 
     @Operation(summary = "Find a Course", description = "Resource to locate a Course by ID." +
             "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource located successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CourseResponseDto.class))),
@@ -110,6 +113,7 @@ public class CourseController {
 
     @Operation(summary = "Find a Course", description = "Resource to locate a Course by Email." +
             "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource located successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CourseResponseDto.class))),
@@ -128,6 +132,7 @@ public class CourseController {
     @Operation(summary = "Delete a new Course",
             description = "Resource to delete a new student linked to a registered Course." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CourseResponseDto.class))),
@@ -145,6 +150,7 @@ public class CourseController {
     @Operation(summary = "Create a new Course",
             description = "Resource to create a new Course linked to a registered user." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource created successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CourseResponseDto.class))),
@@ -168,6 +174,7 @@ public class CourseController {
     @Operation(summary = "Update a Course",
             description = "Resource to update a new student linked to a update password." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource update successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CourseResponseDto.class))),
@@ -189,6 +196,7 @@ public class CourseController {
     @Operation(summary = "Update a new Course",
             description = "Resource to Course." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource update successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
@@ -206,6 +214,7 @@ public class CourseController {
     @Operation(summary = "Update a new Course",
             description = "Resource to Course." +
                     "Request requires use.'",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource update successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),

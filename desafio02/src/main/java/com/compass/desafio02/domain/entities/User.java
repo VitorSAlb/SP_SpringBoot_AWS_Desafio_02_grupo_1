@@ -2,9 +2,11 @@ package com.compass.desafio02.domain.entities;
 
 import com.compass.desafio02.domain.entities.enums.Role;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -30,6 +32,9 @@ public abstract class User implements Serializable {
     private String password;
 
     public User() {
+    }
+
+    public User(String email, String password, List<GrantedAuthority> authorityList) {
     }
 
     public User(String firstName, String lastName, String email, LocalDate birthdate, Role role, String password) {
