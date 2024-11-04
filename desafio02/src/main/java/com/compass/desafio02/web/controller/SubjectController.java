@@ -95,6 +95,7 @@ public class SubjectController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping("/{name}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<SubjectResponseDto> findByName(@PathVariable String name) {
         Subject subject = subjectService.findByName(name);
         return ResponseEntity.ok(Mapper.toDto(subject, SubjectResponseDto.class));
@@ -110,6 +111,7 @@ public class SubjectController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> create(@RequestBody @Valid SubjectCreateDto dto) {
         Professor mainProf = professorService.findByEmail(dto.getMainProfessorEmail());
         Professor subProf = professorService.findByEmail(dto.getSubstituteProfessorEmail());
@@ -118,22 +120,23 @@ public class SubjectController {
         return ResponseEntity.status(201).build();
     }
 
-    @Operation(summary = "Update a Course",
-            description = "Resource to update a new student." +
-                    "Request requires use.",
-            responses = {
-                    @ApiResponse(responseCode = "204", description = "Resource update successfully",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = SubjectResponseDto.class))),
-                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "404", description = "Course not found",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
-            })
-    @PutMapping("/update/{name}")
-    public ResponseEntity<SubjectResponseDto> updateSubject(@PathVariable String name, @RequestBody SubjectCreateDto dto) {
-        Subject updatedSubject = subjectService.save(Mapper.toEntity(dto, Subject.class));
-        return ResponseEntity.ok(Mapper.toDto(updatedSubject, SubjectResponseDto.class));
-    }
+    //    @Operation(summary = "Update a Course",
+    //            description = "Resource to update a new student." +
+    //                    "Request requires use.",
+    //            responses = {
+    //                    @ApiResponse(responseCode = "204", description = "Resource update successfully",
+    //                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = SubjectResponseDto.class))),
+    //                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
+    //                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+    //                    @ApiResponse(responseCode = "404", description = "Course not found",
+    //                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+    //            })
+    //    @PutMapping("/update/{name}")
+    //    @PreAuthorize("isAuthenticated()")
+    //    public ResponseEntity<SubjectResponseDto> updateSubject(@PathVariable String name, @RequestBody SubjectCreateDto dto) {
+    //        Subject updatedSubject = subjectService.save(Mapper.toEntity(dto, Subject.class));
+    //        return ResponseEntity.ok(Mapper.toDto(updatedSubject, SubjectResponseDto.class));
+    //    }
 
     @Operation(summary = "Delete a new Course",
             description = "Resource to delete a new student linked to a registered Course." +
@@ -147,6 +150,7 @@ public class SubjectController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @DeleteMapping("/{name}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> delete(@PathVariable String name) {
         subjectService.delete(name);
         return ResponseEntity.noContent().build();

@@ -49,6 +49,7 @@ public class ProfessorController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ProfessorNoSubjectResponseDto> createProfessor(@RequestBody @Valid ProfessorCreateDto professorDto) {
         Professor professor = ProfessorMapper.toEntity(professorDto);
         professor.setRole(Role.ROLE_PROFESSOR);
@@ -100,6 +101,7 @@ public class ProfessorController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ProfessorResponseDto> getProfessorById(@PathVariable Integer id) {
         Professor professor = professorService.findById(id);
         return ResponseEntity.ok(Mapper.toDto(professor, ProfessorResponseDto.class));
@@ -116,6 +118,7 @@ public class ProfessorController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping("/email/{email}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ProfessorResponseDto> getProfessorByEmail(@PathVariable String email) {
         Professor professor = professorService.findByEmail(email);
         return ResponseEntity.ok(ProfessorMapper.toDto(professor));
@@ -132,6 +135,7 @@ public class ProfessorController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PutMapping("/update/{email}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ProfessorResponseDto> updateProfessor(@PathVariable String email, @RequestBody ProfessorUpdateDto dto) {
         Professor updatedProfessor = professorService.update(email, Mapper.toDto(dto, Professor.class));
         return ResponseEntity.ok(ProfessorMapper.toDto(updatedProfessor));
@@ -150,6 +154,7 @@ public class ProfessorController {
             })
 
     @DeleteMapping("/{email}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> deleteProfessor(@PathVariable String email) {
         professorService.delete(email);
         return ResponseEntity.noContent().build();

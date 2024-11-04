@@ -101,6 +101,7 @@ public class StudentController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<StudentResponseDto> findById(@PathVariable Integer id) {
         Student student = studentService.findById(id);
         return ResponseEntity.ok(Mapper.toDto(student, StudentResponseDto.class));
@@ -117,6 +118,7 @@ public class StudentController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping("/email/{email}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<StudentResponseDto> findByEmail(@PathVariable String email) {
         Student student = studentService.findByEmail(email);
         return ResponseEntity.ok(Mapper.toDto(student, StudentResponseDto.class));
@@ -132,6 +134,7 @@ public class StudentController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping()
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<StudentResponseDto> create(@RequestBody @Valid StudentCreateDto dto) {
         Student student = StudentMapper.toEntity(dto);
         student.setRole(Role.ROLE_STUDENT);
@@ -151,28 +154,30 @@ public class StudentController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @PutMapping("/update/{email}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<StudentResponseDto> updateStudent(@PathVariable String email, @RequestBody StudentUpdateDto dto) {
         Student student = studentService.update(email, Mapper.toEntity(dto, Student.class));
         return ResponseEntity.ok(Mapper.toDto(student, StudentResponseDto.class));
     }
 
-    @Operation(summary = "Update a new student",
-            description = "Resource to update a new student linked to a update password. " +
-                    "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
-            responses = {
-                    @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
-                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "404", description = "Student not found",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
-            })
-
-    @PatchMapping("/password/update/{email}")
-    public ResponseEntity<Void> updatePassword(@PathVariable String email, @RequestBody @Valid UserPasswordDto dto) {
-        studentService.editPassword(email, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmPassword());
-        return ResponseEntity.noContent().build();
-    }
+//    @Operation(summary = "Update a new student",
+//            description = "Resource to update a new student linked to a update password. " +
+//                    "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
+//            responses = {
+//                    @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
+//                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
+//                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
+//                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+//                    @ApiResponse(responseCode = "404", description = "Student not found",
+//                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
+//            })
+//
+//    @PatchMapping("/password/update/{email}")
+//    @PreAuthorize("isAuthenticated()")
+//    public ResponseEntity<Void> updatePassword(@PathVariable String email, @RequestBody @Valid UserPasswordDto dto) {
+//        studentService.editPassword(email, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmPassword());
+//        return ResponseEntity.noContent().build();
+//    }
 
     @Operation(summary = "Delete a new student",
             description = "Resource to delete a new student linked to a registered user. " +
@@ -187,13 +192,27 @@ public class StudentController {
             })
 
     @DeleteMapping("/{email}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> delete(@PathVariable String email) {
         studentService.delete(email);
 
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Add a new subject",
+            description = "Resource to delete a new student linked to a registered user. " +
+                    "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Not Fount",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
+            })
+
     @PatchMapping("/add/subject")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> addStudent(@RequestBody @Valid StudentAddSubjectDto dto) {
         Student student = studentService.findByEmail(dto.getStudentEmail());
         Subject subject = subjectRepository.findByName(dto.getSubjectName());
@@ -202,7 +221,20 @@ public class StudentController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Delete a new subject",
+            description = "Resource to delete a new student linked to a registered user. " +
+                    "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Not Fount",
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
+            })
+
     @PatchMapping("/remove/subject")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> removeStudent(@RequestBody @Valid StudentAddSubjectDto dto) {
         Student student = studentService.findByEmail(dto.getStudentEmail());
         Subject subject = subjectRepository.findByName(dto.getSubjectName());
