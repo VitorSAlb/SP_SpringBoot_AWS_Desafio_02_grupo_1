@@ -1,36 +1,36 @@
+# 🎓 University Management System
 
-# 🎓 Sistema de Gerenciamento de Universidade
+## 📝 Description
 
-## 📝 Descrição
+This project is a RESTful API developed in Java with Spring Boot, aimed at managing students, professors, coordinators, courses, and subjects in a university. It implements CRUD operations for these entities and has different access levels for students, professors, and coordinators based on their roles.
 
-Este projeto é uma API RESTful desenvolvida em Java com Spring Boot, que tem como objetivo gerenciar alunos, professores, coordenadores, cursos e disciplinas em uma universidade. Ele implementa operações de CRUD para essas entidades e possui diferentes níveis de acesso para alunos, professores e coordenadores, de acordo com suas funções.
+## 📑 Index
 
-## 📑 Índice
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Database Configuration](#database-configuration)
+- [How to Run the Project](#how-to-run-the-project)
+- [Demonstration](#demonstration)
+- [Folder Structure](#folder-structure)
 
-- [Funcionalidades](#funcionalidades)
-- [Pré-requisitos](#pré-requisitos)
-- [Configuração do Banco de Dados](#configuração-do-banco-de-dados)
-- [Como Executar o Projeto](#como-executar-o-projeto)
-- [Demonstração](#demonstração)
-- [Estrutura de Pastas](#estrutura-de-pastas)
+## 🚀 Features
 
-## 🚀 Funcionalidades
+- **Student Registration:** Allows registering students with information such as name, email, birthdate, and course.
+- **Professor Registration:** Management of professors and the subjects they teach.
+- **Coordinator Registration:** Associates coordinators with courses and allows them to also teach subjects.
+- **Subject Management:** Adds subjects with student limits and assigns both main and substitute professors.
+- **Student Enrollment:** Enables students to enroll in courses and subjects.
+- **Reports:** Generates detailed reports on students, professors, coordinators, and courses.
 
-- **Cadastro de Alunos:** Permite registrar alunos com informações de nome, email, data de nascimento e curso.
-- **Cadastro de Professores:** Gerenciamento de professores e disciplinas nas quais lecionam.
-- **Cadastro de Coordenadores:** Associa coordenadores a cursos e permite que eles também ministrem disciplinas.
-- **Gerenciamento de Disciplinas:** Adiciona disciplinas com limite de alunos e atribui professores titulares e substitutos.
-- **Matrícula de Alunos:** Permite a matrícula de alunos em cursos e disciplinas.
-- **Relatórios:** Geração de relatórios detalhados sobre alunos, professores, coordenadores e cursos.
+## 🧰 Prerequisites
 
-## 🧰 Pré-requisitos
-
-Certifique-se de ter as seguintes ferramentas instaladas:
+Make sure you have the following tools installed:
 
 - [Java JDK 11+](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
-- [MySQL ou PostgreSQL](https://dev.mysql.com/downloads/installer/): Um banco de dados configurado e em execução.
-- [Maven](https://maven.apache.org/install.html): Para compilar e gerenciar as dependências do projeto.
-- [Docker](https://www.docker.com/): Para configuração do banco de dados através de container.
+- [MySQL or PostgreSQL](https://dev.mysql.com/downloads/installer/): A running and configured database.
+- [Maven](https://maven.apache.org/install.html): To build and manage the project dependencies.
+- [Docker](https://www.docker.com/): For setting up the database using a container.
+
 
 ## 🛠 Configuração do Banco de Dados
 
@@ -127,21 +127,6 @@ Certifique-se de ter as seguintes ferramentas instaladas:
 - **JWTAuthorizationFilter:** Filtro responsável por autorizar acessos baseados em tokens JWT.
 - **SecurityConfig:** Configuração da segurança, definindo regras de acesso para diferentes perfis (aluno, professor, coordenador).
 
-## 🎬 Demonstração
-
-### Exemplo de Endpoint para criação de Alunos:
-```bash
-POST /api/alunos
-```
-```json
-{
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "johndoe@example.com",
-    "birthdate": "2000-01-01",
-    "course": "Sistemas de Informação"
-}
-```
 
 ## 💡 Testes
 

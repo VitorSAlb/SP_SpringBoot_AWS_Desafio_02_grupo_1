@@ -1,5 +1,6 @@
 package com.compass.desafio02.domain.services;
 
+import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.repositories.StudentRepository;
 import com.compass.desafio02.domain.repositories.projection.StudentProjection;
@@ -22,6 +23,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class StudentServiceTest {
@@ -60,6 +62,7 @@ class StudentServiceTest {
 
         assertNotNull(savedStudent);
         assertEquals(student.getEmail(), savedStudent.getEmail());
+        assertEquals("Rua Teste, Bairro Teste, Cidade Teste - SP", savedStudent.getCep());
         verify(studentRepository, times(1)).save(any(Student.class));
     }
 
@@ -153,5 +156,36 @@ class StudentServiceTest {
 
         assertNotNull(result);
         verify(studentRepository, times(1)).findAllP(any(Pageable.class));
+    }
+
+    @Test
+    void testEditPassword_Success() {
+        when(studentRepository.findByEmail(anyString())).thenReturn(student);
+
+        studentService.editPassword(student.getEmail(), student.getPassword(), "NewPassword1!", "NewPassword1!");
+
+        verify(studentRepository, times(1)).save(student);
+        assertEquals("NewPassword1!", student.getPassword());
+    }
+
+    @Test
+    void testEditPassword_InvalidCurrentPassword() {
+        when(studentRepository.findByEmail(anyString())).thenReturn(student);
+
+        assertThrows(PasswordUpdateException.class, () ->
+                studentService.editPassword(student.getEmail(), "wrongPassword", "NewPassword1!", "NewPassword1!")
+        );
+        verify(studentRepository, never()).save(student);
+    }
+
+    @Test
+    void testAddCourse() {
+        Course course = new Course();
+        course.setId(1);
+
+        studentService.addCourse(course, student);
+
+        assertEquals(course, student.getCourse());
+        verify(studentRepository, times(1)).save(student);
     }
 }
