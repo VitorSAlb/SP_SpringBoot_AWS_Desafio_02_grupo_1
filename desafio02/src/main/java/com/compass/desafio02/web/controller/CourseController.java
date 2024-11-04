@@ -136,9 +136,9 @@ public class CourseController {
                     @ApiResponse(responseCode = "404", description = "Not Fount",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        courseService.delete(id);
+    @DeleteMapping("/{name}")
+    public ResponseEntity<Void> delete(@PathVariable String name) {
+        courseService.delete(name);
         return ResponseEntity.noContent().build();
     }
 
@@ -238,6 +238,12 @@ public class CourseController {
         Course course = courseService.findByName(dto.getNameCourse());
 
         professorService.addCourse(course, professor);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/remove/professor/{email}")
+    public ResponseEntity<Void> removeProfessor(@PathVariable String email) {
+        professorService.removeCourse(professorService.findByEmail(email));
         return ResponseEntity.noContent().build();
     }
 }

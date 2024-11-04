@@ -151,7 +151,6 @@ public class SubjectService {
     }
 
     public void removeStudent(Student student, Subject subject) {
-
         student.removeSubject(subject);
         studentRepository.save(student);
     }

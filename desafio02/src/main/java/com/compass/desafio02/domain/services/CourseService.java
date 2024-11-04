@@ -86,11 +86,13 @@ public class CourseService {
         return save(existingCourse);
     }
 
-    public void delete(Integer id) {
-        if (!courseRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Course not found with id: " + id);
+    public void delete(String name) {
+        Course course = findByName(name);
+
+        if (!courseRepository.existsById(course.getId())) {
+            throw new ResourceNotFoundException("Course not found with name: " + course.getName());
         }
-        courseRepository.deleteById(id);
+        courseRepository.deleteById(course.getId());
     }
 
     public Course addCoordinatorToCourse(String nameCourse, String email) {
@@ -158,4 +160,6 @@ public class CourseService {
 
         studentService.addCourse(course, student);
     }
+
+
 }

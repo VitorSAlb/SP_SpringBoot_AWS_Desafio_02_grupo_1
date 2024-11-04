@@ -192,11 +192,20 @@ public class StudentController {
     }
 
     @PatchMapping("/add/subject")
-    public ResponseEntity<Void> addProfessor(@RequestBody @Valid StudentAddSubjectDto dto) {
+    public ResponseEntity<Void> addStudent(@RequestBody @Valid StudentAddSubjectDto dto) {
         Student student = studentService.findByEmail(dto.getStudentEmail());
         Subject subject = subjectRepository.findByName(dto.getSubjectName());
 
         subjectService.addStudent(student, subject);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/remove/subject")
+    public ResponseEntity<Void> removeStudent(@RequestBody @Valid StudentAddSubjectDto dto) {
+        Student student = studentService.findByEmail(dto.getStudentEmail());
+        Subject subject = subjectRepository.findByName(dto.getSubjectName());
+
+        subjectService.removeStudent(student, subject);
         return ResponseEntity.noContent().build();
     }
 }
