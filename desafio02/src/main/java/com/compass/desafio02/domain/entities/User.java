@@ -1,7 +1,9 @@
 package com.compass.desafio02.domain.entities;
 
 import com.compass.desafio02.domain.entities.enums.Role;
+import com.compass.desafio02.web.dto.LoginRequestDTO;
 import jakarta.persistence.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -108,5 +110,9 @@ public abstract class User implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public Boolean isLoginCorrect(LoginRequestDTO requestDTO, PasswordEncoder encoder){
+        return encoder.matches(requestDTO.password(), this.password);
     }
 }
