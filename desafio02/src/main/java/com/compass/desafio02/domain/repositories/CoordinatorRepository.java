@@ -16,4 +16,6 @@ public interface CoordinatorRepository extends JpaRepository<Coordinator, Intege
 
     @Query("SELECT c FROM Coordinator c WHERE c.email = :email")
     Coordinator findByEmail(@Param("email") String email);
+
+    boolean existsByEmail(String email);
 }

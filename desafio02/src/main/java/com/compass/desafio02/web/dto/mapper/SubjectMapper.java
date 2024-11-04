@@ -36,7 +36,7 @@ public class SubjectMapper {
         dto.setSubstituteProfessor(Mapper.toDto(subject.getSubstituteProfessor(), ProfessorNoSubjectResponseDto.class));
         dto.setCourse(Mapper.toDto(subject.getCourse(), CourseNoSubjectsResponseDto.class));
         dto.setStudents(subject.getStudents().stream()
-                .map(StudentMapper::toDto)
+                .map(StudentMapper::toDto2)
                 .collect(Collectors.toList()));
         return dto;
     }

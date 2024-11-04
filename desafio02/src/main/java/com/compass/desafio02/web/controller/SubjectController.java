@@ -1,13 +1,12 @@
 package com.compass.desafio02.web.controller;
 
-import com.compass.desafio02.domain.entities.Subject;
-import com.compass.desafio02.domain.entities.Professor;
-import com.compass.desafio02.domain.entities.Course;
-import com.compass.desafio02.domain.entities.Student;
+import com.compass.desafio02.domain.entities.*;
 import com.compass.desafio02.domain.services.SubjectService;
 import com.compass.desafio02.domain.services.ProfessorService;
 import com.compass.desafio02.domain.services.CourseService;
 import com.compass.desafio02.domain.services.StudentService;
+import com.compass.desafio02.infrastructure.exceptions.CoordinatorAlreadyAssignedException;
+import com.compass.desafio02.infrastructure.exceptions.CoordinatorOrCourseNotFoundException;
 import com.compass.desafio02.web.dto.course.CourseResponseDto;
 import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.subject.*;
@@ -21,6 +20,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.spi.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +53,7 @@ public class SubjectController {
 
     @Operation(summary = "Retrieve Subjects list",
             description = "Request requires Subjects.",
+            security = @SecurityRequirement(name = "security"),
             parameters = {
                     @Parameter(in = ParameterIn.QUERY, name = "page",
                             content = @Content(schema = @Schema(type = "integer", defaultValue = "0")),
@@ -85,6 +86,7 @@ public class SubjectController {
 
     @Operation(summary = "Find a Subjects", description = "Resource to locate a Subjects by Name." +
             "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource located successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = SubjectResponseDto.class))),
@@ -102,6 +104,7 @@ public class SubjectController {
     @Operation(summary = "Create a new Subjects",
             description = "Resource to create a new subjects linked to a registered user." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource created successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = SubjectResponseDto.class))),
@@ -120,6 +123,7 @@ public class SubjectController {
     @Operation(summary = "Update a Course",
             description = "Resource to update a new student." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource update successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = SubjectResponseDto.class))),
@@ -128,8 +132,8 @@ public class SubjectController {
                     @ApiResponse(responseCode = "404", description = "Course not found",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
-    @PutMapping("/{id}")
-    public ResponseEntity<SubjectResponseDto> updateSubject(@PathVariable Integer id, @RequestBody SubjectCreateDto dto) {
+    @PutMapping("/update/{name}")
+    public ResponseEntity<SubjectResponseDto> updateSubject(@PathVariable String name, @RequestBody SubjectCreateDto dto) {
         Subject updatedSubject = subjectService.save(Mapper.toEntity(dto, Subject.class));
         return ResponseEntity.ok(Mapper.toDto(updatedSubject, SubjectResponseDto.class));
     }
@@ -137,6 +141,7 @@ public class SubjectController {
     @Operation(summary = "Delete a new Course",
             description = "Resource to delete a new student linked to a registered Course." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = SubjectResponseDto.class))),
@@ -145,9 +150,11 @@ public class SubjectController {
                     @ApiResponse(responseCode = "404", description = "Not Fount",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        subjectService.delete(id);
+    @DeleteMapping("/{name}")
+    public ResponseEntity<Void> delete(@PathVariable String name) {
+        subjectService.delete(name);
         return ResponseEntity.noContent().build();
     }
+
 }
+

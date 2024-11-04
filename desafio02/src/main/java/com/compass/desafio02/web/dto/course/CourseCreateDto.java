@@ -15,7 +15,7 @@ public class CourseCreateDto {
     private String description;
 
     @NotBlank
-    @Email(message = "{Email.studentCreateDto.student}", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")
+    @Email(message = "Email is required", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")
     private String coordinatorEmail;
 
     public CourseCreateDto() {
@@ -27,27 +27,27 @@ public class CourseCreateDto {
         this.coordinatorEmail = coordinatorEmail;
     }
 
-    public String getName() {
+    public @NotBlank(message = "The course name is required.") @NotEmpty String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NotBlank(message = "The course name is required.") @NotEmpty String name) {
         this.name = name;
     }
 
-    public String getDescription() {
+    public @NotBlank(message = "The course description is required.") @NotEmpty String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(@NotBlank(message = "The course description is required.") @NotEmpty String description) {
         this.description = description;
     }
 
-    public String getCoordinatorEmail() {
+    public @NotBlank @Email(message = "Email is required", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$") String getCoordinatorEmail() {
         return coordinatorEmail;
     }
 
-    public void setCoordinatorId(String coordinatorEmail) {
+    public void setCoordinatorEmail(@NotBlank @Email(message = "Email is required", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$") String coordinatorEmail) {
         this.coordinatorEmail = coordinatorEmail;
     }
 }

@@ -9,10 +9,7 @@ import com.compass.desafio02.web.dto.PageableDto;
 import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
 import com.compass.desafio02.web.dto.mapper.ProfessorMapper;
-import com.compass.desafio02.web.dto.professor.ProfessorAddCourseDto;
-import com.compass.desafio02.web.dto.professor.ProfessorCreateDto;
-import com.compass.desafio02.web.dto.professor.ProfessorNoSubjectResponseDto;
-import com.compass.desafio02.web.dto.professor.ProfessorResponseDto;
+import com.compass.desafio02.web.dto.professor.*;
 import com.compass.desafio02.web.dto.student.StudentResponseDto;
 import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.modelmapper.spi.ErrorMessage;
@@ -44,6 +42,7 @@ public class ProfessorController {
     @Operation(summary = "Create a new Professor",
             description = "Resource to create a new professor linked to a registered user." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource created successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ProfessorResponseDto.class))),
@@ -51,7 +50,7 @@ public class ProfessorController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    public ResponseEntity<ProfessorNoSubjectResponseDto> createProfessor(@RequestBody ProfessorCreateDto professorDto) {
+    public ResponseEntity<ProfessorNoSubjectResponseDto> createProfessor(@RequestBody @Valid ProfessorCreateDto professorDto) {
         Professor professor = ProfessorMapper.toEntity(professorDto);
         professor.setRole(Role.ROLE_PROFESSOR);
         professorService.save(professor);
@@ -60,6 +59,7 @@ public class ProfessorController {
 
     @Operation(summary = "Retrieve Professor list",
             description = "Request requires Professor.",
+            security = @SecurityRequirement(name = "security"),
             parameters = {
                     @Parameter(in = ParameterIn.QUERY, name = "page",
                             content = @Content(schema = @Schema(type = "integer", defaultValue = "0")),
@@ -108,6 +108,7 @@ public class ProfessorController {
 
     @Operation(summary = "Find a Professor", description = "Resource to locate a professor by Email." +
             "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource located successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ProfessorResponseDto.class))),
@@ -124,6 +125,7 @@ public class ProfessorController {
     @Operation(summary = "Update a Professor",
             description = "Resource to update a new Professor linked to a update." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource update successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ProfessorResponseDto.class))),
@@ -132,15 +134,16 @@ public class ProfessorController {
                     @ApiResponse(responseCode = "404", description = "Course not found",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
-    @PutMapping("/{id}")
-    public ResponseEntity<ProfessorResponseDto> updateProfessor(@PathVariable Integer id, @RequestBody Professor professor) {
-        Professor updatedProfessor = professorService.update(id, professor);
+    @PutMapping("/update/{email}")
+    public ResponseEntity<ProfessorResponseDto> updateProfessor(@PathVariable String email, @RequestBody ProfessorUpdateDto dto) {
+        Professor updatedProfessor = professorService.update(email, Mapper.toDto(dto, Professor.class));
         return ResponseEntity.ok(ProfessorMapper.toDto(updatedProfessor));
     }
 
     @Operation(summary = "Delete a new Professor",
             description = "Resource to delete a new student linked to a registered Professor." +
                     "Request requires use.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ProfessorResponseDto.class))),
@@ -149,7 +152,6 @@ public class ProfessorController {
                     @ApiResponse(responseCode = "404", description = "Not Fount",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
-
     @DeleteMapping("/{email}")
     public ResponseEntity<Void> deleteProfessor(@PathVariable String email) {
         professorService.delete(email);

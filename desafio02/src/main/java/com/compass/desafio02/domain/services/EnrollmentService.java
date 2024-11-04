@@ -65,10 +65,6 @@ public class EnrollmentService {
             throw new IllegalArgumentException("Student is already enrolled in this course.");
         }
 
-        // Adicionar as matérias do curso ao estudante
-        course.getSubjects().forEach(student::addSubject);
-        studentService.save(student);
-
         // Adicionar Course a Student
         courseService.addStudentToCourse(course.getName(), student.getEmail());
 

@@ -24,18 +24,13 @@ public class CourseService {
     private CoordinatorService coordinatorService;
 
     public Course save(Course course) {
-        Coordinator coordinator = null;
-
-        try {
-            coordinator = coordinatorRepository.findByEmail(course.getCoordinator().getEmail());
-
-            if(!courseRepository.findByEmailCoordinator(coordinator.getEmail()).isEmpty()) {
-                throw new DuplicateException("Coordinator already enrolled in course");
-            }
-        } catch (Exception e) {
-            throw new BusinessRuleException("Coordinator not founded");
-        }
-
+//        Coordinator coordinator = coordinatorRepository.findByEmail(course.getCoordinator().getEmail());
+//
+//        if (coordinator != null) {
+//            if (!courseRepository.findByEmailCoordinator(coordinator.getEmail()).isEmpty()) {
+//                throw new DuplicateException("Coordinator already enrolled in course");
+//            }
+//        }
 
         if (course.getName().isEmpty()) {
             throw new EmptyFieldException("Course name cannot be empty");
@@ -86,11 +81,13 @@ public class CourseService {
         return save(existingCourse);
     }
 
-    public void delete(Integer id) {
-        if (!courseRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Course not found with id: " + id);
+    public void delete(String name) {
+        Course course = findByName(name);
+
+        if (!courseRepository.existsById(course.getId())) {
+            throw new ResourceNotFoundException("Course not found with name: " + course.getName());
         }
-        courseRepository.deleteById(id);
+        courseRepository.deleteById(course.getId());
     }
 
     public Course addCoordinatorToCourse(String nameCourse, String email) {
@@ -158,4 +155,6 @@ public class CourseService {
 
         studentService.addCourse(course, student);
     }
+
+
 }

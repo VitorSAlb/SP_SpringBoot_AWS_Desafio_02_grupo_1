@@ -13,21 +13,21 @@ public class StudentResponseDto {
     private String email;
     private LocalDate birthdate;
     private Role role;
-    private String address;
+    private String cep;
     private CourseNoCoordinatorResponseDto course;
 
 
     public StudentResponseDto() {
     }
 
-    public StudentResponseDto(Integer id, String firstName, String lastName, String email, LocalDate birthdate, Role role, String address, CourseNoCoordinatorResponseDto course) {
+    public StudentResponseDto(Integer id, String firstName, String lastName, String email, LocalDate birthdate, Role role, String cep, CourseNoCoordinatorResponseDto course) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.birthdate = birthdate;
         this.role = role;
-        this.address = address;
+        this.cep = cep;
         this.course = course;
     }
 
@@ -79,12 +79,12 @@ public class StudentResponseDto {
         this.role = role;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCep() {
+        return cep;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCep(String cep) {
+        this.cep = cep;
     }
 
     public CourseNoCoordinatorResponseDto getCourse() {
