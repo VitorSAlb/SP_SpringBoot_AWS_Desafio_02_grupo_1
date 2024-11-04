@@ -1,9 +1,11 @@
 package com.compass.desafio02.domain.services;
 
 import com.compass.desafio02.domain.entities.Course;
-import com.compass.desafio02.domain.entities.Subject;
+import com.compass.desafio02.feign.ViaCepClient;
 import com.compass.desafio02.domain.repositories.projection.StudentProjection;
 import com.compass.desafio02.infrastructure.exceptions.user.*;
+import com.compass.desafio02.web.dto.feign.CepDto;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +22,22 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private ViaCepClient viaCepClient;
+
+    @Transactional
     public Student save(Student student) {
         if (!isPasswordValid(student.getPassword())) {
             throw new UserCreationException("The password does not meet security requirements.");
+        }
+
+        if (student.getAddress() != null && !student.getAddress().isEmpty()) {
+            CepDto addressResponse = viaCepClient.getAddressByCep(student.getAddress());
+            String formattedAddress = addressResponse.getLogradouro() + ", " +
+                    addressResponse.getBairro() + ", " +
+                    addressResponse.getLocalidade() + " - " +
+                    addressResponse.getUf();
+            student.setAddress(formattedAddress);
         }
 
         try {
@@ -31,6 +46,7 @@ public class StudentService {
             throw new UserCreationException("Error saving student: " + e.getMessage());
         }
     }
+
 
     public Student findById(Integer id) {
         return studentRepository.findById(id).orElseThrow(
