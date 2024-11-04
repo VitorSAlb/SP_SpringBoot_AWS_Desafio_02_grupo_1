@@ -52,6 +52,8 @@ public class SubjectService {
 
         if(main.getCourse() == null) {
             throw new BusinessRuleException("The Main Professor must be registered in a course to associate with a subject. ");
+        } else {
+            subject.setCourse(main.getCourse());
         }
 
         if(sub.getCourse() == null) {

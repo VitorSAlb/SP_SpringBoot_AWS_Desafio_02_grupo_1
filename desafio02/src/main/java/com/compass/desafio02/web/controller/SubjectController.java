@@ -109,12 +109,12 @@ public class SubjectController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    public ResponseEntity<SubjectNoStudentsNoCourseResponseDto> create(@RequestBody @Valid SubjectCreateDto dto) {
+    public ResponseEntity<Void> create(@RequestBody @Valid SubjectCreateDto dto) {
         Professor mainProf = professorService.findByEmail(dto.getMainProfessorEmail());
         Professor subProf = professorService.findByEmail(dto.getSubstituteProfessorEmail());
         Subject subject = new Subject(dto.getName(), dto.getDescription(), mainProf, subProf, null);
         Subject savedSubject = subjectService.save(subject);
-        return ResponseEntity.status(201).body(Mapper.toDto(savedSubject, SubjectNoStudentsNoCourseResponseDto.class));
+        return ResponseEntity.status(201).build();
     }
 
     @Operation(summary = "Update a Course",
