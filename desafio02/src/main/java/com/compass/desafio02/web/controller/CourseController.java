@@ -104,6 +104,7 @@ public class CourseController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CourseResponseDto> findById(@PathVariable Integer id) {
         Course course = courseService.findById(id);
         CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(course);
