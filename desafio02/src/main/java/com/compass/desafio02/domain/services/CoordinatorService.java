@@ -9,6 +9,7 @@ import com.compass.desafio02.domain.repositories.CoordinatorRepository;
 import com.compass.desafio02.domain.repositories.ProfessorRepository;
 import com.compass.desafio02.domain.repositories.SubjectRepository;
 import com.compass.desafio02.domain.repositories.projection.CoordinatorProjection;
+import com.compass.desafio02.infrastructure.exceptions.DuplicateException;
 import com.compass.desafio02.infrastructure.exceptions.user.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,10 @@ public class CoordinatorService {
     private ProfessorRepository professorRepository;
 
     public Coordinator save(Coordinator coordinator) {
+        if (coordinatorRepository.existsByEmail(coordinator.getEmail())) {
+            throw new DuplicateException("Email already exists");
+        }
+
         if (!isPasswordValid(coordinator.getPassword())) {
             throw new IllegalArgumentException("The password must have at least one uppercase letter, one lowercase letter, one number, one special character and at least 8 characters.");
         }

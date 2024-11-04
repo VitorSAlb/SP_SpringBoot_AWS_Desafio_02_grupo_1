@@ -10,8 +10,8 @@ import java.util.List;
 @Entity
 public class Student extends User implements Serializable {
 
-    @Column(name = "address")
-    private String address;
+    @Column(name = "cep")
+    private String cep;
 
     @ManyToOne
     private Course course;
@@ -24,15 +24,15 @@ public class Student extends User implements Serializable {
 
     public Student(String firstName, String lastName, String email, LocalDate birthdate, String password, String address) {
         super(firstName, lastName, email, birthdate, Role.ROLE_STUDENT, password);
-        this.address = address;
+        this.cep = address;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCep() {
+        return cep;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCep(String cep) {
+        this.cep = cep;
     }
 
     public List<Subject> getSubjects() {

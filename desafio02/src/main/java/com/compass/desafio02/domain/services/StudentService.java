@@ -3,6 +3,7 @@ package com.compass.desafio02.domain.services;
 import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.feign.ViaCepClient;
 import com.compass.desafio02.domain.repositories.projection.StudentProjection;
+import com.compass.desafio02.infrastructure.exceptions.DuplicateException;
 import com.compass.desafio02.infrastructure.exceptions.user.*;
 import com.compass.desafio02.web.dto.feign.CepDto;
 import jakarta.transaction.Transactional;
@@ -31,13 +32,17 @@ public class StudentService {
             throw new UserCreationException("The password does not meet security requirements.");
         }
 
-        if (student.getAddress() != null && !student.getAddress().isEmpty()) {
-            CepDto addressResponse = viaCepClient.getAddressByCep(student.getAddress());
+        if (studentRepository.existsByEmail(student.getEmail())) {
+            throw new DuplicateException("Email already exists");
+        }
+
+        if (student.getCep() != null && !student.getCep().isEmpty()) {
+            CepDto addressResponse = viaCepClient.getAddressByCep(student.getCep());
             String formattedAddress = addressResponse.getLogradouro() + ", " +
                     addressResponse.getBairro() + ", " +
                     addressResponse.getLocalidade() + " - " +
                     addressResponse.getUf();
-            student.setAddress(formattedAddress);
+            student.setCep(formattedAddress);
         }
 
         try {
@@ -72,11 +77,12 @@ public class StudentService {
             existingStudent.setEmail(newStudent.getEmail());
             existingStudent.setFirstName(newStudent.getFirstName());
             existingStudent.setLastName(newStudent.getLastName());
-            existingStudent.setAddress(newStudent.getAddress());
+            existingStudent.setCep(newStudent.getCep());
             existingStudent.setBirthdate(newStudent.getBirthdate());
+
             return studentRepository.save(existingStudent);
         } catch (Exception e) {
-            throw new UserUpdateException("Error updating student: " + e.getMessage());
+            throw new UserUpdateException("Error updating student! Invalid Credentials");
         }
     }
 

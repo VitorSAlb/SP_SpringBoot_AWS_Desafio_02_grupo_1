@@ -9,6 +9,7 @@ import com.compass.desafio02.domain.repositories.SubjectRepository;
 import com.compass.desafio02.domain.repositories.projection.ProfessorProjection;
 import com.compass.desafio02.domain.entities.Subject;
 import com.compass.desafio02.infrastructure.exceptions.BusinessRuleException;
+import com.compass.desafio02.infrastructure.exceptions.DuplicateException;
 import com.compass.desafio02.infrastructure.exceptions.ResourceNotFoundException;
 import com.compass.desafio02.infrastructure.exceptions.user.PasswordUpdateException;
 import com.compass.desafio02.infrastructure.exceptions.user.UserCreationException;
@@ -105,6 +106,10 @@ public class ProfessorService {
             throw new IllegalArgumentException("The password must have at least one uppercase letter, one lowercase letter, one number, one special character and at least 8 characters.");
         }
 
+        if (professorRepository.existsByEmail(professor.getEmail())) {
+            throw new DuplicateException("Email already exists");
+        }
+
         try {
             return professorRepository.save(professor);
         } catch (Exception e) {
@@ -120,7 +125,13 @@ public class ProfessorService {
 
     public Professor findByEmail(String email) {
         try {
-            return professorRepository.findByEmail(email);
+            Professor professor = professorRepository.findByEmail(email);
+
+            if (professor == null) {
+                throw new BusinessRuleException("Professor not exists");
+            }
+
+            return professor;
         } catch (RuntimeException e) {
             throw new UserNotFoundException("Email not found with email: " + email);
         }
@@ -143,6 +154,10 @@ public class ProfessorService {
 
     public void delete(String email) {
         Professor professor = findByEmail(email);
+
+        if (professor == null) {
+            throw new BusinessRuleException("Professor Not Founded");
+        }
 
         if (!professorRepository.existsById(professor.getId())) {
             throw new UserDeletionException("Cannot delete professor: Professor not found with Email: " + email);

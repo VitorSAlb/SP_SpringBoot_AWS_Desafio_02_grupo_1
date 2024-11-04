@@ -48,7 +48,7 @@ public class ProfessorController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    public ResponseEntity<ProfessorNoSubjectResponseDto> createProfessor(@RequestBody ProfessorCreateDto professorDto) {
+    public ResponseEntity<ProfessorNoSubjectResponseDto> createProfessor(@RequestBody @Valid ProfessorCreateDto professorDto) {
         Professor professor = ProfessorMapper.toEntity(professorDto);
         professor.setRole(Role.ROLE_PROFESSOR);
         professorService.save(professor);

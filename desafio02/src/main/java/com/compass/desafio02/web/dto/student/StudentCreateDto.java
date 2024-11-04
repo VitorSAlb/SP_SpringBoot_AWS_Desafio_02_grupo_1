@@ -28,21 +28,21 @@ public class StudentCreateDto {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthdate;
 
-    @NotBlank
-    private String address;
+    @NotBlank(message = "Cep is required")
+    private String cep;
 
     private Role role;
 
     public StudentCreateDto() {
     }
 
-    public StudentCreateDto(String firstName, String lastName, String email, String password, LocalDate birthdate, String address) {
+    public StudentCreateDto(String firstName, String lastName, String email, String password, LocalDate birthdate, String cep) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.birthdate = birthdate;
-        this.address = address;
+        this.cep = cep;
         this.role = Role.ROLE_STUDENT;
     }
 
@@ -86,12 +86,12 @@ public class StudentCreateDto {
         this.birthdate = birthdate;
     }
 
-    public @NotBlank String getAddress() {
-        return address;
+    public @NotBlank String getCep() {
+        return cep;
     }
 
-    public void setAddress(@NotBlank String address) {
-        this.address = address;
+    public void setCep(@NotBlank String cep) {
+        this.cep = cep;
     }
 
     public Role getRole() {

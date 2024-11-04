@@ -24,18 +24,13 @@ public class CourseService {
     private CoordinatorService coordinatorService;
 
     public Course save(Course course) {
-        Coordinator coordinator = null;
-
-        try {
-            coordinator = coordinatorRepository.findByEmail(course.getCoordinator().getEmail());
-
-            if(!courseRepository.findByEmailCoordinator(coordinator.getEmail()).isEmpty()) {
-                throw new DuplicateException("Coordinator already enrolled in course");
-            }
-        } catch (Exception e) {
-            throw new BusinessRuleException("Coordinator not founded");
-        }
-
+//        Coordinator coordinator = coordinatorRepository.findByEmail(course.getCoordinator().getEmail());
+//
+//        if (coordinator != null) {
+//            if (!courseRepository.findByEmailCoordinator(coordinator.getEmail()).isEmpty()) {
+//                throw new DuplicateException("Coordinator already enrolled in course");
+//            }
+//        }
 
         if (course.getName().isEmpty()) {
             throw new EmptyFieldException("Course name cannot be empty");

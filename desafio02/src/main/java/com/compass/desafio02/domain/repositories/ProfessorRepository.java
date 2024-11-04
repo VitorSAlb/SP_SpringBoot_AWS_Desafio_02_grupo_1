@@ -15,4 +15,6 @@ public interface ProfessorRepository extends JpaRepository<Professor, Integer> {
 
     @Query("SELECT p FROM Professor p WHERE p.email = :email")
     Professor findByEmail(@Param("email") String email);
+
+    boolean existsByEmail(String email);
 }

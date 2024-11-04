@@ -20,17 +20,17 @@ public class StudentUpdateDto {
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthdate;
-    private String address;
+    private String cep;
 
     public StudentUpdateDto() {
     }
 
-    public StudentUpdateDto(String firstName, String lastName, String email, LocalDate birthdate, String address) {
+    public StudentUpdateDto(String firstName, String lastName, String email, LocalDate birthdate, String cep) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.birthdate = birthdate;
-        this.address = address;
+        this.cep = cep;
     }
 
     public @NotBlank String getFirstName() {
@@ -65,11 +65,11 @@ public class StudentUpdateDto {
         this.birthdate = birthdate;
     }
 
-    public @NotBlank String getAddress() {
-        return address;
+    public String getCep() {
+        return cep;
     }
 
-    public void setAddress(@NotBlank String address) {
-        this.address = address;
+    public void setCep(String cep) {
+        this.cep = cep;
     }
 }
