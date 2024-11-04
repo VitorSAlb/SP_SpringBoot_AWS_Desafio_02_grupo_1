@@ -35,6 +35,9 @@ public class Professor extends User implements Serializable {
         super(firstName, lastName, email, birthdate, Role.ROLE_PROFESSOR, password);
     }
 
+    public Professor(String mail) {
+    }
+
     public Course getCourse() {
         return course;
     }

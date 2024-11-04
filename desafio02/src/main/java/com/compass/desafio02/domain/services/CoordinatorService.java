@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -29,6 +30,8 @@ public class CoordinatorService {
     private SubjectRepository subjectRepository;
     @Autowired
     private ProfessorRepository professorRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Coordinator save(Coordinator coordinator) {
         if (coordinatorRepository.existsByEmail(coordinator.getEmail())) {
@@ -38,6 +41,8 @@ public class CoordinatorService {
         if (!isPasswordValid(coordinator.getPassword())) {
             throw new IllegalArgumentException("The password must have at least one uppercase letter, one lowercase letter, one number, one special character and at least 8 characters.");
         }
+
+        coordinator.setPassword(passwordEncoder.encode(coordinator.getPassword()));
 
         try {
             return coordinatorRepository.save(coordinator);

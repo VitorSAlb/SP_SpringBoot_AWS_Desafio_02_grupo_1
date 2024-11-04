@@ -38,6 +38,9 @@ public class SecurityConfig {
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "api/v1/auth").permitAll()
+                        .requestMatchers(HttpMethod.POST, "api/v1/students").permitAll()
+                        .requestMatchers(HttpMethod.POST, "api/v1/coordinators").permitAll()
+                        .requestMatchers(HttpMethod.POST, "api/v1/professors").permitAll()
                         .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
                         .anyRequest().authenticated()
                 ).sessionManagement(

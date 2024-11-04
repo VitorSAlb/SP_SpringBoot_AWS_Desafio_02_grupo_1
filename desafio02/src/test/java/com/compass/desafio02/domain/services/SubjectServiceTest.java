@@ -1,11 +1,14 @@
-package com.compass.desafio02.domain.services;
-
 import com.compass.desafio02.domain.entities.Course;
 import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.Student;
 import com.compass.desafio02.domain.entities.Subject;
+import com.compass.desafio02.domain.repositories.StudentRepository;
 import com.compass.desafio02.domain.repositories.SubjectRepository;
-import com.compass.desafio02.infrastructure.exceptions.*;
+import com.compass.desafio02.domain.services.ProfessorService;
+import com.compass.desafio02.domain.services.SubjectService;
+import com.compass.desafio02.infrastructure.exceptions.BusinessRuleException;
+import com.compass.desafio02.infrastructure.exceptions.DuplicateException;
+import com.compass.desafio02.infrastructure.exceptions.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -28,6 +31,9 @@ class SubjectServiceTest {
 
     @Mock
     private SubjectRepository subjectRepository;
+
+    @Mock
+    private StudentRepository studentRepository;
 
     @Mock
     private ProfessorService professorService;
@@ -64,10 +70,21 @@ class SubjectServiceTest {
         verify(subjectRepository, times(1)).save(any(Subject.class));
     }
 
+    @Test
+    void testSaveSubject_MoreThan10Students() {
+        Subject subject = new Subject();
+        subject.setName("Mathematics");
+        subject.setMainProfessor(new Professor("main@test.com"));
+        subject.setSubstituteProfessor(new Professor("sub@test.com"));
+        subject.setStudents(Collections.nCopies(11, new Student()));
 
+        when(subjectRepository.existsByName(anyString())).thenReturn(false);
+
+        assertThrows(BusinessRuleException.class, () -> subjectService.save(subject));
+    }
 
     @Test
-    void testSaveSubject_MainAndSubstituteSame() {
+    void testSaveSubject_SameMainAndSubstituteProfessor() {
         Subject subject = new Subject();
         Professor professor = new Professor();
         professor.setEmail("professor@test.com");
@@ -92,7 +109,6 @@ class SubjectServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> subjectService.findByName("Mathematics"));
     }
 
-
     @Test
     void testDeleteSubject_Success() {
         Subject subject = new Subject();
@@ -115,25 +131,30 @@ class SubjectServiceTest {
     }
 
     @Test
-    void testSaveSubject_MoreThan10Students() {
+    void testAddStudentToSubject_Success() {
         Subject subject = new Subject();
         subject.setName("Mathematics");
+        subject.setCourse(new Course());
 
-        Professor mainProfessor = new Professor();
-        mainProfessor.setEmail("main.professor@test.com");
+        Student student = new Student();
+        student.setCourse(subject.getCourse());
 
-        Professor substituteProfessor = new Professor();
-        substituteProfessor.setEmail("substitute.professor@test.com");
+        when(subjectRepository.save(subject)).thenReturn(subject);
 
-        subject.setMainProfessor(mainProfessor);
-        subject.setSubstituteProfessor(substituteProfessor);
+        subjectService.addStudent(student, subject);
 
-        subject.getStudents().addAll(new ArrayList<>(Collections.nCopies(11, new Student())));
-
-        when(subjectRepository.existsByName(anyString())).thenReturn(false);
-        when(professorService.findByEmail(anyString())).thenReturn(mainProfessor, substituteProfessor);
-
-        assertThrows(BusinessRuleException.class, () -> subjectService.save(subject));
+        assertTrue(subject.getStudents().contains(student));
+        verify(studentRepository, times(1)).save(student);
     }
 
+    @Test
+    void testAddStudentToSubject_StudentNotEnrolledInCourse() {
+        Subject subject = new Subject();
+        subject.setName("Mathematics");
+        subject.setCourse(new Course());
+
+        Student student = new Student();
+
+        assertThrows(BusinessRuleException.class, () -> subjectService.addStudent(student, subject));
+    }
 }

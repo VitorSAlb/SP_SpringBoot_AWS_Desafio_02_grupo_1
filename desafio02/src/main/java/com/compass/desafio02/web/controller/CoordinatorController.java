@@ -30,6 +30,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,7 +61,7 @@ public class CoordinatorController {
     public ResponseEntity<CoordinatorResponseDto> createCoordinator(@RequestBody @Valid CoordinatorCreateDto coordinatorDto) {
         Coordinator coordinator = Mapper.toEntity(coordinatorDto, Coordinator.class);
         coordinator.setRole(Role.ROLE_COORDINATOR);
-        coordinatorService.save(coordinator);
+        Coordinator coo1 = coordinatorService.save(coordinator);
         return ResponseEntity.status(201).body(Mapper.toDto(coordinator, CoordinatorResponseDto.class));
     }
 
@@ -92,26 +93,10 @@ public class CoordinatorController {
                     )
             })
     @GetMapping()
+    @PreAuthorize("hasRole('COORDINATOR')")
     public ResponseEntity<PageableDto> getAllCoordinators(@PageableDefault(size = 5, sort = {"firstName"}) Pageable pageable) {
         Page<CoordinatorProjection> coordinators = coordinatorService.findAll(pageable);
         return ResponseEntity.ok(PageableMapper.toDto(coordinators, CoordinatorProjection.class));
-    }
-
-    @Operation(summary = "Find a Coordinators", description = "Resource to locate a Coordinators by ID." +
-            "Request requires use.",
-            security = @SecurityRequirement(name = "security"),
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Resource located successfully",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CoordinatorResponseDto.class))),
-                    @ApiResponse(responseCode = "404", description = "Course not found",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "403", description = "Feature not allowed",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
-            })
-    @GetMapping("/{id}")
-    public ResponseEntity<CoordinatorResponseDto> getCoordinatorById(@PathVariable Integer id) {
-        Coordinator coordinator = coordinatorService.findById(id);
-        return ResponseEntity.ok(CoordinatorMapper.toCoordinatorResponseDto(coordinator));
     }
 
     @Operation(summary = "Find a Coordinators", description = "Resource to locate a Coordinators by Email." +
@@ -126,6 +111,7 @@ public class CoordinatorController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping("/email/{email}")
+    @PreAuthorize("hasRole('COORDINATOR')")
     public ResponseEntity<CoordinatorResponseDto> getCoordinatorByEmail(@PathVariable String email) {
         Coordinator coordinator = coordinatorService.findByEmail(email);
         return ResponseEntity.ok(CoordinatorMapper.toCoordinatorResponseDto(coordinator));
@@ -145,6 +131,7 @@ public class CoordinatorController {
             })
 
     @PutMapping("/update/{email}")
+    @PreAuthorize("hasRole('COORDINATOR') AND (#id = authentication.principal.id)")
     public ResponseEntity<CoordinatorResponseDto> updateCoordinator(@PathVariable String email, @RequestBody CoordinatorCreateDto coordinator) {
         Coordinator updatedCoordinator = coordinatorService.update(email, Mapper.toEntity(coordinator, Coordinator.class));
 
@@ -165,6 +152,7 @@ public class CoordinatorController {
             })
 
     @PatchMapping("/password/update/{email}")
+    @PreAuthorize("hasRole('COORDINATOR') AND (#id = authentication.principal.id)")
     public ResponseEntity<Void> updatePassword(@PathVariable String email, @RequestBody @Valid UserPasswordDto dto) {
         coordinatorService.editPassword(email, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmPassword());
 
@@ -185,6 +173,7 @@ public class CoordinatorController {
             })
 
     @DeleteMapping("/{email}")
+    @PreAuthorize("hasRole('COORDINATOR')")
     public ResponseEntity<Void> deleteCoordinator(@PathVariable String email) {
         coordinatorService.delete(email);
 
