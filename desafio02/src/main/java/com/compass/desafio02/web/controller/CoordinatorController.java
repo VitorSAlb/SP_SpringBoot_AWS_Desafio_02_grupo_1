@@ -133,25 +133,25 @@ public class CoordinatorController {
         return ResponseEntity.ok(CoordinatorMapper.toCoordinatorResponseDto(updatedCoordinator));
     }
 
-    @Operation(summary = "Update a new Coordinator",
-            description = "Resource to update. Update Password" +
-                    "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
-            responses = {
-                    @ApiResponse(responseCode = "204", description = "Resource update successfully",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CoordinatorResponseDto.class))),
-                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "404", description = "Coordinator not found",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
-            })
-
-    @PatchMapping("/password/update/{email}")
-    @PreAuthorize("hasRole('ROLE_COORDINATOR') AND #(#id == authentication.principal.id)")
-    public ResponseEntity<Void> updatePassword(@PathVariable String email, @RequestBody @Valid UserPasswordDto dto) {
-        coordinatorService.editPassword(email, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmPassword());
-
-        return ResponseEntity.noContent().build();
-    }
+//    @Operation(summary = "Update a new Coordinator",
+//            description = "Resource to update. Update Password" +
+//                    "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
+//            responses = {
+//                    @ApiResponse(responseCode = "204", description = "Resource update successfully",
+//                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = CoordinatorResponseDto.class))),
+//                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
+//                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+//                    @ApiResponse(responseCode = "404", description = "Coordinator not found",
+//                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
+//            })
+//
+//    @PatchMapping("/password/update/{email}")
+//    @PreAuthorize("hasRole('ROLE_COORDINATOR') AND #(#id == authentication.principal.id)")
+//    public ResponseEntity<Void> updatePassword(@PathVariable String email, @RequestBody @Valid UserPasswordDto dto) {
+//        coordinatorService.editPassword(email, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmPassword());
+//
+//        return ResponseEntity.noContent().build();
+//    }
 
     @Operation(summary = "Delete a new Coordinators",
             description = "Resource to delete a new Coordinators linked to a registered Coordinators." +
