@@ -9,10 +9,7 @@ import com.compass.desafio02.web.dto.PageableDto;
 import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
 import com.compass.desafio02.web.dto.mapper.ProfessorMapper;
-import com.compass.desafio02.web.dto.professor.ProfessorAddCourseDto;
-import com.compass.desafio02.web.dto.professor.ProfessorCreateDto;
-import com.compass.desafio02.web.dto.professor.ProfessorNoSubjectResponseDto;
-import com.compass.desafio02.web.dto.professor.ProfessorResponseDto;
+import com.compass.desafio02.web.dto.professor.*;
 import com.compass.desafio02.web.dto.student.StudentResponseDto;
 import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -132,9 +129,9 @@ public class ProfessorController {
                     @ApiResponse(responseCode = "404", description = "Course not found",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
-    @PutMapping("/{id}")
-    public ResponseEntity<ProfessorResponseDto> updateProfessor(@PathVariable Integer id, @RequestBody Professor professor) {
-        Professor updatedProfessor = professorService.update(id, professor);
+    @PutMapping("/update/{email}")
+    public ResponseEntity<ProfessorResponseDto> updateProfessor(@PathVariable String email, @RequestBody ProfessorUpdateDto dto) {
+        Professor updatedProfessor = professorService.update(email, Mapper.toDto(dto, Professor.class));
         return ResponseEntity.ok(ProfessorMapper.toDto(updatedProfessor));
     }
 

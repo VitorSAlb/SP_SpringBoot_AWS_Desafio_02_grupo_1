@@ -130,8 +130,8 @@ public class ProfessorService {
         return professorRepository.findAllP(pageable);
     }
 
-    public Professor update(Integer id, Professor newProfessor) {
-        Professor existingProfessor = findById(id);
+    public Professor update(String email, Professor newProfessor) {
+        Professor existingProfessor = findByEmail(email);
 
         existingProfessor.setEmail(newProfessor.getEmail());
         existingProfessor.setFirstName(newProfessor.getFirstName());
