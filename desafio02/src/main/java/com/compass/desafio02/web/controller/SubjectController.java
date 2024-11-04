@@ -1,13 +1,12 @@
 package com.compass.desafio02.web.controller;
 
-import com.compass.desafio02.domain.entities.Subject;
-import com.compass.desafio02.domain.entities.Professor;
-import com.compass.desafio02.domain.entities.Course;
-import com.compass.desafio02.domain.entities.Student;
+import com.compass.desafio02.domain.entities.*;
 import com.compass.desafio02.domain.services.SubjectService;
 import com.compass.desafio02.domain.services.ProfessorService;
 import com.compass.desafio02.domain.services.CourseService;
 import com.compass.desafio02.domain.services.StudentService;
+import com.compass.desafio02.infrastructure.exceptions.CoordinatorAlreadyAssignedException;
+import com.compass.desafio02.infrastructure.exceptions.CoordinatorOrCourseNotFoundException;
 import com.compass.desafio02.web.dto.course.CourseResponseDto;
 import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.subject.*;
@@ -128,8 +127,8 @@ public class SubjectController {
                     @ApiResponse(responseCode = "404", description = "Course not found",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
-    @PutMapping("/{id}")
-    public ResponseEntity<SubjectResponseDto> updateSubject(@PathVariable Integer id, @RequestBody SubjectCreateDto dto) {
+    @PutMapping("/update/{name}")
+    public ResponseEntity<SubjectResponseDto> updateSubject(@PathVariable String name, @RequestBody SubjectCreateDto dto) {
         Subject updatedSubject = subjectService.save(Mapper.toEntity(dto, Subject.class));
         return ResponseEntity.ok(Mapper.toDto(updatedSubject, SubjectResponseDto.class));
     }
@@ -145,9 +144,11 @@ public class SubjectController {
                     @ApiResponse(responseCode = "404", description = "Not Fount",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        subjectService.delete(id);
+    @DeleteMapping("/{name}")
+    public ResponseEntity<Void> delete(@PathVariable String name) {
+        subjectService.delete(name);
         return ResponseEntity.noContent().build();
     }
+
 }
+

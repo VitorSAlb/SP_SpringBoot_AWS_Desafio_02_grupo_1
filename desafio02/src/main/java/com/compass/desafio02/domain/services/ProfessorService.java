@@ -194,5 +194,10 @@ public class ProfessorService {
         professor.setCourse(course);
         professorRepository.save(professor);
     }
+
+    public void removeCourse(Professor professor) {
+        professor.setCourse(null);
+        professorRepository.save(professor);
+    }
 }
 

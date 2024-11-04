@@ -59,11 +59,11 @@ public class EnrollmentController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    public ResponseEntity<EnrollmentResponseDto> createEnrollment(@Valid @RequestBody enrollmentCreateDto dto) {
+    public ResponseEntity<Void> createEnrollment(@Valid @RequestBody enrollmentCreateDto dto) {
         Student student = studentService.findByEmail(dto.getStudentEmail());
         Course course = courseService.findByName(dto.getCourseName());
         Enrollment enrollment = enrollmentService.createEnrollment(course.getId(), student.getId());
-        return ResponseEntity.status(201).body(EnrollmentMapper.toDto(enrollment));
+        return ResponseEntity.status(201).build();
     }
 
     @Operation(summary = "Retrieve Enrollment list",
