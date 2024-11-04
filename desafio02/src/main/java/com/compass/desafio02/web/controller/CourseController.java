@@ -2,14 +2,17 @@ package com.compass.desafio02.web.controller;
 
 import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Course;
+import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.Subject;
 import com.compass.desafio02.domain.services.CoordinatorService;
 import com.compass.desafio02.domain.services.CourseService;
+import com.compass.desafio02.domain.services.ProfessorService;
 import com.compass.desafio02.infrastructure.exceptions.ResourceNotFoundException;
 import com.compass.desafio02.web.dto.*;
 import com.compass.desafio02.web.dto.course.*;
 import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
+import com.compass.desafio02.web.dto.professor.ProfessorAddCourseDto;
 import com.compass.desafio02.web.dto.student.StudentResponseDto;
 import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
 import com.compass.desafio02.web.dto.subject.SubjectResponseNameAndDescriptionDto;
@@ -48,6 +51,8 @@ public class CourseController {
 
     @Autowired
     private CoordinatorService coordinatorService;
+    @Autowired
+    private ProfessorService professorService;
 
 
     @Operation(summary = "Retrieve student list",
@@ -224,6 +229,15 @@ public class CourseController {
     @PatchMapping("/remove/subject")
     public ResponseEntity<Void> removeSubject(@RequestBody @Valid CourseAddSubjectDto dto) {
         courseService.removeSubjectToCourse(dto.getNameCourse(), dto.getSubjectName());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/add/professor")
+    public ResponseEntity<Void> addProfessor(@RequestBody @Valid ProfessorAddCourseDto dto) {
+        Professor professor = professorService.findByEmail(dto.getEmailProfessor());
+        Course course = courseService.findByName(dto.getNameCourse());
+
+        professorService.addCourse(course, professor);
         return ResponseEntity.noContent().build();
     }
 }
