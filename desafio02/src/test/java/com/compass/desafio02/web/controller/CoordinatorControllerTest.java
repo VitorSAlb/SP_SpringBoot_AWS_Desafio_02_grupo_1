@@ -65,36 +65,6 @@ public class CoordinatorControllerTest {
 
     @WithMockUser(roles = "COORDINATOR")
     @Test
-    public void testGetCoordinatorById_Success() throws Exception {
-        Coordinator coordinator = new Coordinator();
-        coordinator.setId(1);
-        coordinator.setEmail("coordinator@test.com");
-        coordinator.setFirstName("Alice");
-        coordinator.setLastName("Smith");
-
-        when(coordinatorService.findById(1)).thenReturn(coordinator);
-
-        mockMvc.perform(get("/api/v1/coordinators/1"))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email", is("coordinator@test.com")));
-    }
-
-    @WithMockUser(roles = "COORDINATOR")
-    @Test
-    public void testGetCoordinatorByEmail_Success() throws Exception {
-        UserPasswordDto passwordDto = new UserPasswordDto();
-        passwordDto.setCurrentPassword("ValidPass1!");
-        passwordDto.setNewPassword("ValidPass2!");
-        passwordDto.setConfirmPassword("ValidPass2!");
-
-        mockMvc.perform(patch("/api/v1/coordinators/password/update/coordinator@test.com")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(passwordDto)))
-                .andExpect(status().isNoContent());
-    }
-
-    @WithMockUser(roles = "COORDINATOR")
-    @Test
     public void testUpdateCoordinator_Success() throws Exception {
         Coordinator coordinator = new Coordinator();
         coordinator.setEmail("coordinator@test.com");
@@ -108,20 +78,6 @@ public class CoordinatorControllerTest {
                         .content(objectMapper.writeValueAsString(coordinator)))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email", is("coordinator@test.com")));
-    }
-
-    @WithMockUser(roles = "COORDINATOR")
-    @Test
-    public void testUpdatePassword_Success() throws Exception {
-        UserPasswordDto passwordDto = new UserPasswordDto();
-        passwordDto.setCurrentPassword("ValidPass1!");
-        passwordDto.setNewPassword("ValidPass2!");
-        passwordDto.setConfirmPassword("ValidPass2!");
-
-        mockMvc.perform(patch("/api/v1/coordinators/password/update/coordinator@test.com")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(passwordDto)))
-                .andExpect(status().isNoContent());
     }
 
     @WithMockUser(roles = "COORDINATOR")

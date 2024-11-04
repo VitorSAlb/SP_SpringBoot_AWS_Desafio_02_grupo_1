@@ -160,24 +160,6 @@ public class StudentController {
         return ResponseEntity.ok(Mapper.toDto(student, StudentResponseDto.class));
     }
 
-//    @Operation(summary = "Update a new student",
-//            description = "Resource to update a new student linked to a update password. " +
-//                    "Request requires use of a bearer token. Restricted access to Role='ROLE_PROFESSOR'",
-//            responses = {
-//                    @ApiResponse(responseCode = "204", description = "Resource deleted successfully",
-//                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = StudentResponseDto.class))),
-//                    @ApiResponse(responseCode = "400", description = "Resource not processed due to missing or invalid data",
-//                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
-//                    @ApiResponse(responseCode = "404", description = "Student not found",
-//                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
-//            })
-//
-//    @PatchMapping("/password/update/{email}")
-//    @PreAuthorize("isAuthenticated()")
-//    public ResponseEntity<Void> updatePassword(@PathVariable String email, @RequestBody @Valid UserPasswordDto dto) {
-//        studentService.editPassword(email, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmPassword());
-//        return ResponseEntity.noContent().build();
-//    }
 
     @Operation(summary = "Delete a new student",
             description = "Resource to delete a new student linked to a registered user. " +
