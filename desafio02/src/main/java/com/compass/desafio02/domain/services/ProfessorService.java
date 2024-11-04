@@ -28,78 +28,78 @@ public class ProfessorService {
 
     @Autowired
     private ProfessorRepository professorRepository;
-    @Autowired
-    private CourseRepository courseRepository;
-    @Autowired
-    private SubjectRepository subjectRepository;
+//    @Autowired
+//    private CourseRepository courseRepository;
+//    @Autowired
+//    private SubjectRepository subjectRepository;
 
-    public void addMainProfessor(String emailProfessor, String nameCourse, String subjectName) {
-        Professor professor = findByEmail(emailProfessor);
-        Subject subject = subjectRepository.findByNameAndCourseName(subjectName, nameCourse)
-                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with name: " + subjectName + " in course: " + nameCourse));
+//    public void addMainProfessor(String emailProfessor, String nameCourse, String subjectName) {
+//        Professor professor = findByEmail(emailProfessor);
+//        Subject subject = subjectRepository.findByNameAndCourseName(subjectName, nameCourse)
+//                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with name: " + subjectName + " in course: " + nameCourse));
+//
+//        validateMainProfessorAssignment(professor, subject);
+//
+//        subject.setMainProfessor(professor);
+//        subjectRepository.save(subject);
+//    }
+//
+//    public void addSubstituteProfessor(String emailProfessor, String nameCourse, String subjectName) {
+//        Professor professor = findByEmail(emailProfessor);
+//        Subject subject = subjectRepository.findByNameAndCourseName(subjectName, nameCourse)
+//                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with name: " + subjectName + " in course: " + nameCourse));
+//
+//        validateSubstituteProfessorAssignment(professor, subject);
+//
+//        subject.setSubstituteProfessor(professor);
+//        subjectRepository.save(subject);
+//    }
+//
+//    public void removeMainProfessor(String emailProfessor, String nameCourse, String subjectName) {
+//        Professor professor = findByEmail(emailProfessor);
+//        Subject subject = subjectRepository.findByNameAndCourseName(subjectName, nameCourse)
+//                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with name: " + subjectName + " in course: " + nameCourse));
+//
+//        if (subject.getMainProfessor() != null && subject.getMainProfessor().equals(professor)) {
+//            subject.setMainProfessor(null);
+//            subjectRepository.save(subject);
+//        }
+//    }
+//
+//    public void removeSubstituteProfessor(String emailProfessor, String nameCourse, String subjectName) {
+//        Professor professor = findByEmail(emailProfessor);
+//        Subject subject = subjectRepository.findByNameAndCourseName(subjectName, nameCourse)
+//                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with name: " + subjectName + " in course: " + nameCourse));
+//
+//        if (subject.getSubstituteProfessor() != null && subject.getSubstituteProfessor().equals(professor)) {
+//            subject.setSubstituteProfessor(null);
+//            subjectRepository.save(subject);
+//        }
+//    }
 
-        validateMainProfessorAssignment(professor, subject);
+//    private void validateMainProfessorAssignment(Professor professor, Subject subject) {
+//        List<Subject> subjectsAsMain = subjectRepository.findByMainProfessor(professor);
+//        if (!subjectsAsMain.isEmpty()) {
+//            throw new BusinessRuleException("A professor can only be a main professor in one subject.");
+//        }
+//        validateProfessorSubjects(professor);
+//    }
+//
+//    private void validateSubstituteProfessorAssignment(Professor professor, Subject subject) {
+//        validateProfessorSubjects(professor);
+//    }
 
-        subject.setMainProfessor(professor);
-        subjectRepository.save(subject);
-    }
-
-    public void addSubstituteProfessor(String emailProfessor, String nameCourse, String subjectName) {
-        Professor professor = findByEmail(emailProfessor);
-        Subject subject = subjectRepository.findByNameAndCourseName(subjectName, nameCourse)
-                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with name: " + subjectName + " in course: " + nameCourse));
-
-        validateSubstituteProfessorAssignment(professor, subject);
-
-        subject.setSubstituteProfessor(professor);
-        subjectRepository.save(subject);
-    }
-
-    public void removeMainProfessor(String emailProfessor, String nameCourse, String subjectName) {
-        Professor professor = findByEmail(emailProfessor);
-        Subject subject = subjectRepository.findByNameAndCourseName(subjectName, nameCourse)
-                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with name: " + subjectName + " in course: " + nameCourse));
-
-        if (subject.getMainProfessor() != null && subject.getMainProfessor().equals(professor)) {
-            subject.setMainProfessor(null);
-            subjectRepository.save(subject);
-        }
-    }
-
-    public void removeSubstituteProfessor(String emailProfessor, String nameCourse, String subjectName) {
-        Professor professor = findByEmail(emailProfessor);
-        Subject subject = subjectRepository.findByNameAndCourseName(subjectName, nameCourse)
-                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with name: " + subjectName + " in course: " + nameCourse));
-
-        if (subject.getSubstituteProfessor() != null && subject.getSubstituteProfessor().equals(professor)) {
-            subject.setSubstituteProfessor(null);
-            subjectRepository.save(subject);
-        }
-    }
-
-    private void validateMainProfessorAssignment(Professor professor, Subject subject) {
-        List<Subject> subjectsAsMain = subjectRepository.findByMainProfessor(professor);
-        if (!subjectsAsMain.isEmpty()) {
-            throw new BusinessRuleException("A professor can only be a main professor in one subject.");
-        }
-        validateProfessorSubjects(professor);
-    }
-
-    private void validateSubstituteProfessorAssignment(Professor professor, Subject subject) {
-        validateProfessorSubjects(professor);
-    }
-
-    private void validateProfessorSubjects(Professor professor) {
-        List<Subject> subjectsAsMain = subjectRepository.findByMainProfessor(professor);
-        List<Subject> subjectsAsSubstitute = subjectRepository.findBySubstituteProfessor(professor);
-
-        if (subjectsAsMain.size() > 1) {
-            throw new BusinessRuleException("A professor can only be a main professor in one subject.");
-        }
-        if ((subjectsAsMain.size() + subjectsAsSubstitute.size()) > 3) {
-            throw new BusinessRuleException("A professor can participate in a maximum of 3 subjects.");
-        }
-    }
+//    private void validateProfessorSubjects(Professor professor) {
+//        List<Subject> subjectsAsMain = subjectRepository.findByMainProfessor(professor);
+//        List<Subject> subjectsAsSubstitute = subjectRepository.findBySubstituteProfessor(professor);
+//
+//        if (subjectsAsMain.size() > 1) {
+//            throw new BusinessRuleException("A professor can only be a main professor in one subject.");
+//        }
+//        if ((subjectsAsMain.size() + subjectsAsSubstitute.size()) > 3) {
+//            throw new BusinessRuleException("A professor can participate in a maximum of 3 subjects.");
+//        }
+//    }
 
     public Professor save(Professor professor) {
         if (!isPasswordValid(professor.getPassword())) {
@@ -178,28 +178,28 @@ public class ProfessorService {
         }
     }
   
-    public void editPassword(Integer id, String currentPassword, String newPassword, String confirmPassword) {
-        if (!newPassword.equals(confirmPassword)) {
-            throw new PasswordUpdateException("New password and confirmation password do not match.");
-        }
-
-        if (!isPasswordValid(newPassword)) {
-            throw new PasswordUpdateException("Password does not meet security requirements.");
-        }
-
-        Professor professor = findById(id);
-
-        if (!Objects.equals(professor.getPassword(), currentPassword)) {
-            throw new PasswordUpdateException("Current password is incorrect.");
-        }
-
-        professor.setPassword(newPassword);
-        try {
-            professorRepository.save(professor);
-        } catch (Exception e) {
-            throw new PasswordUpdateException("Error updating password: " + e.getMessage());
-        }
-    }
+//    public void editPassword(Integer id, String currentPassword, String newPassword, String confirmPassword) {
+//        if (!newPassword.equals(confirmPassword)) {
+//            throw new PasswordUpdateException("New password and confirmation password do not match.");
+//        }
+//
+//        if (!isPasswordValid(newPassword)) {
+//            throw new PasswordUpdateException("Password does not meet security requirements.");
+//        }
+//
+//        Professor professor = findById(id);
+//
+//        if (!Objects.equals(professor.getPassword(), currentPassword)) {
+//            throw new PasswordUpdateException("Current password is incorrect.");
+//        }
+//
+//        professor.setPassword(newPassword);
+//        try {
+//            professorRepository.save(professor);
+//        } catch (Exception e) {
+//            throw new PasswordUpdateException("Error updating password: " + e.getMessage());
+//        }
+//    }
 
     private boolean isPasswordValid(String password) {
         return password != null && password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$");
