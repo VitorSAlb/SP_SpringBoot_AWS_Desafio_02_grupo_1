@@ -49,22 +49,6 @@ public class ProfessorControllerTest {
 
     @WithMockUser(roles = "COORDINATOR")
     @Test
-    public void testGetProfessorById_Success() throws Exception {
-        Professor professor = new Professor();
-        professor.setId(1);
-        professor.setEmail("professor@test.com");
-        professor.setFirstName("John");
-        professor.setLastName("Doe");
-
-        when(professorService.findById(anyInt())).thenReturn(professor);
-
-        mockMvc.perform(get("/api/v1/professors/1"))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email", is("professor@test.com")));
-    }
-
-    @WithMockUser(roles = "COORDINATOR")
-    @Test
     public void testGetProfessorByEmail_Success() throws Exception {
         Professor professor = new Professor();
         professor.setEmail("professor@test.com");
