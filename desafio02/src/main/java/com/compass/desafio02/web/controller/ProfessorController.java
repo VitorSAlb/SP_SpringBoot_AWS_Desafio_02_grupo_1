@@ -49,7 +49,7 @@ public class ProfessorController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR')")
     public ResponseEntity<ProfessorNoSubjectResponseDto> createProfessor(@RequestBody @Valid ProfessorCreateDto professorDto) {
         Professor professor = ProfessorMapper.toEntity(professorDto);
         professor.setRole(Role.ROLE_PROFESSOR);
@@ -84,27 +84,10 @@ public class ProfessorController {
                     )
             })
     @GetMapping()
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR')")
     public ResponseEntity<PageableDto> getAllProfessors(@PageableDefault(size = 5, sort = {"firstName"}) Pageable pageable) {
         Page<ProfessorProjection> professors = professorService.findAll(pageable);
         return ResponseEntity.ok(PageableMapper.toDto(professors, ProfessorProjection.class));
-    }
-
-    @Operation(summary = "Find a Professor", description = "Resource to locate a professor by ID." +
-            "Request requires use.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Resource located successfully",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ProfessorResponseDto.class))),
-                    @ApiResponse(responseCode = "404", description = "Professor not found",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "403", description = "Feature not allowed",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
-            })
-    @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ProfessorResponseDto> getProfessorById(@PathVariable Integer id) {
-        Professor professor = professorService.findById(id);
-        return ResponseEntity.ok(Mapper.toDto(professor, ProfessorResponseDto.class));
     }
 
     @Operation(summary = "Find a Professor", description = "Resource to locate a professor by Email." +
@@ -118,7 +101,7 @@ public class ProfessorController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping("/email/{email}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR') or (hasRole('ROLE_PROFESSOR') and #email == principal.username)")
     public ResponseEntity<ProfessorResponseDto> getProfessorByEmail(@PathVariable String email) {
         Professor professor = professorService.findByEmail(email);
         return ResponseEntity.ok(ProfessorMapper.toDto(professor));
@@ -135,7 +118,7 @@ public class ProfessorController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PutMapping("/update/{email}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR') or (hasRole('ROLE_PROFESSOR') and #email == principal.username)")
     public ResponseEntity<ProfessorResponseDto> updateProfessor(@PathVariable String email, @RequestBody ProfessorUpdateDto dto) {
         Professor updatedProfessor = professorService.update(email, Mapper.toDto(dto, Professor.class));
         return ResponseEntity.ok(ProfessorMapper.toDto(updatedProfessor));
@@ -154,7 +137,7 @@ public class ProfessorController {
             })
 
     @DeleteMapping("/{email}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR')")
     public ResponseEntity<Void> deleteProfessor(@PathVariable String email) {
         professorService.delete(email);
         return ResponseEntity.noContent().build();

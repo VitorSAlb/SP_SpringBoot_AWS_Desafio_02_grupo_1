@@ -83,7 +83,7 @@ public class CourseController {
                     )
             })
     @GetMapping()
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR') ")
     public ResponseEntity<PageableDto> findAll(@PageableDefault(size = 5, page = 0, sort = {"name"}) Pageable pageable) {
         Page<Course> courses = courseService.findAll(pageable);
 
@@ -104,7 +104,7 @@ public class CourseController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR') ")
     public ResponseEntity<CourseResponseDto> findById(@PathVariable Integer id) {
         Course course = courseService.findById(id);
         CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(course);
@@ -122,7 +122,7 @@ public class CourseController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping("/name/{name}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR') ")
     public ResponseEntity<CourseResponseDto> findByName(@PathVariable String name) {
         Course course = courseService.findByName(name);
         CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(course);
@@ -141,7 +141,7 @@ public class CourseController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @DeleteMapping("/{name}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR') ")
     public ResponseEntity<Void> delete(@PathVariable String name) {
         courseService.delete(name);
         return ResponseEntity.noContent().build();
@@ -157,7 +157,7 @@ public class CourseController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR') ")
     public ResponseEntity<CourseNoSubjectsResponseDto> create(@RequestBody @Valid CourseCreateDto courseCreateDto) {
         Coordinator coo = coordinatorService.findByEmail(courseCreateDto.getCoordinatorEmail());
 
@@ -184,7 +184,7 @@ public class CourseController {
             })
 
     @PutMapping("/{name}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR')")
     public ResponseEntity<CourseResponseDto> update(@PathVariable String name, @RequestBody CourseUpdateDto courseUpdateDto) {
         Course course = Mapper.toEntity(courseUpdateDto, Course.class);
 
@@ -205,7 +205,7 @@ public class CourseController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PatchMapping("/coordinator")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR')")
     public ResponseEntity<CourseResponseDto> updateCoordinator(@RequestBody CourseAddCooDto dto) {
         Course updatedCourse = courseService.addCoordinatorToCourse(dto.getName(), dto.getCoordinatorEmail());
         return ResponseEntity.ok(Mapper.toCourseResponseDto(updatedCourse));
@@ -223,28 +223,28 @@ public class CourseController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PatchMapping("/remove/coordinator/{name}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR')")
     public ResponseEntity<Void> removeCoordinator(@PathVariable String name) {
         courseService.removeCoordinatorFromCourse(name);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/add/subject")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR') or hasRole('ROLE_PROFESSOR')")
     public ResponseEntity<Void> addSubject(@RequestBody @Valid CourseAddSubjectDto dto) {
         courseService.addSubjectToCourse(dto.getNameCourse(), dto.getSubjectName());
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/remove/subject")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR') or hasRole('ROLE_PROFESSOR')")
     public ResponseEntity<Void> removeSubject(@RequestBody @Valid CourseAddSubjectDto dto) {
         courseService.removeSubjectToCourse(dto.getNameCourse(), dto.getSubjectName());
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/add/professor")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR') or hasRole('ROLE_PROFESSOR')")
     public ResponseEntity<Void> addProfessor(@RequestBody @Valid ProfessorAddCourseDto dto) {
         Professor professor = professorService.findByEmail(dto.getEmailProfessor());
         Course course = courseService.findByName(dto.getNameCourse());
@@ -254,7 +254,7 @@ public class CourseController {
     }
 
     @PatchMapping("/remove/professor/{email}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR') or hasRole('ROLE_PROFESSOR')")
     public ResponseEntity<Void> removeProfessor(@PathVariable String email) {
         professorService.removeCourse(professorService.findByEmail(email));
         return ResponseEntity.noContent().build();

@@ -59,6 +59,7 @@ public class EnrollmentController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_COORDINATOR')")
     public ResponseEntity<Void> createEnrollment(@Valid @RequestBody enrollmentCreateDto dto) {
         Student student = studentService.findByEmail(dto.getStudentEmail());
         Course course = courseService.findByName(dto.getCourseName());
@@ -93,7 +94,7 @@ public class EnrollmentController {
                     )
             })
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('ROLE_COORDINATOR', 'ROLE_PROFESSOR')")
     public ResponseEntity<PageableDto> getAllEnrollments(@PageableDefault(size = 5) Pageable pageable) {
         Page<Enrollment> enrollments = enrollmentService.getAllEnrollments(pageable);
 
@@ -116,7 +117,7 @@ public class EnrollmentController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('ROLE_COORDINATOR', 'ROLE_PROFESSOR', 'ROLE_STUDENT')")
     public ResponseEntity<EnrollmentResponseDto> getEnrollmentById(@PathVariable Integer id) {
         Enrollment enrollment = enrollmentService.findEnrollmentById(id);
         return ResponseEntity.ok(EnrollmentMapper.toDto(enrollment));
@@ -134,14 +135,14 @@ public class EnrollmentController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @DeleteMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_COORDINATOR')")
     public ResponseEntity<Void> deleteEnrollment(@PathVariable Integer id) {
         enrollmentService.deleteEnrollment(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/course/{courseId}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('ROLE_COORDINATOR', 'ROLE_PROFESSOR')")
     public ResponseEntity<List<EnrollmentResponseDto>> getEnrollmentsByCourseId(@PathVariable Integer courseId) {
         List<Enrollment> enrollments = enrollmentService.getEnrollmentsByCourseId(courseId);
         List<EnrollmentResponseDto> enrollmentDtos = enrollments.stream()
@@ -158,7 +159,7 @@ public class EnrollmentController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping("/student/{studentId}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('ROLE_COORDINATOR', 'ROLE_PROFESSOR', 'ROLE_STUDENT')")
     public ResponseEntity<List<EnrollmentResponseDto>> getEnrollmentsByStudentId(@PathVariable Integer studentId) {
         List<Enrollment> enrollments = enrollmentService.getEnrollmentsByStudentId(studentId);
         List<EnrollmentResponseDto> enrollmentDtos = enrollments.stream()
