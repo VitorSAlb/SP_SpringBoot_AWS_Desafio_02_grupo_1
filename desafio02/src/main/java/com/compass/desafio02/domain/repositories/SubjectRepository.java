@@ -23,4 +23,6 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
     List<Subject> findByMainProfessor(Professor professor);
     List<Subject> findBySubstituteProfessor(Professor professor);
 
+
+    boolean existsByName(String name);
 }

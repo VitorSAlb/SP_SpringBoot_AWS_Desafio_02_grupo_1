@@ -14,8 +14,8 @@ public class CourseCreateDto {
     @NotEmpty
     private String description;
 
-    @NotBlank(message = "The coordinator's email is required.")
-    @Email(message = "Please provide a valid email address.")
+    @NotBlank
+    @Email(message = "{Email.studentCreateDto.student}", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")
     private String coordinatorEmail;
 
     public CourseCreateDto() {

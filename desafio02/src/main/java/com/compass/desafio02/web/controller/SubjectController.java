@@ -10,13 +10,10 @@ import com.compass.desafio02.domain.services.CourseService;
 import com.compass.desafio02.domain.services.StudentService;
 import com.compass.desafio02.web.dto.course.CourseResponseDto;
 import com.compass.desafio02.web.dto.mapper.Mapper;
-import com.compass.desafio02.web.dto.subject.SubjectCreateDto;
-import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
+import com.compass.desafio02.web.dto.subject.*;
 import com.compass.desafio02.web.dto.PageableDto;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
 import com.compass.desafio02.web.dto.mapper.SubjectMapper;
-import com.compass.desafio02.web.dto.subject.SubjectResponseNameAndDescriptionDto;
-import com.compass.desafio02.web.dto.subject.SubjectResponseNameDescriptionCourseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -86,7 +83,7 @@ public class SubjectController {
         return ResponseEntity.ok(PageableMapper.toDto(subjects, SubjectResponseNameDescriptionCourseDto.class));
     }
 
-    @Operation(summary = "Find a Subjects", description = "Resource to locate a Subjects by ID." +
+    @Operation(summary = "Find a Subjects", description = "Resource to locate a Subjects by Name." +
             "Request requires use.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource located successfully",
@@ -96,9 +93,9 @@ public class SubjectController {
                     @ApiResponse(responseCode = "403", description = "Feature not allowed",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
-    @GetMapping("/{id}")
-    public ResponseEntity<SubjectResponseDto> findById(@PathVariable Integer id) {
-        Subject subject = subjectService.findById(id);
+    @GetMapping("/{name}")
+    public ResponseEntity<SubjectResponseDto> findByName(@PathVariable String name) {
+        Subject subject = subjectService.findByName(name);
         return ResponseEntity.ok(Mapper.toDto(subject, SubjectResponseDto.class));
     }
 
@@ -112,11 +109,13 @@ public class SubjectController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    public ResponseEntity<SubjectResponseNameAndDescriptionDto> create(@RequestBody @Valid SubjectCreateDto dto) {
-        Subject savedSubject = subjectService.save(Mapper.toEntity(dto, Subject.class));
-        return ResponseEntity.status(201).body(Mapper.toDto(savedSubject, SubjectResponseNameAndDescriptionDto.class));
+    public ResponseEntity<SubjectNoStudentsNoCourseResponseDto> create(@RequestBody @Valid SubjectCreateDto dto) {
+        Professor mainProf = professorService.findByEmail(dto.getMainProfessorEmail());
+        Professor subProf = professorService.findByEmail(dto.getSubstituteProfessorEmail());
+        Subject subject = new Subject(dto.getName(), dto.getDescription(), mainProf, subProf, null);
+        Subject savedSubject = subjectService.save(subject);
+        return ResponseEntity.status(201).body(Mapper.toDto(savedSubject, SubjectNoStudentsNoCourseResponseDto.class));
     }
-
 
     @Operation(summary = "Update a Course",
             description = "Resource to update a new student." +

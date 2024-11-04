@@ -119,7 +119,7 @@ public class ProfessorController {
     @GetMapping("/email/{email}")
     public ResponseEntity<ProfessorResponseDto> getProfessorByEmail(@PathVariable String email) {
         Professor professor = professorService.findByEmail(email);
-        return ResponseEntity.ok(Mapper.toDto(professor, ProfessorResponseDto.class));
+        return ResponseEntity.ok(ProfessorMapper.toDto(professor));
     }
     @Operation(summary = "Update a Professor",
             description = "Resource to update a new Professor linked to a update." +

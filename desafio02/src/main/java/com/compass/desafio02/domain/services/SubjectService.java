@@ -6,10 +6,13 @@ import com.compass.desafio02.domain.entities.Subject;
 import com.compass.desafio02.domain.repositories.CourseRepository;
 import com.compass.desafio02.domain.repositories.StudentRepository;
 import com.compass.desafio02.domain.repositories.SubjectRepository;
+import com.compass.desafio02.infrastructure.exceptions.DuplicateException;
 import com.compass.desafio02.infrastructure.exceptions.ResourceNotFoundException;
 import com.compass.desafio02.infrastructure.exceptions.BusinessRuleException;
 import com.compass.desafio02.infrastructure.exceptions.user.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.env.PropertyResolver;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,11 +30,35 @@ public class SubjectService {
 
     public Subject save(Subject subject) {
 
+        if (subjectRepository.existsByName(subject.getName())) {
+            throw new DuplicateException("This Subject already exists");
+        }
+
         if (subject.getStudents() != null && subject.getStudents().size() > 10) {
             throw new BusinessRuleException("A subject cannot have more than 10 students.");
         }
 
-        return subjectRepository.save(subject);
+        if (subject.getMainProfessor() == null) {
+            throw new BusinessRuleException("A subject needs Main Professor");
+        }
+
+        if (subject.getMainProfessor() == subject.getSubstituteProfessor()) {
+            throw new DuplicateException("The Main Professor e Substitute Professor cannot be the same person");
+        }
+
+        if (subject.getSubstituteProfessor() == null) {
+            throw new BusinessRuleException("A subject needs Substitute Professor");
+        }
+
+        subject.getMainProfessor().addSubjectHolder(subject);
+        subject.getSubstituteProfessor().addSubjectSub(subject);
+
+        try {
+            return subjectRepository.save(subject);
+        } catch (Exception e) {
+            throw new DuplicateException(e.getMessage());
+        }
+
     }
 
     public Subject findById(Integer id) {
@@ -82,4 +109,6 @@ public class SubjectService {
         subject.setCourse(null);
         subjectRepository.save(subject);
     }
+
+
 }

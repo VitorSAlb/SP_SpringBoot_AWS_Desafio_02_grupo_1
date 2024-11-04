@@ -1,32 +1,26 @@
 package com.compass.desafio02.web.dto.subject;
 
 import com.compass.desafio02.web.dto.course.CourseNoSubjectsResponseDto;
-import com.compass.desafio02.web.dto.professor.ProfessorNoSubjectResponseDto;
 import com.compass.desafio02.web.dto.professor.ProfessorResponseDto;
 import com.compass.desafio02.web.dto.student.StudentResponseDto;
-import com.compass.desafio02.web.dto.course.CourseResponseDto;
 
 import java.util.List;
 
-public class SubjectResponseDto {
+public class SubjectNoProfessorsResponseDto {
 
     private Integer id;
     private String name;
     private String description;
-    private ProfessorNoSubjectResponseDto mainProfessor;
-    private ProfessorNoSubjectResponseDto substituteProfessor;
     private CourseNoSubjectsResponseDto course;
     private List<StudentResponseDto> students;
 
-    public SubjectResponseDto() {
+    public SubjectNoProfessorsResponseDto() {
     }
 
-    public SubjectResponseDto(Integer id, String name, String description, ProfessorNoSubjectResponseDto mainProfessor, ProfessorNoSubjectResponseDto substituteProfessor, CourseNoSubjectsResponseDto course, List<StudentResponseDto> students) {
+    public SubjectNoProfessorsResponseDto(Integer id, String name, String description, CourseNoSubjectsResponseDto course, List<StudentResponseDto> students) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.mainProfessor = mainProfessor;
-        this.substituteProfessor = substituteProfessor;
         this.course = course;
         this.students = students;
     }
@@ -53,22 +47,6 @@ public class SubjectResponseDto {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public ProfessorNoSubjectResponseDto getMainProfessor() {
-        return mainProfessor;
-    }
-
-    public void setMainProfessor(ProfessorNoSubjectResponseDto mainProfessor) {
-        this.mainProfessor = mainProfessor;
-    }
-
-    public ProfessorNoSubjectResponseDto getSubstituteProfessor() {
-        return substituteProfessor;
-    }
-
-    public void setSubstituteProfessor(ProfessorNoSubjectResponseDto substituteProfessor) {
-        this.substituteProfessor = substituteProfessor;
     }
 
     public CourseNoSubjectsResponseDto getCourse() {
