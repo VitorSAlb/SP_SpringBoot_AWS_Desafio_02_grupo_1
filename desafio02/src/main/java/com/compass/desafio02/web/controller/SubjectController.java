@@ -27,6 +27,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -77,6 +78,7 @@ public class SubjectController {
                     )
             })
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PageableDto> findAll(@PageableDefault(size = 5, page = 0, sort = {"name"}) Pageable pageable) {
         Page<Subject> subjects = subjectService.findAll(pageable);
         return ResponseEntity.ok(PageableMapper.toDto(subjects, SubjectResponseNameDescriptionCourseDto.class));

@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Professor", description = "Contains all operations related to a Professor resource")
@@ -82,6 +83,7 @@ public class ProfessorController {
                     )
             })
     @GetMapping()
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PageableDto> getAllProfessors(@PageableDefault(size = 5, sort = {"firstName"}) Pageable pageable) {
         Page<ProfessorProjection> professors = professorService.findAll(pageable);
         return ResponseEntity.ok(PageableMapper.toDto(professors, ProfessorProjection.class));
