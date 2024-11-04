@@ -1,6 +1,7 @@
 package com.compass.desafio02.domain.entities;
 
 import com.compass.desafio02.domain.entities.enums.Role;
+import com.compass.desafio02.infrastructure.exceptions.BusinessRuleException;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,11 +21,11 @@ public class Professor extends User implements Serializable {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @OneToMany(mappedBy = "mainProfessor")
+    @OneToMany(mappedBy = "mainProfessor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Column(name = "Subjects")
     private List<Subject> subjectHolder = new ArrayList<>();
 
-    @OneToMany(mappedBy = "substituteProfessor")
+    @OneToMany(mappedBy = "substituteProfessor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Subject> subjectSub = new ArrayList<>();
 
     public Professor() {
@@ -62,7 +63,7 @@ public class Professor extends User implements Serializable {
         if (subjectHolder.isEmpty()) {
             subjectHolder.add(subject);
         } else {
-            throw new IllegalStateException("The Professor only can have one subject");
+            throw new BusinessRuleException("The Professor only can have one subject");
         }
     }
 
@@ -70,7 +71,7 @@ public class Professor extends User implements Serializable {
         if (subjectSub.size() < 2) {
             subjectSub.add(subject);
         } else {
-            throw new IllegalStateException("The teacher can only be a substitute in two subjects.");
+            throw new BusinessRuleException("The teacher can only be a substitute in two subjects.");
         }
     }
 

@@ -43,15 +43,12 @@ import java.util.List;
 public class CourseController {
     private static final Logger log = LoggerFactory.getLogger(CourseController.class);
 
-    // MUDAR OS COORDENADORES PARA DTO
-
     @Autowired
     private CourseService courseService;
 
     @Autowired
     private CoordinatorService coordinatorService;
 
-    // Start Course ---------------------------------------------------------------------
 
     @Operation(summary = "Retrieve student list",
             description = "Request requires Student.",
@@ -150,26 +147,17 @@ public class CourseController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    public ResponseEntity<CourseNoSubjectsNoCoordinatorResponseDto> create(@RequestBody @Valid CourseCreateDto courseCreateDto) {
-
-        String coordinatorEmail = courseCreateDto.getCoordinatorEmail();
+    public ResponseEntity<CourseNoSubjectsResponseDto> create(@RequestBody @Valid CourseCreateDto courseCreateDto) {
+        Coordinator coo = coordinatorService.findByEmail(courseCreateDto.getCoordinatorEmail());
 
         Course course = new Course();
         course.setName(courseCreateDto.getName());
         course.setDescription(courseCreateDto.getDescription());
-
-        if (coordinatorEmail != null) {
-            Coordinator coo = coordinatorService.findByEmail(coordinatorEmail);
-            course.setCoordinator(coo);
-        }
+        course.setCoordinator(coo);
 
         Course savedCourse = courseService.save(course);
 
-        CourseNoSubjectsNoCoordinatorResponseDto courseResponseDto = new CourseNoSubjectsNoCoordinatorResponseDto();
-        courseResponseDto.setName(savedCourse.getName());
-        courseResponseDto.setDescription(savedCourse.getDescription());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(courseResponseDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Mapper.toDto(savedCourse, CourseNoSubjectsResponseDto.class));
     }
 
     @Operation(summary = "Update a Course",

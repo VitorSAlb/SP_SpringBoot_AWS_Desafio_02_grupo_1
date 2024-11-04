@@ -94,15 +94,18 @@ public class GlobalExceptionHandler {
         }
 
         String path = request.getDescription(false).replace("uri=", "");
+        String message = errors.values().stream().findFirst().orElse("Validation error occurred");
+
         ErrorMessage errorMessage = new ErrorMessage(
                 HttpStatus.BAD_REQUEST,
-                ex.getMessage(),
+                message,
                 path
         );
         errorMessage.setErrors(errors);
 
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
     }
+
 
     @ExceptionHandler(DuplicateException.class)
     public ResponseEntity<ErrorMessage> handleDuplicateCourseException(DuplicateException ex, HttpServletRequest request) {
@@ -142,5 +145,15 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
         );
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(BusinessRuleException.class)
+    public ResponseEntity<ErrorMessage> handleBusinessRuleException(BusinessRuleException ex, HttpServletRequest request) {
+        ErrorMessage errorMessage = new ErrorMessage(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
     }
 }
