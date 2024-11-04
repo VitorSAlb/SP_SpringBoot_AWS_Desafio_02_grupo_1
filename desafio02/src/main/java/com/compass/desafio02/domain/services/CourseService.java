@@ -1,9 +1,6 @@
 package com.compass.desafio02.domain.services;
 
-import com.compass.desafio02.domain.entities.Coordinator;
-import com.compass.desafio02.domain.entities.Course;
-import com.compass.desafio02.domain.entities.Student;
-import com.compass.desafio02.domain.entities.Subject;
+import com.compass.desafio02.domain.entities.*;
 import com.compass.desafio02.domain.repositories.CoordinatorRepository;
 import com.compass.desafio02.domain.repositories.CourseRepository;
 import com.compass.desafio02.infrastructure.exceptions.*;
@@ -23,8 +20,22 @@ public class CourseService {
     private SubjectService subjectService;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private CoordinatorService coordinatorService;
 
     public Course save(Course course) {
+        Coordinator coordinator = null;
+
+        try {
+            coordinator = coordinatorRepository.findByEmail(course.getCoordinator().getEmail());
+
+            if(!courseRepository.findByEmailCoordinator(coordinator.getEmail()).isEmpty()) {
+                throw new DuplicateException("Coordinator already enrolled in course");
+            }
+        } catch (Exception e) {
+            throw new BusinessRuleException("Coordinator not founded");
+        }
+
 
         if (course.getName().isEmpty()) {
             throw new EmptyFieldException("Course name cannot be empty");

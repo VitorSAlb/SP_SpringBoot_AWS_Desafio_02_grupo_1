@@ -148,6 +148,14 @@ public class ProfessorService {
             throw new UserDeletionException("Cannot delete professor: Professor not found with Email: " + email);
         }
 
+        if (!professor.getSubjectSub().isEmpty() || !professor.getSubjectHolder().isEmpty()) {
+            throw new UserDeletionException("Error Professor is linked to a subject, remove this professor of subject to delete with successfully");
+        }
+
+        if (professor.getCourse() != null) {
+            throw new UserDeletionException("Error Professor is linked to a course, remove this professor of course to delete with successfully");
+        }
+
         try {
             professorRepository.deleteById(professor.getId());
         } catch (Exception e) {
@@ -180,6 +188,11 @@ public class ProfessorService {
 
     private boolean isPasswordValid(String password) {
         return password != null && password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$");
+    }
+
+    public void addCourse(Course course, Professor professor) {
+        professor.setCourse(course);
+        professorRepository.save(professor);
     }
 }
 

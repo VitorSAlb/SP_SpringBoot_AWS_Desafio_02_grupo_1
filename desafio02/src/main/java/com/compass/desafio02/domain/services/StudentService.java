@@ -99,6 +99,10 @@ public class StudentService {
             throw new UserDeletionException("Cannot delete student: Student not found with Email: " + email);
         }
 
+        if (student.getCourse() != null) {
+            throw new UserDeletionException("Error Student is linked to a course, remove this student of course to delete with successfully");
+        }
+
         try {
             studentRepository.deleteById(student.getId());
         } catch (Exception e) {
