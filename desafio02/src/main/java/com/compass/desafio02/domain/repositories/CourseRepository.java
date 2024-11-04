@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface CourseRepository extends JpaRepository<Course, Integer> {
 
     @Query("SELECT n FROM Course n WHERE n.name = :name")
@@ -17,4 +19,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
     Page<Course> findAllP(Pageable pageable);
 
     boolean existsByName(String name);
+
+    @Query("SELECT c FROM Course c WHERE c.coordinator.email = :email")
+    List<Course> findByEmailCoordinator(@Param("email") String email);
 }

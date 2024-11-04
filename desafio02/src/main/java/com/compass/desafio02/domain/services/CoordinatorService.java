@@ -1,10 +1,17 @@
 package com.compass.desafio02.domain.services;
 
 import com.compass.desafio02.domain.entities.Coordinator;
+import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.Student;
+import com.compass.desafio02.domain.entities.Subject;
+import com.compass.desafio02.domain.entities.enums.Role;
 import com.compass.desafio02.domain.repositories.CoordinatorRepository;
+import com.compass.desafio02.domain.repositories.ProfessorRepository;
+import com.compass.desafio02.domain.repositories.SubjectRepository;
 import com.compass.desafio02.domain.repositories.projection.CoordinatorProjection;
+import com.compass.desafio02.infrastructure.exceptions.DuplicateException;
 import com.compass.desafio02.infrastructure.exceptions.user.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +25,16 @@ public class CoordinatorService {
     @Autowired
     private CoordinatorRepository coordinatorRepository;
 
+    @Autowired
+    private SubjectRepository subjectRepository;
+    @Autowired
+    private ProfessorRepository professorRepository;
+
     public Coordinator save(Coordinator coordinator) {
+        if (coordinatorRepository.existsByEmail(coordinator.getEmail())) {
+            throw new DuplicateException("Email already exists");
+        }
+
         if (!isPasswordValid(coordinator.getPassword())) {
             throw new IllegalArgumentException("The password must have at least one uppercase letter, one lowercase letter, one number, one special character and at least 8 characters.");
         }
@@ -68,6 +84,10 @@ public class CoordinatorService {
             throw new UserDeletionException("Cannot delete coordinator: Coordinator not found with Email: " + email);
         }
 
+        if (coordinator.getCourse() != null) {
+            throw new UserDeletionException("Error Coordinator is linked to a course, remove this coordinator of course to delete with successfully");
+        }
+
         try {
             coordinatorRepository.deleteById(coordinator.getId());
         } catch (Exception e) {
@@ -101,4 +121,43 @@ public class CoordinatorService {
     private boolean isPasswordValid(String password) {
         return password != null && password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$");
     }
+
+//    @Transactional
+//    public void assignCoordinatorAsProfessor(String subjectName, String coordinatorEmail, boolean isMainProfessor) {
+//        Coordinator coordinator = coordinatorRepository.findByEmail(coordinatorEmail);
+//        if (coordinator == null) {
+//            throw new IllegalArgumentException("Coordinator not found with email: " + coordinatorEmail);
+//        }
+//
+//        Professor professor = convertCoordinatorToProfessor(coordinator);
+//
+//        if (professor.getId() == null) {
+//            professor = professorRepository.save(professor);
+//        }
+//
+//        Subject subject = subjectRepository.findByName(subjectName);
+//        if (subject == null) {
+//            throw new IllegalArgumentException("Subject not found with name: " + subjectName);
+//        }
+//
+//        if (isMainProfessor) {
+//            subject.setMainProfessor(professor);
+//        } else {
+//            subject.setSubstituteProfessor(professor);
+//        }
+//
+//        subjectRepository.save(subject);
+//    }
+//
+//
+//    private Professor convertCoordinatorToProfessor(Coordinator coordinator) {
+//        Professor professor = new Professor();
+//        professor.setFirstName(coordinator.getFirstName());
+//        professor.setLastName(coordinator.getLastName());
+//        professor.setEmail(coordinator.getEmail());
+//        professor.setPassword(coordinator.getPassword());
+//        professor.setRole(Role.ROLE_PROFESSOR);
+//        professor.setBirthdate(coordinator.getBirthdate());
+//        return professor;
+//    }
 }

@@ -4,13 +4,12 @@ import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.enums.Role;
 import com.compass.desafio02.domain.repositories.projection.ProfessorProjection;
 import com.compass.desafio02.domain.services.ProfessorService;
+import com.compass.desafio02.infrastructure.exceptions.user.UserNotFoundException;
 import com.compass.desafio02.web.dto.PageableDto;
 import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
 import com.compass.desafio02.web.dto.mapper.ProfessorMapper;
-import com.compass.desafio02.web.dto.professor.ProfessorCreateDto;
-import com.compass.desafio02.web.dto.professor.ProfessorNoSubjectResponseDto;
-import com.compass.desafio02.web.dto.professor.ProfessorResponseDto;
+import com.compass.desafio02.web.dto.professor.*;
 import com.compass.desafio02.web.dto.student.StudentResponseDto;
 import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +50,7 @@ public class ProfessorController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    public ResponseEntity<ProfessorNoSubjectResponseDto> createProfessor(@RequestBody ProfessorCreateDto professorDto) {
+    public ResponseEntity<ProfessorNoSubjectResponseDto> createProfessor(@RequestBody @Valid ProfessorCreateDto professorDto) {
         Professor professor = ProfessorMapper.toEntity(professorDto);
         professor.setRole(Role.ROLE_PROFESSOR);
         professorService.save(professor);
@@ -120,7 +120,7 @@ public class ProfessorController {
     @GetMapping("/email/{email}")
     public ResponseEntity<ProfessorResponseDto> getProfessorByEmail(@PathVariable String email) {
         Professor professor = professorService.findByEmail(email);
-        return ResponseEntity.ok(Mapper.toDto(professor, ProfessorResponseDto.class));
+        return ResponseEntity.ok(ProfessorMapper.toDto(professor));
     }
     @Operation(summary = "Update a Professor",
             description = "Resource to update a new Professor linked to a update." +
@@ -134,9 +134,9 @@ public class ProfessorController {
                     @ApiResponse(responseCode = "404", description = "Course not found",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
-    @PutMapping("/{id}")
-    public ResponseEntity<ProfessorResponseDto> updateProfessor(@PathVariable Integer id, @RequestBody Professor professor) {
-        Professor updatedProfessor = professorService.update(id, professor);
+    @PutMapping("/update/{email}")
+    public ResponseEntity<ProfessorResponseDto> updateProfessor(@PathVariable String email, @RequestBody ProfessorUpdateDto dto) {
+        Professor updatedProfessor = professorService.update(email, Mapper.toDto(dto, Professor.class));
         return ResponseEntity.ok(ProfessorMapper.toDto(updatedProfessor));
     }
 

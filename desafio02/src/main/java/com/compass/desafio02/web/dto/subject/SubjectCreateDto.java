@@ -1,5 +1,7 @@
 package com.compass.desafio02.web.dto.subject;
 
+import com.compass.desafio02.web.dto.professor.ProfessorNoSubjectResponseDto;
+import com.compass.desafio02.web.dto.professor.ProfessorResponseDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -12,27 +14,19 @@ public class SubjectCreateDto {
     @NotBlank(message = "The description of the discipline is required.")
     private String description;
 
-    @NotNull(message = "The description of the discipline is mandatory.")
-    private Integer mainProfessor;
-
-    @NotNull(message = "The Substitute teacher ID is required.")
-    private Integer substituteProfessor;
-
-    @NotNull(message = "The Course ID is required.")
-    private Integer courseId;
-
-    private List<String> studentEmails;
+    @NotBlank(message = "The Subject needs email of Main Professor")
+    private String mainProfessorEmail;
+    @NotBlank(message = "The Subject needs email of Substitute Professor")
+    private String substituteProfessorEmail;
 
     public SubjectCreateDto() {
     }
 
-    public SubjectCreateDto(String name, String description, Integer mainProfessor, Integer substituteProfessor, Integer courseId, List<String> studentEmails) {
+    public SubjectCreateDto(String name, String description, String mainProfessorEmail, String substituteProfessorEmail) {
         this.name = name;
         this.description = description;
-        this.mainProfessor = mainProfessor;
-        this.substituteProfessor = substituteProfessor;
-        this.courseId = courseId;
-        this.studentEmails = studentEmails;
+        this.mainProfessorEmail = mainProfessorEmail;
+        this.substituteProfessorEmail = substituteProfessorEmail;
     }
 
     public @NotBlank(message = "The name of the discipline is required.") String getName() {
@@ -51,35 +45,19 @@ public class SubjectCreateDto {
         this.description = description;
     }
 
-    public @NotNull(message = "The description of the discipline is mandatory.") Integer getMainProfessor() {
-        return mainProfessor;
+    public @NotBlank(message = "The Subject needs email of Main Professor") String getMainProfessorEmail() {
+        return mainProfessorEmail;
     }
 
-    public void setMainProfessor(@NotNull(message = "The description of the discipline is mandatory.") Integer mainProfessor) {
-        this.mainProfessor = mainProfessor;
+    public void setMainProfessorEmail(@NotBlank(message = "The Subject needs email of Main Professor") String mainProfessorEmail) {
+        this.mainProfessorEmail = mainProfessorEmail;
     }
 
-    public @NotNull(message = "The Substitute teacher ID is required.") Integer getSubstituteProfessor() {
-        return substituteProfessor;
+    public @NotBlank(message = "The Subject needs email of Substitute Professor") String getSubstituteProfessorEmail() {
+        return substituteProfessorEmail;
     }
 
-    public void setSubstituteProfessor(@NotNull(message = "The Substitute teacher ID is required.") Integer substituteProfessor) {
-        this.substituteProfessor = substituteProfessor;
-    }
-
-    public @NotNull(message = "The Course ID is required.") Integer getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(@NotNull(message = "The Course ID is required.") Integer courseId) {
-        this.courseId = courseId;
-    }
-
-    public List<String> getStudentEmails() {
-        return studentEmails;
-    }
-
-    public void setStudentEmails(List<String> studentEmails) {
-        this.studentEmails = studentEmails;
+    public void setSubstituteProfessorEmail(@NotBlank(message = "The Subject needs email of Substitute Professor") String substituteProfessorEmail) {
+        this.substituteProfessorEmail = substituteProfessorEmail;
     }
 }

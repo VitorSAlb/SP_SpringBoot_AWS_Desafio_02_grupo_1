@@ -1,11 +1,19 @@
 package com.compass.desafio02.web.controller;
 
+import com.compass.desafio02.domain.entities.Course;
+import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.Student;
+import com.compass.desafio02.domain.entities.Subject;
 import com.compass.desafio02.domain.entities.enums.Role;
+import com.compass.desafio02.domain.repositories.SubjectRepository;
 import com.compass.desafio02.domain.repositories.projection.StudentProjection;
+import com.compass.desafio02.domain.services.CourseService;
 import com.compass.desafio02.domain.services.StudentService;
+import com.compass.desafio02.domain.services.SubjectService;
 import com.compass.desafio02.web.dto.PageableDto;
 import com.compass.desafio02.web.dto.mapper.Mapper;
+import com.compass.desafio02.web.dto.professor.ProfessorAddCourseDto;
+import com.compass.desafio02.web.dto.student.StudentAddSubjectDto;
 import com.compass.desafio02.web.dto.student.StudentCreateDto;
 import com.compass.desafio02.web.dto.student.StudentResponseDto;
 import com.compass.desafio02.web.dto.UserPasswordDto;
@@ -39,6 +47,12 @@ public class StudentController {
 
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private SubjectRepository subjectRepository;
+    @Autowired
+    private CourseService courseService;
+    @Autowired
+    private SubjectService subjectService;
 
     @Operation(summary = "Retrieve student list",
             description = "Request requires Student.",
@@ -181,6 +195,24 @@ public class StudentController {
     public ResponseEntity<Void> delete(@PathVariable String email) {
         studentService.delete(email);
 
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/add/subject")
+    public ResponseEntity<Void> addStudent(@RequestBody @Valid StudentAddSubjectDto dto) {
+        Student student = studentService.findByEmail(dto.getStudentEmail());
+        Subject subject = subjectRepository.findByName(dto.getSubjectName());
+
+        subjectService.addStudent(student, subject);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/remove/subject")
+    public ResponseEntity<Void> removeStudent(@RequestBody @Valid StudentAddSubjectDto dto) {
+        Student student = studentService.findByEmail(dto.getStudentEmail());
+        Subject subject = subjectRepository.findByName(dto.getSubjectName());
+
+        subjectService.removeStudent(student, subject);
         return ResponseEntity.noContent().build();
     }
 }

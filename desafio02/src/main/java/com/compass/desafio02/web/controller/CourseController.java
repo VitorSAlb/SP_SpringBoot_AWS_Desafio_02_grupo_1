@@ -2,13 +2,20 @@ package com.compass.desafio02.web.controller;
 
 import com.compass.desafio02.domain.entities.Coordinator;
 import com.compass.desafio02.domain.entities.Course;
+import com.compass.desafio02.domain.entities.Professor;
+import com.compass.desafio02.domain.entities.Subject;
 import com.compass.desafio02.domain.services.CoordinatorService;
 import com.compass.desafio02.domain.services.CourseService;
+import com.compass.desafio02.domain.services.ProfessorService;
+import com.compass.desafio02.infrastructure.exceptions.ResourceNotFoundException;
 import com.compass.desafio02.web.dto.*;
 import com.compass.desafio02.web.dto.course.*;
 import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
+import com.compass.desafio02.web.dto.professor.ProfessorAddCourseDto;
 import com.compass.desafio02.web.dto.student.StudentResponseDto;
+import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
+import com.compass.desafio02.web.dto.subject.SubjectResponseNameAndDescriptionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -31,6 +38,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "Course", description = "Contains all operations related to a Course resource")
@@ -39,15 +47,14 @@ import java.util.List;
 public class CourseController {
     private static final Logger log = LoggerFactory.getLogger(CourseController.class);
 
-    // MUDAR OS COORDENADORES PARA DTO
-
     @Autowired
     private CourseService courseService;
 
     @Autowired
     private CoordinatorService coordinatorService;
+    @Autowired
+    private ProfessorService professorService;
 
-    // Start Course ---------------------------------------------------------------------
 
     @Operation(summary = "Retrieve student list",
             description = "Request requires Student.",
@@ -116,7 +123,7 @@ public class CourseController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping("/name/{name}")
-    public ResponseEntity<CourseResponseDto> findByEmail(@PathVariable String name) {
+    public ResponseEntity<CourseResponseDto> findByName(@PathVariable String name) {
         Course course = courseService.findByName(name);
         CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(course);
         return ResponseEntity.ok(courseResponseDto);
@@ -134,9 +141,9 @@ public class CourseController {
                     @ApiResponse(responseCode = "404", description = "Not Fount",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        courseService.delete(id);
+    @DeleteMapping("/{name}")
+    public ResponseEntity<Void> delete(@PathVariable String name) {
+        courseService.delete(name);
         return ResponseEntity.noContent().build();
     }
 
@@ -151,21 +158,17 @@ public class CourseController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    public ResponseEntity<CourseNoSubjectsNoCoordinatorResponseDto> create(@RequestBody @Valid CourseCreateDto courseCreateDto) {
+    public ResponseEntity<CourseNoSubjectsResponseDto> create(@RequestBody @Valid CourseCreateDto courseCreateDto) {
+        Coordinator coo = coordinatorService.findByEmail(courseCreateDto.getCoordinatorEmail());
 
-        String coordinatorEmail = courseCreateDto.getCoordinatorEmail();
-
-        Course course = Mapper.toEntity(courseCreateDto, Course.class);
-
-        if (coordinatorEmail != null) {
-            Coordinator coo = coordinatorService.findByEmail(coordinatorEmail);
-            course.setCoordinator(coo);
-        }
+        Course course = new Course();
+        course.setName(courseCreateDto.getName());
+        course.setDescription(courseCreateDto.getDescription());
+        course.setCoordinator(coo);
 
         Course savedCourse = courseService.save(course);
-        CourseResponseDto courseResponseDto = Mapper.toCourseResponseDto(savedCourse);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(Mapper.toDto(courseResponseDto, CourseNoSubjectsNoCoordinatorResponseDto.class));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Mapper.toDto(savedCourse, CourseNoSubjectsResponseDto.class));
     }
 
     @Operation(summary = "Update a Course",
@@ -204,8 +207,6 @@ public class CourseController {
             })
     @PatchMapping("/coordinator")
     public ResponseEntity<CourseResponseDto> updateCoordinator(@RequestBody CourseAddCooDto dto) {
-        log.info("email: " + dto.getCoordinatorEmail());
-        log.info("name: " + dto.getName());
         Course updatedCourse = courseService.addCoordinatorToCourse(dto.getName(), dto.getCoordinatorEmail());
         return ResponseEntity.ok(Mapper.toCourseResponseDto(updatedCourse));
     }
@@ -228,4 +229,30 @@ public class CourseController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/add/subject")
+    public ResponseEntity<Void> addSubject(@RequestBody @Valid CourseAddSubjectDto dto) {
+        courseService.addSubjectToCourse(dto.getNameCourse(), dto.getSubjectName());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/remove/subject")
+    public ResponseEntity<Void> removeSubject(@RequestBody @Valid CourseAddSubjectDto dto) {
+        courseService.removeSubjectToCourse(dto.getNameCourse(), dto.getSubjectName());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/add/professor")
+    public ResponseEntity<Void> addProfessor(@RequestBody @Valid ProfessorAddCourseDto dto) {
+        Professor professor = professorService.findByEmail(dto.getEmailProfessor());
+        Course course = courseService.findByName(dto.getNameCourse());
+
+        professorService.addCourse(course, professor);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/remove/professor/{email}")
+    public ResponseEntity<Void> removeProfessor(@PathVariable String email) {
+        professorService.removeCourse(professorService.findByEmail(email));
+        return ResponseEntity.noContent().build();
+    }
 }

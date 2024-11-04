@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 
 @Entity
 @Table(name = "tb_course")
 public class Course {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -22,12 +24,15 @@ public class Course {
     private String description;
 
     @JsonBackReference
-    @OneToOne(optional = true)
+    @OneToOne(optional = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "coordinator_id", referencedColumnName = "id")
     private Coordinator coordinator;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<Subject> subjects = new ArrayList<>();
+
+    @OneToMany
+    private List<Student> students = new ArrayList<>();
 
 
     public Course() {
@@ -85,17 +90,39 @@ public class Course {
         this.subjects = subjects;
     }
 
-    // Método para adicionar uma disciplina - duvida
     public void addSubject(Subject subjects) {
         this.subjects.add(subjects);
         subjects.setCourse(this);
     }
 
-    // Método para remover uma disciplina - duvida
     public void removeSubject(Subject subjects) {
         this.subjects.remove(subjects);
         subjects.setCourse(null);
     }
 
+    public void addStudent(Student student) {
+        if (!students.contains(student)) {
+            this.students.add(student);
+            student.setCourse(this);
+        }
+    }
 
+
+    public void removeStudent(Student student) {
+        if (students.remove(student)) {
+            student.setCourse(null);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", coordinator=" + coordinator.getEmail() +
+                ", subjects=" + subjects +
+                ", students=" + students +
+                '}';
+    }
 }

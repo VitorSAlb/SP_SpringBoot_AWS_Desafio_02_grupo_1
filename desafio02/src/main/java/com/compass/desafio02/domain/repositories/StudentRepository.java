@@ -16,4 +16,6 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     @Query("SELECT s FROM Student s WHERE s.email = :email")
     Student findByEmail(@Param("email") String email);
 
+
+    boolean existsByEmail(String email);
 }

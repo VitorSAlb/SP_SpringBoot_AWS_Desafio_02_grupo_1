@@ -6,6 +6,7 @@ import com.compass.desafio02.web.dto.coordinator.CoordinatorNoCourseResponseDto;
 import com.compass.desafio02.web.dto.coordinator.CoordinatorResponseDto;
 import com.compass.desafio02.web.dto.course.CourseResponseDto;
 import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
+import com.compass.desafio02.web.dto.subject.SubjectResponseNoCourseDto;
 import org.modelmapper.ModelMapper;
 
 import java.util.Collections;
@@ -31,9 +32,9 @@ public class Mapper {
                 ? modelMapper.map(coordinator, CoordinatorNoCourseResponseDto.class)
                 : null;
 
-        List<SubjectResponseDto> subjectDtos = course.getSubjects() != null && !course.getSubjects().isEmpty()
+        List<SubjectResponseNoCourseDto> subjectDtos = course.getSubjects() != null && !course.getSubjects().isEmpty()
                 ? course.getSubjects().stream()
-                .map(subject -> modelMapper.map(subject, SubjectResponseDto.class))
+                .map(subject -> modelMapper.map(subject, SubjectResponseNoCourseDto.class))
                 .toList()
                 : Collections.emptyList();
 

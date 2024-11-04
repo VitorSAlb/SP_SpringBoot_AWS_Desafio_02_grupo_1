@@ -3,7 +3,7 @@ services:
   db:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: ums
     ports:
       - "3307:3306"

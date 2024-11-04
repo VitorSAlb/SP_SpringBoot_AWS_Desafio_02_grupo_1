@@ -10,10 +10,10 @@ import java.util.List;
 @Entity
 public class Student extends User implements Serializable {
 
-    @Column(name = "address")
-    private String address;
+    @Column(name = "cep")
+    private String cep;
 
-    @OneToOne
+    @ManyToOne
     private Course course;
 
     @ManyToMany(mappedBy = "students", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -24,15 +24,15 @@ public class Student extends User implements Serializable {
 
     public Student(String firstName, String lastName, String email, LocalDate birthdate, String password, String address) {
         super(firstName, lastName, email, birthdate, Role.ROLE_STUDENT, password);
-        this.address = address;
+        this.cep = address;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCep() {
+        return cep;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCep(String cep) {
+        this.cep = cep;
     }
 
     public List<Subject> getSubjects() {
@@ -49,6 +49,9 @@ public class Student extends User implements Serializable {
 
     public void setCourse(Course course) {
         this.course = course;
+        if (course != null) {
+            course.addStudent(this);
+        }
     }
 
     public void addSubject(Subject subject) {
@@ -58,10 +61,10 @@ public class Student extends User implements Serializable {
         }
     }
 
-    // Método para remover uma matéria
     public void removeSubject(Subject subject) {
         if (subjects.remove(subject)) {
             subject.getStudents().remove(this);
         }
     }
+
 }

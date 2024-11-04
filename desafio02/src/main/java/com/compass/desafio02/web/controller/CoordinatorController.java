@@ -9,6 +9,7 @@ import com.compass.desafio02.web.dto.UserPasswordDto;
 import com.compass.desafio02.web.dto.coordinator.CoordinatorCreateDto;
 import com.compass.desafio02.web.dto.coordinator.CoordinatorResponseDto;
 import com.compass.desafio02.web.dto.PageableDto;
+//import com.compass.desafio02.web.dto.coordinator.CoordinatorTeachDto;
 import com.compass.desafio02.web.dto.mapper.CoordinatorMapper;
 import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
@@ -27,8 +28,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Tag(name = "Coordinators", description = "Contains all operations related to a coordinators resource")
 @RestController
@@ -185,4 +190,20 @@ public class CoordinatorController {
 
         return ResponseEntity.noContent().build();
     }
+
+//    @PatchMapping("/api/v1/coordinators/assignAsProfessor")
+//    public ResponseEntity<String> assignCoordinatorAsProfessor(
+//            @Validated @RequestBody CoordinatorTeachDto coordinatorTeachDto,
+//            @RequestParam boolean isMainProfessor) {
+//
+//        coordinatorService.assignCoordinatorAsProfessor(
+//                coordinatorTeachDto.getSubjectName(),
+//                coordinatorTeachDto.getCoordinatorEmail(),
+//                isMainProfessor
+//        );
+//
+//        String role = isMainProfessor ? "main professor" : "substitute professor";
+//        return ResponseEntity.ok("Coordinator assigned as " + role + " successfully.");
+//    }
+
 }

@@ -1,7 +1,9 @@
 package com.compass.desafio02.web.dto.subject;
 
 import com.compass.desafio02.web.dto.course.CourseNoSubjectsResponseDto;
+import com.compass.desafio02.web.dto.professor.ProfessorNoSubjectResponseDto;
 import com.compass.desafio02.web.dto.professor.ProfessorResponseDto;
+import com.compass.desafio02.web.dto.student.StudentGResponseDto;
 import com.compass.desafio02.web.dto.student.StudentResponseDto;
 import com.compass.desafio02.web.dto.course.CourseResponseDto;
 
@@ -12,15 +14,15 @@ public class SubjectResponseDto {
     private Integer id;
     private String name;
     private String description;
-    private ProfessorResponseDto mainProfessor;
-    private ProfessorResponseDto substituteProfessor;
+    private ProfessorNoSubjectResponseDto mainProfessor;
+    private ProfessorNoSubjectResponseDto substituteProfessor;
     private CourseNoSubjectsResponseDto course;
-    private List<StudentResponseDto> students;
+    private List<StudentGResponseDto> students;
 
     public SubjectResponseDto() {
     }
 
-    public SubjectResponseDto(Integer id, String name, String description, ProfessorResponseDto mainProfessor, ProfessorResponseDto substituteProfessor, CourseNoSubjectsResponseDto course, List<StudentResponseDto> students) {
+    public SubjectResponseDto(Integer id, String name, String description, ProfessorNoSubjectResponseDto mainProfessor, ProfessorNoSubjectResponseDto substituteProfessor, CourseNoSubjectsResponseDto course, List<StudentGResponseDto> students) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -54,19 +56,19 @@ public class SubjectResponseDto {
         this.description = description;
     }
 
-    public ProfessorResponseDto getMainProfessor() {
+    public ProfessorNoSubjectResponseDto getMainProfessor() {
         return mainProfessor;
     }
 
-    public void setMainProfessor(ProfessorResponseDto mainProfessor) {
+    public void setMainProfessor(ProfessorNoSubjectResponseDto mainProfessor) {
         this.mainProfessor = mainProfessor;
     }
 
-    public ProfessorResponseDto getSubstituteProfessor() {
+    public ProfessorNoSubjectResponseDto getSubstituteProfessor() {
         return substituteProfessor;
     }
 
-    public void setSubstituteProfessor(ProfessorResponseDto substituteProfessor) {
+    public void setSubstituteProfessor(ProfessorNoSubjectResponseDto substituteProfessor) {
         this.substituteProfessor = substituteProfessor;
     }
 
@@ -78,11 +80,11 @@ public class SubjectResponseDto {
         this.course = course;
     }
 
-    public List<StudentResponseDto> getStudents() {
+    public List<StudentGResponseDto> getStudents() {
         return students;
     }
 
-    public void setStudents(List<StudentResponseDto> students) {
+    public void setStudents(List<StudentGResponseDto> students) {
         this.students = students;
     }
 }

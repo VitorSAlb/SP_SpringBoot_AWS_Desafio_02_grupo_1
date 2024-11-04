@@ -1,6 +1,8 @@
 package com.compass.desafio02.web.dto.professor;
 
-import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
+import com.compass.desafio02.domain.entities.Course;
+import com.compass.desafio02.web.dto.course.CourseNoSubjectsResponseDto;
+import com.compass.desafio02.web.dto.subject.SubjectHolderSubResponseDto;
 
 import java.util.List;
 
@@ -10,17 +12,21 @@ public class ProfessorResponseDto {
     private String firstName;
     private String lastName;
     private String email;
-    private List<SubjectResponseDto> subjects;
+    private List<SubjectHolderSubResponseDto> MainSubjects;
+    private List<SubjectHolderSubResponseDto> SubstituteSubjects;
+    private CourseNoSubjectsResponseDto course;
 
     public ProfessorResponseDto() {
     }
 
-    public ProfessorResponseDto(Integer id, String firstName, String lastName, String email, List<SubjectResponseDto> subjects) {
+    public ProfessorResponseDto(Integer id, String firstName, String lastName, String email, List<SubjectHolderSubResponseDto> mainSubjects, List<SubjectHolderSubResponseDto> substituteSubjects, CourseNoSubjectsResponseDto course) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.subjects = subjects;
+        MainSubjects = mainSubjects;
+        SubstituteSubjects = substituteSubjects;
+        this.course = course;
     }
 
     public Integer getId() {
@@ -55,11 +61,27 @@ public class ProfessorResponseDto {
         this.email = email;
     }
 
-    public List<SubjectResponseDto> getSubjects() {
-        return subjects;
+    public List<SubjectHolderSubResponseDto> getMainSubjects() {
+        return MainSubjects;
     }
 
-    public void setSubjects(List<SubjectResponseDto> subjects) {
-        this.subjects = subjects;
+    public void setMainSubjects(List<SubjectHolderSubResponseDto> mainSubjects) {
+        MainSubjects = mainSubjects;
+    }
+
+    public List<SubjectHolderSubResponseDto> getSubstituteSubjects() {
+        return SubstituteSubjects;
+    }
+
+    public void setSubstituteSubjects(List<SubjectHolderSubResponseDto> substituteSubjects) {
+        SubstituteSubjects = substituteSubjects;
+    }
+
+    public CourseNoSubjectsResponseDto getCourse() {
+        return course;
+    }
+
+    public void setCourse(CourseNoSubjectsResponseDto course) {
+        this.course = course;
     }
 }

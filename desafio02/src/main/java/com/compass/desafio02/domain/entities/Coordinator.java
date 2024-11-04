@@ -41,4 +41,8 @@ public class Coordinator extends User implements Serializable {
         }
     }
 
+    public boolean hasCourse() {
+        return this.course != null;
+    }
+
 }

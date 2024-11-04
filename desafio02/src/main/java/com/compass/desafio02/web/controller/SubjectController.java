@@ -1,17 +1,15 @@
 package com.compass.desafio02.web.controller;
 
-import com.compass.desafio02.domain.entities.Subject;
-import com.compass.desafio02.domain.entities.Professor;
-import com.compass.desafio02.domain.entities.Course;
-import com.compass.desafio02.domain.entities.Student;
+import com.compass.desafio02.domain.entities.*;
 import com.compass.desafio02.domain.services.SubjectService;
 import com.compass.desafio02.domain.services.ProfessorService;
 import com.compass.desafio02.domain.services.CourseService;
 import com.compass.desafio02.domain.services.StudentService;
+import com.compass.desafio02.infrastructure.exceptions.CoordinatorAlreadyAssignedException;
+import com.compass.desafio02.infrastructure.exceptions.CoordinatorOrCourseNotFoundException;
 import com.compass.desafio02.web.dto.course.CourseResponseDto;
 import com.compass.desafio02.web.dto.mapper.Mapper;
-import com.compass.desafio02.web.dto.subject.SubjectCreateDto;
-import com.compass.desafio02.web.dto.subject.SubjectResponseDto;
+import com.compass.desafio02.web.dto.subject.*;
 import com.compass.desafio02.web.dto.PageableDto;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
 import com.compass.desafio02.web.dto.mapper.SubjectMapper;
@@ -83,10 +81,10 @@ public class SubjectController {
     @GetMapping
     public ResponseEntity<PageableDto> findAll(@PageableDefault(size = 5, page = 0, sort = {"name"}) Pageable pageable) {
         Page<Subject> subjects = subjectService.findAll(pageable);
-        return ResponseEntity.ok(PageableMapper.toDto(subjects, SubjectResponseDto.class));
+        return ResponseEntity.ok(PageableMapper.toDto(subjects, SubjectResponseNameDescriptionCourseDto.class));
     }
 
-    @Operation(summary = "Find a Subjects", description = "Resource to locate a Subjects by ID." +
+    @Operation(summary = "Find a Subjects", description = "Resource to locate a Subjects by Name." +
             "Request requires use.",
             security = @SecurityRequirement(name = "security"),
             responses = {
@@ -97,9 +95,9 @@ public class SubjectController {
                     @ApiResponse(responseCode = "403", description = "Feature not allowed",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
-    @GetMapping("/{id}")
-    public ResponseEntity<SubjectResponseDto> findById(@PathVariable Integer id) {
-        Subject subject = subjectService.findById(id);
+    @GetMapping("/{name}")
+    public ResponseEntity<SubjectResponseDto> findByName(@PathVariable String name) {
+        Subject subject = subjectService.findByName(name);
         return ResponseEntity.ok(Mapper.toDto(subject, SubjectResponseDto.class));
     }
 
@@ -114,19 +112,13 @@ public class SubjectController {
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    public ResponseEntity<SubjectResponseDto> create(@RequestBody @Valid SubjectCreateDto subjectCreateDto) {
-        Professor mainProfessor = professorService.findById(subjectCreateDto.getMainProfessor());
-        Professor substituteProfessor = professorService.findById(subjectCreateDto.getSubstituteProfessor());
-        Course course = courseService.findById(subjectCreateDto.getCourseId());
-        List<Student> students = subjectCreateDto.getStudentEmails().stream()
-                .map(email -> studentService.findByEmail(email))
-                .collect(Collectors.toList());
-
-        Subject subject = SubjectMapper.toEntity(subjectCreateDto, mainProfessor, substituteProfessor, course, students);
+    public ResponseEntity<Void> create(@RequestBody @Valid SubjectCreateDto dto) {
+        Professor mainProf = professorService.findByEmail(dto.getMainProfessorEmail());
+        Professor subProf = professorService.findByEmail(dto.getSubstituteProfessorEmail());
+        Subject subject = new Subject(dto.getName(), dto.getDescription(), mainProf, subProf, null);
         Subject savedSubject = subjectService.save(subject);
-        return ResponseEntity.status(201).body(Mapper.toDto(savedSubject, SubjectResponseDto.class));
+        return ResponseEntity.status(201).build();
     }
-
 
     @Operation(summary = "Update a Course",
             description = "Resource to update a new student." +
@@ -140,17 +132,9 @@ public class SubjectController {
                     @ApiResponse(responseCode = "404", description = "Course not found",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
-    @PutMapping("/{id}")
-    public ResponseEntity<SubjectResponseDto> updateSubject(@PathVariable Integer id, @RequestBody SubjectCreateDto dto) {
-        Professor mainProfessor = professorService.findById(dto.getMainProfessor());
-        Professor substituteProfessor = professorService.findById(dto.getSubstituteProfessor());
-        Course course = courseService.findById(dto.getCourseId());
-        List<Student> students = dto.getStudentEmails().stream()
-                .map(email -> studentService.findByEmail(email))
-                .collect(Collectors.toList());
-
-        Subject newSubject = SubjectMapper.toEntity(dto, mainProfessor, substituteProfessor, course, students);
-        Subject updatedSubject = subjectService.update(id, newSubject);
+    @PutMapping("/update/{name}")
+    public ResponseEntity<SubjectResponseDto> updateSubject(@PathVariable String name, @RequestBody SubjectCreateDto dto) {
+        Subject updatedSubject = subjectService.save(Mapper.toEntity(dto, Subject.class));
         return ResponseEntity.ok(Mapper.toDto(updatedSubject, SubjectResponseDto.class));
     }
 
@@ -166,9 +150,11 @@ public class SubjectController {
                     @ApiResponse(responseCode = "404", description = "Not Fount",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
             })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        subjectService.delete(id);
+    @DeleteMapping("/{name}")
+    public ResponseEntity<Void> delete(@PathVariable String name) {
+        subjectService.delete(name);
         return ResponseEntity.noContent().build();
     }
+
 }
+

@@ -1,7 +1,12 @@
 package com.compass.desafio02.domain.services;
 
+import com.compass.desafio02.domain.entities.Course;
+import com.compass.desafio02.feign.ViaCepClient;
 import com.compass.desafio02.domain.repositories.projection.StudentProjection;
+import com.compass.desafio02.infrastructure.exceptions.DuplicateException;
 import com.compass.desafio02.infrastructure.exceptions.user.*;
+import com.compass.desafio02.web.dto.feign.CepDto;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,9 +23,26 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private ViaCepClient viaCepClient;
+
+    @Transactional
     public Student save(Student student) {
         if (!isPasswordValid(student.getPassword())) {
             throw new UserCreationException("The password does not meet security requirements.");
+        }
+
+        if (studentRepository.existsByEmail(student.getEmail())) {
+            throw new DuplicateException("Email already exists");
+        }
+
+        if (student.getCep() != null && !student.getCep().isEmpty()) {
+            CepDto addressResponse = viaCepClient.getAddressByCep(student.getCep());
+            String formattedAddress = addressResponse.getLogradouro() + ", " +
+                    addressResponse.getBairro() + ", " +
+                    addressResponse.getLocalidade() + " - " +
+                    addressResponse.getUf();
+            student.setCep(formattedAddress);
         }
 
         try {
@@ -29,6 +51,7 @@ public class StudentService {
             throw new UserCreationException("Error saving student: " + e.getMessage());
         }
     }
+
 
     public Student findById(Integer id) {
         return studentRepository.findById(id).orElseThrow(
@@ -54,11 +77,12 @@ public class StudentService {
             existingStudent.setEmail(newStudent.getEmail());
             existingStudent.setFirstName(newStudent.getFirstName());
             existingStudent.setLastName(newStudent.getLastName());
-            existingStudent.setAddress(newStudent.getAddress());
+            existingStudent.setCep(newStudent.getCep());
             existingStudent.setBirthdate(newStudent.getBirthdate());
+
             return studentRepository.save(existingStudent);
         } catch (Exception e) {
-            throw new UserUpdateException("Error updating student: " + e.getMessage());
+            throw new UserUpdateException("Error updating student! Invalid Credentials");
         }
     }
 
@@ -79,6 +103,10 @@ public class StudentService {
 
         if (!studentRepository.existsById(student.getId())) {
             throw new UserDeletionException("Cannot delete student: Student not found with Email: " + email);
+        }
+
+        if (student.getCourse() != null) {
+            throw new UserDeletionException("Error Student is linked to a course, remove this student of course to delete with successfully");
         }
 
         try {
@@ -114,5 +142,10 @@ public class StudentService {
 
     private boolean isPasswordValid(String password) {
         return password != null && password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$");
+    }
+
+    public void addCourse(Course course, Student student) {
+        student.setCourse(course);
+        studentRepository.save(student);
     }
 }
