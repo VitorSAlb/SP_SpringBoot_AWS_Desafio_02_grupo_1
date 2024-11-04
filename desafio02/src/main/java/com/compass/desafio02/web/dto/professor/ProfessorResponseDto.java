@@ -1,5 +1,7 @@
 package com.compass.desafio02.web.dto.professor;
 
+import com.compass.desafio02.domain.entities.Course;
+import com.compass.desafio02.web.dto.course.CourseNoSubjectsResponseDto;
 import com.compass.desafio02.web.dto.subject.SubjectHolderSubResponseDto;
 
 import java.util.List;
@@ -12,17 +14,19 @@ public class ProfessorResponseDto {
     private String email;
     private List<SubjectHolderSubResponseDto> MainSubjects;
     private List<SubjectHolderSubResponseDto> SubstituteSubjects;
+    private CourseNoSubjectsResponseDto course;
 
     public ProfessorResponseDto() {
     }
 
-    public ProfessorResponseDto(Integer id, String firstName, String lastName, String email, List<SubjectHolderSubResponseDto> mainSubjects, List<SubjectHolderSubResponseDto> substituteSubjects) {
+    public ProfessorResponseDto(Integer id, String firstName, String lastName, String email, List<SubjectHolderSubResponseDto> mainSubjects, List<SubjectHolderSubResponseDto> substituteSubjects, CourseNoSubjectsResponseDto course) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         MainSubjects = mainSubjects;
         SubstituteSubjects = substituteSubjects;
+        this.course = course;
     }
 
     public Integer getId() {
@@ -71,5 +75,13 @@ public class ProfessorResponseDto {
 
     public void setSubstituteSubjects(List<SubjectHolderSubResponseDto> substituteSubjects) {
         SubstituteSubjects = substituteSubjects;
+    }
+
+    public CourseNoSubjectsResponseDto getCourse() {
+        return course;
+    }
+
+    public void setCourse(CourseNoSubjectsResponseDto course) {
+        this.course = course;
     }
 }
