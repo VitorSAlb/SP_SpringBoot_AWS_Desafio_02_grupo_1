@@ -56,6 +56,7 @@ public class SubjectRepositoryTest {
         substituteProfessor.setRole(Role.ROLE_PROFESSOR);
         professorRepository.save(substituteProfessor);
 
+
         course = new Course();
         course.setName("Software Engineering");
         course.setDescription("Bachelor in Software Engineering");

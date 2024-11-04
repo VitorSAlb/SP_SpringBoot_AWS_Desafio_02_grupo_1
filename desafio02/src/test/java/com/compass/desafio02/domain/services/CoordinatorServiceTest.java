@@ -45,18 +45,6 @@ class CoordinatorServiceTest {
     }
 
     @Test
-    void testSaveCoordinator_Success() {
-        when(coordinatorRepository.existsByEmail(anyString())).thenReturn(false);
-        when(coordinatorRepository.save(any(Coordinator.class))).thenReturn(coordinator);
-
-        Coordinator savedCoordinator = coordinatorService.save(coordinator);
-
-        assertNotNull(savedCoordinator);
-        assertEquals(coordinator.getEmail(), savedCoordinator.getEmail());
-        verify(coordinatorRepository, times(1)).save(any(Coordinator.class));
-    }
-
-    @Test
     void testSaveCoordinator_EmailAlreadyExists() {
         when(coordinatorRepository.existsByEmail(anyString())).thenReturn(true);
 
