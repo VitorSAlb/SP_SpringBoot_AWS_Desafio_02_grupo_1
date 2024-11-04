@@ -1,10 +1,15 @@
 package com.compass.desafio02.domain.services;
 
 import com.compass.desafio02.domain.entities.Coordinator;
+import com.compass.desafio02.domain.entities.Professor;
 import com.compass.desafio02.domain.entities.Student;
+import com.compass.desafio02.domain.entities.Subject;
+import com.compass.desafio02.domain.entities.enums.Role;
 import com.compass.desafio02.domain.repositories.CoordinatorRepository;
+import com.compass.desafio02.domain.repositories.SubjectRepository;
 import com.compass.desafio02.domain.repositories.projection.CoordinatorProjection;
 import com.compass.desafio02.infrastructure.exceptions.user.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +22,9 @@ public class CoordinatorService {
 
     @Autowired
     private CoordinatorRepository coordinatorRepository;
+
+    @Autowired
+    private SubjectRepository subjectRepository;
 
     public Coordinator save(Coordinator coordinator) {
         if (!isPasswordValid(coordinator.getPassword())) {
@@ -100,5 +108,49 @@ public class CoordinatorService {
 
     private boolean isPasswordValid(String password) {
         return password != null && password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$");
+    }
+
+    @Transactional
+    public void assignAsPrincipal(String subjectName, Coordinator coordinator) {
+        Subject subject = subjectRepository.findByName(subjectName);
+
+        if (subject == null) {
+            throw new IllegalArgumentException("Subject not found");
+        }
+
+        if (subject.getMainProfessor() != null) {
+            subject.setMainProfessor(null);
+        }
+
+        Professor mainProfessor = convertCoordinatorToProfessor(coordinator);
+        subject.setMainProfessor(mainProfessor);
+        subjectRepository.save(subject);
+    }
+
+    @Transactional
+    public void assignAsSubstitute(String subjectName, Coordinator coordinator) {
+        Subject subject = subjectRepository.findByName(subjectName);
+
+        if (subject == null) {
+            throw new IllegalArgumentException("Subject not found");
+        }
+
+        if (subject.getSubstituteProfessor() != null) {
+            subject.setSubstituteProfessor(null);
+        }
+
+        Professor substituteProfessor = convertCoordinatorToProfessor(coordinator);
+        subject.setSubstituteProfessor(substituteProfessor);
+        subjectRepository.save(subject);
+    }
+
+    private Professor convertCoordinatorToProfessor(Coordinator coordinator) {
+        Professor professor = new Professor();
+        professor.setFirstName(coordinator.getFirstName());
+        professor.setLastName(coordinator.getLastName());
+        professor.setEmail(coordinator.getEmail());
+        professor.setPassword(coordinator.getPassword());
+        professor.setRole(Role.ROLE_PROFESSOR);
+        return professor;
     }
 }

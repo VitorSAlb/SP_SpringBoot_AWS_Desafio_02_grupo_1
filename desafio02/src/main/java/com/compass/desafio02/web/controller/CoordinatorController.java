@@ -9,6 +9,7 @@ import com.compass.desafio02.web.dto.UserPasswordDto;
 import com.compass.desafio02.web.dto.coordinator.CoordinatorCreateDto;
 import com.compass.desafio02.web.dto.coordinator.CoordinatorResponseDto;
 import com.compass.desafio02.web.dto.PageableDto;
+import com.compass.desafio02.web.dto.coordinator.CoordinatorTeachDto;
 import com.compass.desafio02.web.dto.mapper.CoordinatorMapper;
 import com.compass.desafio02.web.dto.mapper.Mapper;
 import com.compass.desafio02.web.dto.mapper.PageableMapper;
@@ -28,6 +29,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Tag(name = "Coordinators", description = "Contains all operations related to a coordinators resource")
 @RestController
@@ -176,5 +179,21 @@ public class CoordinatorController {
         coordinatorService.delete(email);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/assignAsPrincipal")
+    public ResponseEntity<String> assignAsPrincipal(@PathVariable Integer id, @RequestBody Map<String, String> request) {
+        Coordinator coordinator = coordinatorService.findById(id);
+        String subjectName = request.get("subjectName");
+        coordinatorService.assignAsPrincipal(subjectName, coordinator);
+        return ResponseEntity.ok("Coordinator assigned as principal professor for subject: " + subjectName);
+    }
+
+    @PatchMapping("/{id}/assignAsSubstitute")
+    public ResponseEntity<String> assignAsSubstitute(@PathVariable Integer id, @RequestBody Map<String, String> request) {
+        Coordinator coordinator = coordinatorService.findById(id);
+        String subjectName = request.get("subjectName");
+        coordinatorService.assignAsSubstitute(subjectName, coordinator);
+        return ResponseEntity.ok("Coordinator assigned as substitute professor for subject: " + subjectName);
     }
 }
